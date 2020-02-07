@@ -17,7 +17,9 @@ function AppRouter(props) {
     }, []);
 
     if (currentUserLoading) {
-        return <div className="wrapper"><Preloader/></div>
+        return <div className="wrapper">
+            <Preloader/>
+        </div>
     }
 
     return (
