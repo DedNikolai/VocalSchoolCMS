@@ -79,4 +79,10 @@ public class UserServiceImpl implements UserService {
     User registeredUser = userRepository.save(user);
     return registeredUser;
   }
+
+  @Override
+  public User getCurrentUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    return userRepository.findByEmail(authentication.getName()).orElse(null);
+  }
 }

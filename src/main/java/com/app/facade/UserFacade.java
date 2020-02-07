@@ -29,4 +29,9 @@ public class UserFacade {
     User user = userService.registerUser(signUpRequest);
     return modelMapper.map(user, UserResponse.class);
   }
+
+  public UserResponse getCurrentUser() {
+    User user = userService.getCurrentUser();
+    return modelMapper.map(user, UserResponse.class);
+  }
 }

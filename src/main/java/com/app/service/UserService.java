@@ -17,4 +17,6 @@ public interface UserService {
   JwtAuthenticationResponse authenticateUser(LoginRequest loginRequest);
 
   User registerUser(SignUpRequest signUpRequest);
+
+  User getCurrentUser();
 }

@@ -38,4 +38,9 @@ public class UserController {
   public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
     return ResponseEntity.ok(userFacade.registerUser(signUpRequest));
   }
+
+  @GetMapping("users/current")
+  public ResponseEntity<UserResponse> getCurrentUser() {
+    return ResponseEntity.ok(userFacade.getCurrentUser());
+  }
 }
