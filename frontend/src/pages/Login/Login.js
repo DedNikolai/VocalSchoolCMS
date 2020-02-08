@@ -52,16 +52,16 @@ const useStyles = makeStyles(theme => ({
 
 function Login(props) {
     const classes = useStyles();
-    const {currentUser, currentUserLoading, userSignIn} = props;
-
-    if (currentUser) {
-        return <Redirect to={'/admin'}/>
-    }
+    const {currentUser, userSignIn} = props;
 
     const submitLoginForm = (event) => {
         event.preventDefault();
         const data = new FormData(event.target);
         userSignIn({email: data.get('email'), password: data.get('password')});
+    }
+
+    if (currentUser) {
+        return <Redirect to={'/admin'}/>
     }
 
     return (
