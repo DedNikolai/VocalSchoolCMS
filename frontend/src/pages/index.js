@@ -10,14 +10,16 @@ import Admin from './Admin/Admin';
 import {getCurrentUser} from "../store/actions/user";
 
 function AppRouter(props) {
-    const {currentUser, currentUserLoading, getCurrentUser, authLoading} = props;
+    const {currentUser, currentUserLoading, getCurrentUser} = props;
 
     useEffect(() => {
         getCurrentUser();
     }, []);
 
-    if (currentUserLoading || authLoading) {
-        return <div className="wrapper"><Preloader/></div>
+    if (currentUserLoading) {
+        return <div className="wrapper">
+            <Preloader/>
+        </div>
     }
 
     return (
@@ -42,8 +44,7 @@ export const ProtectedRoute = ({component: Component, authenticated, ...rest}) =
 AppRouter.propTypes = {
     currentUser: PropTypes.object,
     currentUserLoading: PropTypes.bool.isRequired,
-    getCurrentUser: PropTypes.func,
-    authLoading: PropTypes.bool.isRequired
+    getCurrentUser: PropTypes.func
 };
 
 AppRouter.defaultProps = {
@@ -51,15 +52,14 @@ AppRouter.defaultProps = {
 }
 
 ProtectedRoute.propTypes = {
-    component: PropTypes.func,
-    authenticated: PropTypes.bool
+    component: PropTypes.func.isRequired,
+    authenticated: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = ({user}) => {
     return {
         currentUser: user.currentUser,
-        currentUserLoading: user.currentUserLoading,
-        authLoading: user.authLoading
+        currentUserLoading: user.currentUserLoading
     }
 }
 

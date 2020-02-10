@@ -2,7 +2,7 @@ import * as TYPES from '../../constants/user';
 
 const initialState = {
     currentUser: null,
-    currentUserLoading: false,
+    currentUserLoading: true,
     authLoading: false,
 }
 

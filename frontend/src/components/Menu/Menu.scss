@@ -1,0 +1,11 @@
+.main-menu {
+  &__item {
+    color: rgba(.1, .1, .1, .87);
+    font-weight: 400;
+    font-size: 14px;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    line-height: 18px;
+    text-decoration: none;
+    text-underline: none;
+  }
+}
