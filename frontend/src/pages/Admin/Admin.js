@@ -1,43 +1,23 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {connect} from 'react-redux'
 import {userSignOut} from '../../store/actions/user'
 import PropTypes from 'prop-types'
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
-import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
-import { mainListItems, secondaryListItems } from '../../components/Menu/Menu';
-import Deposits from '../../components/Deposits/Deposits';
-import Orders from '../../components/Orders/Orders';
-
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+import Menu from '../../components/Menu/Menu';
+import AdminRouter from './AdminRouter/AdminRouter'
 
 const drawerWidth = 240;
 
@@ -123,14 +103,7 @@ const useStyles = makeStyles(theme => ({
 function Admin(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
-    const [text, setText] = useState('');
     const {userSignOut} = props;
-
-    useEffect(() => {
-        fetch('/api/v1/hello').then(res => {
-            return res.text()
-        }).then(text => setText(text))
-    }, [])
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -138,7 +111,6 @@ function Admin(props) {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     return (
         <div className={classes.root}>
@@ -159,8 +131,6 @@ function Admin(props) {
                     </Typography>
                     <IconButton color="inherit">
                         <ExitToAppOutlinedIcon onClick={userSignOut}/>
-                        {/*<Badge badgeContent={4} color="secondary">*/}
-                        {/*</Badge>*/}
                     </IconButton>
                 </Toolbar>
             </AppBar>
@@ -177,33 +147,12 @@ function Admin(props) {
                     </IconButton>
                 </div>
                 <Divider />
-                <List>{mainListItems}</List>
-                <Divider />
-                <List>{secondaryListItems}</List>
+                <List><Menu/></List>
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
                 <Container maxWidth="lg" className={classes.container}>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} md={8} lg={9}>
-                            <Paper className={fixedHeightPaper}>
-                                <h1>{text} in ADMIN panel</h1>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12} md={4} lg={3}>
-                            <Paper className={fixedHeightPaper}>
-                                <Deposits />
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Paper className={classes.paper}>
-                                <Orders />
-                            </Paper>
-                        </Grid>
-                    </Grid>
-                    <Box pt={4}>
-                        <Copyright />
-                    </Box>
+                    <AdminRouter />
                 </Container>
             </main>
         </div>
