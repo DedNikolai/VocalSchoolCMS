@@ -18,7 +18,7 @@ import java.util.Date;
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntiy {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Long id;
 
   @CreatedDate

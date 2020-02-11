@@ -1,7 +1,9 @@
 package com.app.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -14,6 +16,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -28,13 +31,15 @@ public class User extends BaseEntiy {
   @Column(name = "password")
   private String password;
 
-  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private Teacher teacher;
 
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"))
   @Column(name = "role")
   @Enumerated(EnumType.STRING)
-  private Set<Role> roles;
+  private Set<Role> roles = new HashSet<>();
 
 }
