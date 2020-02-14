@@ -1,7 +1,9 @@
 package com.app.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,11 +19,16 @@ import javax.persistence.Table;
 @NoArgsConstructor
 public class Lesson extends BaseEntiy {
 
-  @Column(name = "lesson_date")
-  private String lessonDate;
+  @ManyToOne
+  @JoinColumn(name="lesson_date", nullable=false)
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  private LessonDate date;
 
   @ManyToOne
   @JoinColumn(name="teacher_id", nullable=false)
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private Teacher teacher;
 
   @ManyToOne

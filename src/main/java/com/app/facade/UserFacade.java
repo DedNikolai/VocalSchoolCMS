@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class UserFacade {
@@ -50,5 +53,11 @@ public class UserFacade {
 
   public void deleteUser(Long id) {
     userService.deleteUser(id);
+  }
+
+  public List<UserResponse> getAllUsers() {
+    List<User> users = userService.getAllUsers();
+    List<UserResponse> userResponseList = users.stream().map(user -> modelMapper.map(user, UserResponse.class)).collect(Collectors.toList());
+    return userResponseList;
   }
 }

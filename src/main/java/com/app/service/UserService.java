@@ -5,6 +5,8 @@ import com.app.dto.request.SignUpRequest;
 import com.app.dto.response.JwtAuthenticationResponse;
 import com.app.model.User;
 
+import java.util.List;
+
 public interface UserService {
   User getUserById(Long id);
 
@@ -19,4 +21,6 @@ public interface UserService {
   User registerUser(SignUpRequest signUpRequest);
 
   User getCurrentUser();
+
+  List<User> getAllUsers();
 }
