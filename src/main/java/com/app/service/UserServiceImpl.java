@@ -4,6 +4,7 @@ import com.app.dto.request.LoginRequest;
 import com.app.dto.request.SignUpRequest;
 import com.app.dto.response.JwtAuthenticationResponse;
 import com.app.exeption.AppException;
+import com.app.exeption.ResourceNotFoundException;
 import com.app.model.Role;
 import com.app.model.User;
 import com.app.repository.UserRepository;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -29,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User getUserById(Long id) {
-    User user = userRepository.findById(id).orElse(null);
+    User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
     return user;
   }
 
@@ -40,13 +42,14 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User updateUser(Long id, User user) {
-    user.setId(id);
+    User userFromDb = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+    user.setId(userFromDb.getId());
     return userRepository.save(user);
   }
 
   @Override
   public void deleteUser(Long id) {
-    User user = userRepository.findById(id).orElse(null);
+    User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
     userRepository.delete(user);
   }
 
@@ -84,5 +87,10 @@ public class UserServiceImpl implements UserService {
   public User getCurrentUser() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     return userRepository.findByEmail(authentication.getName()).orElse(null);
+  }
+
+  @Override
+  public List<User> getAllUsers() {
+    return userRepository.findAll();
   }
 }

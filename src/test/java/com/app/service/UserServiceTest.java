@@ -78,6 +78,7 @@ public class UserServiceTest {
     mockUser.setEmail(expectedEmail);
 
     Mockito.when(userRepository.save(mockUser)).thenReturn(mockUser);
+    Mockito.when(userRepository.findById(expectedId)).thenReturn(Optional.of(mockUser));
     User user = userService.updateUser(expectedId, mockUser);
 
     Mockito.verify(userRepository).save(mockUser);

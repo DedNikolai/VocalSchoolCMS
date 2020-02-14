@@ -1,7 +1,9 @@
 package com.app.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -10,6 +12,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -45,7 +48,7 @@ public class Teacher extends BaseEntiy {
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User user;
 
-  @ManyToMany(mappedBy = "teachers")
+  @ManyToMany(mappedBy = "teachers", fetch = FetchType.EAGER)
   private Set<Student> students;
 
   @OneToMany(mappedBy="teacher")
@@ -57,10 +60,14 @@ public class Teacher extends BaseEntiy {
   @Enumerated(EnumType.STRING)
   private Set<Discipline> disciplines;
 
-  @OneToMany(mappedBy = "teacher")
+  @OneToMany(mappedBy = "teacher", fetch = FetchType.EAGER)
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private Set<Price> prices;
 
   @OneToMany(mappedBy = "teacher")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private Set<ConfirmedLesson> confirmedLessons;
 
 }

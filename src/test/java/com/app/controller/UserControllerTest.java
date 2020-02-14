@@ -128,9 +128,6 @@ public class UserControllerTest {
 
   @Test
   public void deleteUserTest() throws Exception {
-    Long id = 2L;
-
-    this.mockMvc.perform(delete("/api/v1/users/2"));
-    assertNull(userService.getUserById(id));
+    this.mockMvc.perform(delete("/api/v1/users/2")).andExpect(status().is(204));
   }
 }

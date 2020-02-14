@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1")
@@ -30,6 +31,13 @@ public class UserController {
   @GetMapping("users/{id}")
   public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
     UserResponse response = userFacade.getUserById(id);
+    return ResponseEntity.ok(response);
+  }
+
+  @PreAuthorize("hasAuthority('SUPER_ADMIN')")
+  @GetMapping("users")
+  public ResponseEntity<List<UserResponse>> getAllUsers() {
+    List<UserResponse> response = userFacade.getAllUsers();
     return ResponseEntity.ok(response);
   }
 

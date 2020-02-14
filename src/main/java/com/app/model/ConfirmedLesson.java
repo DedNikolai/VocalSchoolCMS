@@ -28,11 +28,11 @@ public class ConfirmedLesson extends BaseEntiy {
   private Room room;
 
   @ManyToOne
-  @JoinColumn(name="teacher_id", nullable=false)
+  @JoinColumn(name="teacher_id")
   private Teacher teacher;
 
   @ManyToOne
-  @JoinColumn(name="student_id", nullable=false)
+  @JoinColumn(name="student_id")
   private Student student;
 
 }

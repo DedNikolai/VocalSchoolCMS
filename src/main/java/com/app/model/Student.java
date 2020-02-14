@@ -1,15 +1,19 @@
 package com.app.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -39,16 +43,22 @@ public class Student extends BaseEntiy {
   @Column(name = "pay_balance")
   private Integer payBalance;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "students_teachers",
       joinColumns = {@JoinColumn(name = "student_id")},
       inverseJoinColumns = {@JoinColumn(name = "teacher_id")})
-  private Set<Teacher> teachers;
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  private Set<Teacher> teachers = new HashSet<>();
 
-  @OneToMany(mappedBy="student")
-  private Set<Lesson> lessons;
+  @OneToMany(mappedBy="student", fetch = FetchType.EAGER)
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  private Set<Lesson> lessons = new HashSet<>();
 
   @OneToMany(mappedBy = "student")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private Set<ConfirmedLesson> confirmedLessons;
 
 }
