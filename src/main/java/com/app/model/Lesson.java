@@ -20,19 +20,19 @@ import javax.persistence.Table;
 public class Lesson extends BaseEntiy {
 
   @ManyToOne
-  @JoinColumn(name="lesson_date", nullable=false)
+  @JoinColumn(name="lesson_date")
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
   private LessonDate date;
 
   @ManyToOne
-  @JoinColumn(name="teacher_id", nullable=false)
+  @JoinColumn(name="teacher_id")
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
   private Teacher teacher;
 
   @ManyToOne
-  @JoinColumn(name="student_id", nullable=false)
+  @JoinColumn(name="student_id")
   private Student student;
 
   @Enumerated(EnumType.STRING)

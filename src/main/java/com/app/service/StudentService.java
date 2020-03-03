@@ -13,5 +13,5 @@ public interface StudentService {
 
   void deleteStudent(Long id);
 
-  Page<Student> getAllStudents(Pageable pageable);
+  Page<Student> getAllStudents(String params, Pageable pageable);
 }

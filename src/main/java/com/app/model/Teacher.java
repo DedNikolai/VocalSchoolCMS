@@ -54,7 +54,7 @@ public class Teacher extends BaseEntiy {
   @OneToMany(mappedBy="teacher")
   private Set<Lesson> lessons;
 
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "teacher_discipline", joinColumns = @JoinColumn(name = "teacher_id"))
   @Column(name = "discipline")
   @Enumerated(EnumType.STRING)
