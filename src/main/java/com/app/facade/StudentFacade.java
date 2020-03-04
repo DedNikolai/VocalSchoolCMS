@@ -37,8 +37,8 @@ public class StudentFacade {
     studentService.deleteStudent(id);
   }
 
-  public Page<StudentResponse> getAllStudents(Pageable pageable) {
-    Page<Student> students = studentService.getAllStudents(pageable);
+  public Page<StudentResponse> getAllStudents(String params, Pageable pageable) {
+    Page<Student> students = studentService.getAllStudents(params, pageable);
     Page<StudentResponse> studentsList = students.map(student -> modelMapper.map(student, StudentResponse.class));
     return studentsList;
   }

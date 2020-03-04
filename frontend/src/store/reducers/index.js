@@ -1,9 +1,13 @@
 import { combineReducers } from 'redux';
-import {reducer as toastrReducer} from 'react-redux-toastr'
-import user from './user/user'
+import {reducer as toastrReducer} from 'react-redux-toastr';
+import user from './user/user';
+import student from './student/student';
+import teacher from './teacher/teacher';
 
 const rootReducer = combineReducers({
     user,
+    student,
+    teacher,
     toastr: toastrReducer
 });
 

@@ -1,0 +1,7 @@
+export const STUDENTS_LOADING = 'STUDENTS_LOADING';
+export const SAVE_STUDENTS = 'SAVE_STUDENTS';
+
+export const STUDENT_LOADING = 'STUDENT_LOADING';
+export const SAVE_STUDENT = 'SAVE_STUDENT';
+
+

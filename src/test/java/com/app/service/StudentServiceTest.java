@@ -106,7 +106,7 @@ public class StudentServiceTest {
     Page<Student> studentsList = new PageImpl<>(students);
 
     Mockito.when(studentRepository.findAll(pageable)).thenReturn(studentsList);
-    Page<Student> studentResponse = studentService.getAllStudents(pageable);
+    Page<Student> studentResponse = studentService.getAllStudents(null, pageable);
 
     Mockito.verify(studentRepository).findAll(pageable);
     Assert.assertEquals(expectedSize, studentResponse.getContent().size());
