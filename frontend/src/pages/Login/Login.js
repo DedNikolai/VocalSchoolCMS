@@ -15,7 +15,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {userSignIn} from '../../store/actions/user'
+import {userSignIn} from '../../store/actions/user';
+import {useFormik} from 'formik';
 
 function Copyright() {
     return (
@@ -54,11 +55,12 @@ function Login(props) {
     const classes = useStyles();
     const {currentUser, userSignIn} = props;
 
-    const submitLoginForm = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.target);
-        userSignIn({email: data.get('email'), password: data.get('password')});
-    }
+    const formik = useFormik({
+        initialValues: {},
+        onSubmit: value => {
+            userSignIn(value);
+        },
+    });
 
     if (currentUser) {
         return <Redirect to={'/admin'}/>
@@ -74,7 +76,7 @@ function Login(props) {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <form className={classes.form} noValidate onSubmit={submitLoginForm}>
+                <form className={classes.form} noValidate onSubmit={formik.handleSubmit}>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -85,6 +87,7 @@ function Login(props) {
                         name="email"
                         autoComplete="email"
                         autoFocus
+                        onChange={formik.handleChange}
                     />
                     <TextField
                         variant="outlined"
@@ -96,6 +99,7 @@ function Login(props) {
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        onChange={formik.handleChange}
                     />
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}

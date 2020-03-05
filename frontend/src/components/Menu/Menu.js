@@ -11,6 +11,7 @@ import {Roles} from '../../constants/roles';
 import {connect} from 'react-redux';
 import SchoolIcon from '@material-ui/icons/School';
 import ScheduleIcon from '@material-ui/icons/Schedule';
+import FaceIcon from '@material-ui/icons/Face';
 import './Menu.scss';
 
 const teacherPermissions = [Roles.TEACHER, Roles.ADMIN, Roles.SUPER_ADMIN];
@@ -30,6 +31,17 @@ function Menu(props) {
                 </ListItem>
             </NavLink>
             {
+                hasRoles(user, superAdmin) &&
+                <NavLink to='/admin/users' className='main-menu__item'>
+                    <ListItem button>
+                        <ListItemIcon>
+                            <PeopleIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Користувачі" />
+                    </ListItem>
+                </NavLink>
+            }
+            {
                 hasRoles(user, adminPermissions) &&
                 <NavLink to='/admin/lessons' className='main-menu__item'>
                     <ListItem button>
@@ -45,7 +57,7 @@ function Menu(props) {
                 <NavLink to='/admin/students' className='main-menu__item'>
                     <ListItem button>
                         <ListItemIcon>
-                            <PeopleIcon />
+                            <FaceIcon />
                         </ListItemIcon>
                         <ListItemText primary="Учні" />
                     </ListItem>

@@ -105,13 +105,11 @@ function Students(props) {
                                                     if (column.id === 'actions') {
                                                         return (
                                                             <TableCell className={classes.cell}>
-                                                                <NavLink to={`/admin/students/${row.id}`}>
-                                                                    <IconButton>
-                                                                        <NavLink to={`/admin/students/edit/${row.id}`}>
-                                                                            <Edit/>
-                                                                        </NavLink>
-                                                                    </IconButton>
-                                                                </NavLink>
+                                                                <IconButton>
+                                                                    <NavLink to={`/admin/students/edit/${row.id}`}>
+                                                                        <Edit/>
+                                                                    </NavLink>
+                                                                </IconButton>
                                                                 <IconButton>
                                                                     <DeleteOutline onClick={() => deleteStudent(row.id)}/>
                                                                 </IconButton>
