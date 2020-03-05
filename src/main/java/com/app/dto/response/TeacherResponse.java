@@ -18,7 +18,7 @@ public class TeacherResponse {
   private String firstName;
   private String lastName;
   private Integer age;
-  private UserResponse user;
+//  private UserResponse user;
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
   @JsonView(View.Teacher.class)

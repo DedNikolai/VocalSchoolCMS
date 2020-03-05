@@ -7,9 +7,9 @@ import PropTypes from 'prop-types';
 import MainPage from '../MainPage/MainPage';
 import Students from '../Students/Students';
 import Teachers from '../Teachers/Teachers';
-import TimeTables from '../TimeTables/TimeTables';
-import Reports from '../Reports/Reports';
-import ManageStudent from '../ManageStudent/ManageStudent'
+import ManageStudent from '../ManageStudent/ManageStudent';
+import ManageTeacher from '../ManageTeachers/ManageTeacher';
+import Users from '../Users/Users';
 
 const teacherPermissions = [Roles.TEACHER, Roles.ADMIN, Roles.SUPER_ADMIN];
 const adminPermissions = [Roles.ADMIN, Roles.SUPER_ADMIN];
@@ -23,9 +23,10 @@ function AdminRouter (props) {
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/students/edit/:id' component={ManageStudent} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/students/edit' component={ManageStudent} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/students' component={Students} />
+            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/teachers/edit/:id' component={ManageTeacher} />
+            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/teachers/edit' component={ManageTeacher} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/teachers' component={Teachers} />
-            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons' component={TimeTables} />
-            <AuthorizedRoute authorized={hasRoles(user, superAdmin)} path='/admin/reports' component={Reports} />
+            <AuthorizedRoute authorized={hasRoles(user, superAdmin)} path='/admin/users' component={Users} />
             <AuthorizedRoute authorized={hasRoles(user, teacherPermissions)} path='/admin' component={MainPage} />
         </Switch>
     )

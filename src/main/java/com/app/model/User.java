@@ -31,10 +31,10 @@ public class User extends BaseEntiy {
   @Column(name = "password")
   private String password;
 
-  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  private Teacher teacher;
+//  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//  @ToString.Exclude
+//  @EqualsAndHashCode.Exclude
+//  private Teacher teacher;
 
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"))

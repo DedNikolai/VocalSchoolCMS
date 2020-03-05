@@ -44,14 +44,14 @@ public class Teacher extends BaseEntiy {
   @Column(name = "age")
   private Integer age;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "user_id", referencedColumnName = "id")
-  private User user;
+//  @OneToOne(cascade = CascadeType.ALL)
+//  @JoinColumn(name = "user_id", referencedColumnName = "id")
+//  private User user;
 
   @ManyToMany(mappedBy = "teachers", fetch = FetchType.EAGER)
   private Set<Student> students;
 
-  @OneToMany(mappedBy="teacher")
+  @OneToMany(mappedBy="teacher", fetch = FetchType.EAGER)
   private Set<Lesson> lessons;
 
   @ElementCollection(fetch = FetchType.EAGER)
