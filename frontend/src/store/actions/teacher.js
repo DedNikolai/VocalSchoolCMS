@@ -1,20 +1,20 @@
 import * as TYPES from '../constants/teacher';
 import api from '../api/FetchData';
 import {toastr} from 'react-redux-toastr'
-import {getAllStudents} from "./student";
 
 export const getAllTeachers = () => dispatch => {
-    dispatch({type: TYPES.ALL_TEACHERS_LOADING, payload: true})
+    dispatch({type: TYPES.ALL_TEACHERS_LOADING, payload: {teachersLoading: true}})
     api.get('/teachers').then(res => {
         if (res.status === 200) {
-            dispatch({type: TYPES.SAVE_ALL_TEACHERS, payload: res.data})
+            dispatch({type: TYPES.SAVE_TEACHERS, payload: {allTeachers: res.data}})
         }
     }).finally(() => {
-        dispatch({type: TYPES.ALL_TEACHERS_LOADING, payload: false})
+        dispatch({type: TYPES.ALL_TEACHERS_LOADING, payload: {teachersLoading: false}})
     })
 };
 
 export const getTeacherById = id => dispatch => {
+    console.log(id)
     dispatch({type: TYPES.TEACHER_LOADING, payload: true})
     api.get(`/teachers/${id}`).then(res => {
         if (res.status === 200) {

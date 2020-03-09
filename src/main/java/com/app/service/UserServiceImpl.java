@@ -44,6 +44,7 @@ public class UserServiceImpl implements UserService {
   public User updateUser(Long id, User user) {
     User userFromDb = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
     user.setId(userFromDb.getId());
+    user.setPassword(userFromDb.getPassword());
     return userRepository.save(user);
   }
 

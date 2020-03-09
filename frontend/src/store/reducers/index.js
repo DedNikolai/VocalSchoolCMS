@@ -5,9 +5,9 @@ import student from './student/student';
 import teacher from './teacher/teacher';
 
 const rootReducer = combineReducers({
-    user,
-    student,
-    teacher,
+    user: user,
+    student: student,
+    teacher: teacher,
     toastr: toastrReducer
 });
 

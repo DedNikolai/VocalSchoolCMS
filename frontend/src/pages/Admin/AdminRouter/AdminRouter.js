@@ -9,6 +9,7 @@ import Students from '../Students/Students';
 import Teachers from '../Teachers/Teachers';
 import ManageStudent from '../ManageStudent/ManageStudent';
 import ManageTeacher from '../ManageTeachers/ManageTeacher';
+import ManageUser from '../ManageUser/ManageUser';
 import Users from '../Users/Users';
 
 const teacherPermissions = [Roles.TEACHER, Roles.ADMIN, Roles.SUPER_ADMIN];
@@ -20,13 +21,15 @@ function AdminRouter (props) {
 
     return (
         <Switch>
+            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/users/edit/:id' component={ManageUser} />
+            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/users/add-new' component={ManageUser} />
+            <AuthorizedRoute authorized={hasRoles(user, superAdmin)} path='/admin/users' component={Users} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/students/edit/:id' component={ManageStudent} />
-            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/students/edit' component={ManageStudent} />
+            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/students/add-new' component={ManageStudent} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/students' component={Students} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/teachers/edit/:id' component={ManageTeacher} />
-            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/teachers/edit' component={ManageTeacher} />
+            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/teachers/add-new' component={ManageTeacher} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/teachers' component={Teachers} />
-            <AuthorizedRoute authorized={hasRoles(user, superAdmin)} path='/admin/users' component={Users} />
             <AuthorizedRoute authorized={hasRoles(user, teacherPermissions)} path='/admin' component={MainPage} />
         </Switch>
     )

@@ -2,3 +2,9 @@ export const AUTH_LOADING = 'AUTH_LOADING';
 
 export const USER_LOADING = 'USER_LOADING';
 export const SAVE_USER = 'SAVE_USER';
+
+export const ALL_USERS_LOADING = 'ALL_USERS_LOADING';
+export const SAVE_ALL_USERS = 'SAVE_ALL_TEACHERS';
+
+export const USER_BY_ID_LOADING = 'USER_BY_ID_LOADING';
+export const SAVE_USER_BY_ID = 'SAVE_USER_BY_ID';

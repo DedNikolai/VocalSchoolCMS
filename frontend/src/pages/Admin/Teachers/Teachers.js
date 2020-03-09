@@ -56,7 +56,7 @@ function Teachers(props) {
     return (
         <div className='teachers-list'>
             <div className='teachers-list__top-block'>
-                <NavLink to='/admin/teachers/edit'>
+                <NavLink to='/admin/teachers/add-new'>
                     <AddButton/>
                 </NavLink>
             </div>

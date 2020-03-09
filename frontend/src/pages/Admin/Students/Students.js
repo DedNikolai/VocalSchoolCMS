@@ -71,7 +71,7 @@ function Students(props) {
                     setSearchParam={value => setParam(value)}
                     search={(param) => getAllStudents(0, rowsPerPage, param)}
                 />
-                <NavLink to='/admin/students/edit'>
+                <NavLink to='/admin/students/add-new'>
                     <AddButton/>
                 </NavLink>
             </div>
