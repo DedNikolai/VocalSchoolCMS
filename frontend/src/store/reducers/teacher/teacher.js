@@ -9,10 +9,10 @@ const initialState = {
 
 const teacher = (state = initialState, action) => {
     switch (action.type) {
-        case TYPES.SAVE_ALL_TEACHERS:
-            return {...state, teachers: action.payload}
+        case TYPES.SAVE_TEACHERS:
+            return {...state, teachers: action.payload.allTeachers}
         case TYPES.ALL_TEACHERS_LOADING:
-            return {...state, teachersLoading: action.payload}
+            return {...state, teachersLoading: action.payload.teachersLoading}
         case TYPES.SAVE_TEACHER:
             return {...state, teacherById: action.payload}
         case TYPES.TEACHER_LOADING:

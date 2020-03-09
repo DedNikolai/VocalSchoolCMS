@@ -2,7 +2,9 @@ package com.app.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.CascadeType;
@@ -22,7 +24,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "taechers")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Teacher extends BaseEntiy {
 
@@ -62,12 +65,10 @@ public class Teacher extends BaseEntiy {
 
   @OneToMany(mappedBy = "teacher", fetch = FetchType.EAGER)
   @ToString.Exclude
-  @EqualsAndHashCode.Exclude
   private Set<Price> prices;
 
   @OneToMany(mappedBy = "teacher")
   @ToString.Exclude
-  @EqualsAndHashCode.Exclude
   private Set<ConfirmedLesson> confirmedLessons;
 
 }

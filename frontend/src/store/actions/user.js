@@ -34,7 +34,61 @@ export const getCurrentUser = () => dispatch => {
 export const userSignOut = () => dispatch => {
     LocalStorageService.delete(LocalStorageService.Keys.TOKEN);
     dispatch({type: TYPES.SAVE_USER, payload: null});
-}
+};
+
+export const getAllUsers = () => dispatch => {
+    dispatch({type: TYPES.ALL_USERS_LOADING, payload: {usersLoading: true}})
+    api.get('/users').then(res => {
+        if (res.status === 200) {
+            dispatch({type: TYPES.SAVE_ALL_USERS, payload: {allUsers: res.data}})
+        }
+    }).finally(() => {
+        dispatch({type: TYPES.ALL_USERS_LOADING, payload: {usersLoading: false}})
+    })
+};
+
+export const getUserById = id => dispatch => {
+    dispatch({type: TYPES.USER_BY_ID_LOADING, payload: true})
+    api.get(`/users/${id}`).then(res => {
+        if (res.status === 200) {
+            dispatch({type: TYPES.SAVE_USER_BY_ID, payload: res.data})
+        }
+    }).finally(() => {
+        dispatch({type: TYPES.USER_BY_ID_LOADING, payload: false})
+    })
+};
+
+export const updateUser = (id, data) => dispatch => {
+    dispatch({type: TYPES.USER_BY_ID_LOADING, payload: true})
+    api.put(`/users/${id}`, data).then(res => {
+        if (res.status === 200) {
+            dispatch({type: TYPES.SAVE_USER_BY_ID, payload: res.data})
+            dispatch(getAllUsers());
+            toastr.success('User was updated');
+        }
+    }).finally(() => {
+        dispatch({type: TYPES.USER_BY_ID_LOADING, payload: false})
+    })
+};
+
+export const deleteUser = id => dispatch => {
+    api.deleteApi(`/users/${id}`).then(res => {
+        if (res.status >= 200 && res.status < 300) {
+            dispatch(getAllUsers());
+            toastr.success('User was deleted');
+        }
+    })
+};
+
+export const createUser = data => dispatch => {
+    dispatch({type: TYPES.USER_BY_ID_LOADING, payload: true})
+    api.post('/users', data).then(res => {
+        if (res.status >= 200 && res.status < 300) {
+            dispatch(getAllUsers());
+            toastr.success('User was created');
+        }
+    }).finally(() => dispatch({type: TYPES.USER_BY_ID_LOADING, payload: true}))
+};
 
 
 

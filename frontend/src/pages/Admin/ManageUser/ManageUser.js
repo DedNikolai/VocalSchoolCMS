@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {NavLink, Redirect} from 'react-router-dom';
-import {getTeacherById, updateTeacher, createTeacher} from "../../../store/actions/teacher";
+import {createUser, getUserById, updateUser} from "../../../store/actions/user";
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
 import Preloader from '../../../components/Preloader/index';
 import Paper from '@material-ui/core/Paper';
-import {makeStyles, useTheme, createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
+import {createMuiTheme, makeStyles, ThemeProvider, useTheme} from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -17,11 +17,11 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
-import { green } from '@material-ui/core/colors';
+import {green} from '@material-ui/core/colors';
 import {useFormik} from 'formik';
-import './ManageTeacher.scss';
+import './ManageUser.scss';
 import {colors} from '../../../constants/view';
-import Disciplines from '../../../constants/disciplines';
+import {Roles} from '../../../constants/roles';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -67,22 +67,23 @@ const theme = createMuiTheme({
     },
 });
 
-function ManageTeacher(props) {
+function ManageUser(props) {
     const classes = useStyles();
-    const {teacher, teacherLoading, getTeacher, updateTeacher, createTeacher} = props;
-    const id = props.match.params.id
+    const {user, userLoading, getUser, updateUser, createUser} = props;
+    const id = props.match.params.id;
     const theme = useTheme();
     const [changed, setChanged] = useState(false);
+    const allRoles = Object.keys(Roles).map(key => Roles[key]);
 
     const formik = useFormik({
         initialValues: {},
         onSubmit: value => {
-            const data = {...teacher};
+            const data = {...user};
             Object.keys(value).forEach(key => data[key] = value[key]);
             if (id) {
-                updateTeacher(id, data);
+                updateUser(id, data);
             } else {
-                createTeacher(value);
+                createUser(value);
             }
             setChanged(true)
         },
@@ -90,70 +91,33 @@ function ManageTeacher(props) {
 
     useEffect(() => {
         if (id) {
-            getTeacher(id);
+            getUser(id);
         }
     }, []);
 
     const handleChange = event => {
-        formik.setFieldValue('disciplines', event.target.value);
+        formik.setFieldValue('roles', event.target.value);
     };
 
     if (changed) {
-        return <Redirect to='/admin/teachers' />
+        return <Redirect to='/admin/users' />
     }
-    if (teacherLoading && id) {
+
+    if (userLoading && id) {
         return <div className="wrapper"><Preloader/></div>
     }
 
-    const teacherDesciplines = id ? Disciplines.filter(discpline => teacher.disciplines.some(item => item === discpline)) : [];
-    const checked = id ? formik.values.disciplines || teacher.disciplines : formik.values.disciplines || [];
+    const userRoles = id ? allRoles.filter(role => user.roles.some(item => item === role)) : [];
+    const checked = id ? formik.values.roles || user.roles : formik.values.roles || [];
     return (
         <Paper>
             <form className={classes.root} noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
                 <div>
                     <TextField
-                        label="Ім'я"
-                        name='firstName'
-                        id="outlined-size-small"
-                        defaultValue={id ? teacher.firstName : ''}
-                        variant="outlined"
-                        size="small"
-                        onChange={formik.handleChange}
-                    />
-                    <TextField
-                        label="Прізвище"
-                        name='lastName'
-                        id="outlined-size-small"
-                        defaultValue={id ? teacher.lastName : ''}
-                        variant="outlined"
-                        size="small"
-                        onChange={formik.handleChange}
-                    />
-                    <TextField
-                        label="Вік"
-                        name='age'
-                        id="outlined-size-small"
-                        defaultValue={id ? teacher.age : ''}
-                        variant="outlined"
-                        size="small"
-                        onChange={formik.handleChange}
-                    />
-                </div>
-                <div>
-                    <TextField
                         label="Email"
                         name='email'
                         id="outlined-size-small"
-                        defaultValue={id ? teacher.email : ''}
-                        variant="outlined"
-                        size="small"
-                        onChange={formik.handleChange}
-                    />
-                    <TextField
-                        label="Телефон"
-                        name='phone'
-                        id="outlined-size-small"
-                        defaultValue={id ? teacher.phone : ''}
+                        defaultValue={id ? user.email : ''}
                         variant="outlined"
                         size="small"
                         onChange={formik.handleChange}
@@ -161,29 +125,29 @@ function ManageTeacher(props) {
                 </div>
                 <div>
                     <FormControl className={classes.formControl}>
-                        <InputLabel id="demo-mutiple-checkbox-label">Дисципліни</InputLabel>
+                        <InputLabel id="demo-mutiple-checkbox-label">Рівні доступу</InputLabel>
                         <Select
                             labelId="demo-mutiple-checkbox-label"
                             id="demo-mutiple-checkbox"
                             name='teachers'
                             multiple
-                            value={formik.values.disciplines || teacherDesciplines}
+                            value={formik.values.roles || userRoles}
                             onChange={handleChange}
                             input={<Input />}
-                            renderValue={selected => selected.map(descipline => descipline + ', ')}
+                            renderValue={selected => selected.join(', ')}
                             MenuProps={MenuProps}
                         >
-                            {Disciplines.map(item => (
-                                <MenuItem key={item} value={item}>
-                                    <Checkbox checked={checked.indexOf(item) > -1} />
-                                    <ListItemText primary={item} />
+                            {allRoles.map(role => (
+                                <MenuItem key={role} value={role}>
+                                    <Checkbox checked={checked.indexOf(role) > -1} />
+                                    <ListItemText primary={role} />
                                 </MenuItem>
                             ))}
                         </Select>
                     </FormControl>
                 </div>
                 <div className='buttons-container'>
-                    <NavLink to='/admin/teachers'>
+                    <NavLink to='/admin/users'>
                         <Button
                             variant="contained"
                             color="secondary"
@@ -208,32 +172,33 @@ function ManageTeacher(props) {
                 </div>
             </form>
         </Paper>
+
     )
 }
 
-ManageTeacher.propTypes = {
-    teacher: PropTypes.object,
-    teacherLoading: PropTypes.bool.isRequired,
-    getTeacher: PropTypes.func.isRequired,
-    createTeacher: PropTypes.func.isRequired,
-    updateTeacher: PropTypes.func.isRequired,
+ManageUser.propTypes = {
+    user: PropTypes.object,
+    userLoading: PropTypes.bool.isRequired,
+    getUser: PropTypes.func.isRequired,
+    createUser: PropTypes.func.isRequired,
+    updateUser: PropTypes.func.isRequired,
 };
 
-ManageTeacher.defaultProps = {
-    teacher: {},
+ManageUser.defaultProps = {
+    user: null,
 }
 
-const mapStateToProps = ({teacher}) => {
+const mapStateToProps = ({user}) => {
     return {
-        teacher: teacher.teacherById,
-        teacherLoading: teacher.teacherByIdLoading,
+        user: user.userById,
+        userLoading: user.userByIdLoading,
     }
 };
 
 const mapDispatchToProps = dispatch => ({
-    getTeacher: (id) => dispatch(getTeacherById(id)),
-    updateTeacher: (id, data) => dispatch(updateTeacher(id, data)),
-    createTeacher: data => dispatch(createTeacher(data)),
+    getUser: (id) => dispatch(getUserById(id)),
+    updateUser: (id, data) => dispatch(updateUser(id, data)),
+    createUser: data => dispatch(createUser(data)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManageTeacher);
+export default connect(mapStateToProps, mapDispatchToProps)(ManageUser);
