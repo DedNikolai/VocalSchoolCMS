@@ -18,12 +18,12 @@ public class StudentResponse {
   private String lastName;
   private Integer age;
   private Integer payBalance;
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  @JsonView(View.Student.class)
-  private Set<TeacherResponse> teachers;
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  @JsonView(View.Student.class)
-  private Set<LessonResponse> lessons;
+//  @ToString.Exclude
+//  @EqualsAndHashCode.Exclude
+//  @JsonView(View.Student.class)
+//  private Set<TeacherResponse> teachers;
+//  @ToString.Exclude
+//  @EqualsAndHashCode.Exclude
+//  @JsonView(View.Student.class)
+//  private Set<LessonResponse> lessons;
 }

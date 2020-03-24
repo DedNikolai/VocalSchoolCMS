@@ -40,16 +40,10 @@ VALUES
   (1, 'SOLFEGGIO'),
   (2, 'VOCAL');
 
-INSERT INTO lesson_date
-  (id, date_created, date_modified, lesson_day, lesson_hour)
-VALUES
-  (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 10),
-  (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 15);
-
 INSERT INTO lessons
-  (id, date_created, date_modified, lesson_date, teacher_id, student_id, room, price, discipline, lesson_type)
+  (id, date_created, date_modified, teacher_id, student_id, room, discipline, lesson_type, lesson_day, time_hour, time_minutes)
 VALUES
-  (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 1, 1, 'ROOM1', 500, 'VOCAL', 'MAN'),
-  (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 1, 2, 'ROOM2', 350, 'SOLFEGGIO', 'MAN'),
-  (3, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 2, 1, 'ROOM3', 400, 'VOCAL', 'CHILD');
+  (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 1, 'ROOM1', 'VOCAL', 'MAN', 'MONDAY', 12, 0),
+  (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 2, 'ROOM2', 'SOLFEGGIO', 'MAN', 'MONDAY', 13, 0),
+  (3, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 1, 'ROOM3', 'VOCAL', 'CHILD', 'FRIDAY', 10, 30);
 

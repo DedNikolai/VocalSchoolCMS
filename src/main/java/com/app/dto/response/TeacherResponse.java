@@ -19,14 +19,14 @@ public class TeacherResponse {
   private String lastName;
   private Integer age;
 //  private UserResponse user;
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  @JsonView(View.Teacher.class)
+//  @ToString.Exclude
+//  @EqualsAndHashCode.Exclude
+//  @JsonView(View.Teacher.class)
   private Set<StudentResponse> students;
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  @JsonView(View.Teacher.class)
-  private Set<LessonResponse> lessons;
+//  @ToString.Exclude
+//  @EqualsAndHashCode.Exclude
+//  @JsonView(View.Teacher.class)
+//  private Set<LessonResponse> lessons;
   private Set<Discipline> disciplines;
   @ToString.Exclude
   @EqualsAndHashCode.Exclude

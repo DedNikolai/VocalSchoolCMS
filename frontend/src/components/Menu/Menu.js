@@ -12,6 +12,7 @@ import {connect} from 'react-redux';
 import SchoolIcon from '@material-ui/icons/School';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import FaceIcon from '@material-ui/icons/Face';
+import ListAltIcon from '@material-ui/icons/ListAlt';
 import './Menu.scss';
 
 const teacherPermissions = [Roles.TEACHER, Roles.ADMIN, Roles.SUPER_ADMIN];
@@ -46,9 +47,9 @@ function Menu(props) {
                 <NavLink to='/admin/lessons' className='main-menu__item'>
                     <ListItem button>
                         <ListItemIcon>
-                            <ScheduleIcon />
+                            <ListAltIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Урокы" />
+                        <ListItemText primary="Розклад" />
                     </ListItem>
                 </NavLink>
             }
