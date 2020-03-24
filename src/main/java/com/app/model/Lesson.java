@@ -20,12 +20,6 @@ import javax.persistence.Table;
 public class Lesson extends BaseEntiy {
 
   @ManyToOne
-  @JoinColumn(name="lesson_date")
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  private LessonDate date;
-
-  @ManyToOne
   @JoinColumn(name="teacher_id")
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
@@ -39,8 +33,11 @@ public class Lesson extends BaseEntiy {
   @Column(name = "room")
   private Room room;
 
-  @Column(name = "price")
-  private Integer price;
+  @Column(name = "time_hour")
+  private Integer timeHour;
+
+  @Column(name = "time_minutes")
+  private Integer timeMinutes;
 
   @Column(name = "discipline")
   @Enumerated(EnumType.STRING)
@@ -49,5 +46,9 @@ public class Lesson extends BaseEntiy {
   @Column(name = "lesson_type")
   @Enumerated(EnumType.STRING)
   private LessonType type;
+
+  @Column(name = "lesson_day")
+  @Enumerated(EnumType.STRING)
+  private LessonDay day;
 
 }

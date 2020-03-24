@@ -11,6 +11,8 @@ import ManageStudent from '../ManageStudent/ManageStudent';
 import ManageTeacher from '../ManageTeachers/ManageTeacher';
 import ManageUser from '../ManageUser/ManageUser';
 import Users from '../Users/Users';
+import Lessons from '../Lessons/Lessons'
+import ManageLessons from '../ManageLessons/ManageLessons';
 
 const teacherPermissions = [Roles.TEACHER, Roles.ADMIN, Roles.SUPER_ADMIN];
 const adminPermissions = [Roles.ADMIN, Roles.SUPER_ADMIN];
@@ -30,6 +32,9 @@ function AdminRouter (props) {
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/teachers/edit/:id' component={ManageTeacher} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/teachers/add-new' component={ManageTeacher} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/teachers' component={Teachers} />
+            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/add-new' component={ManageLessons} />
+            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/edit/:id' component={ManageLessons} />
+            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons' component={Lessons} />
             <AuthorizedRoute authorized={hasRoles(user, teacherPermissions)} path='/admin' component={MainPage} />
         </Switch>
     )
