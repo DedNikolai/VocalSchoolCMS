@@ -27,4 +27,5 @@ public class LessonResponse {
   private LessonDay day;
   private Integer timeHour;
   private Integer timeMinutes;
+  private Integer duration;
 }

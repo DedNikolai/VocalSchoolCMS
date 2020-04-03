@@ -39,6 +39,9 @@ public class Lesson extends BaseEntiy {
   @Column(name = "time_minutes")
   private Integer timeMinutes;
 
+  @Column(name = "duration")
+  private Integer duration;
+
   @Column(name = "discipline")
   @Enumerated(EnumType.STRING)
   private Discipline discipline;

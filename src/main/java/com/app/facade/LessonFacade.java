@@ -45,4 +45,10 @@ public class LessonFacade {
     Lesson updatedLesson = lessonService.updateLesson(lesson, id);
     return modelMapper.map(updatedLesson, LessonResponse.class);
   }
+
+  public List<LessonResponse> getAllLessons() {
+    List<Lesson> lessons = lessonService.getAllLessons();
+    List<LessonResponse> response = lessons.stream().map(lesson -> modelMapper.map(lesson, LessonResponse.class)).collect(Collectors.toList());
+    return response;
+  }
 }

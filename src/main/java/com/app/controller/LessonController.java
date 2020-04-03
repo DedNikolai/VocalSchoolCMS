@@ -54,4 +54,10 @@ public class LessonController {
     LessonResponse response = lessonFacade.updateLesson(request, id);
     return ResponseEntity.ok(response);
   }
+
+  @GetMapping
+  public ResponseEntity<List<LessonResponse>> getLessons() {
+    List<LessonResponse> response = lessonFacade.getAllLessons();
+    return ResponseEntity.ok(response);
+  }
 }
