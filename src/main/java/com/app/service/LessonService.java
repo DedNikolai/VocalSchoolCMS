@@ -14,4 +14,6 @@ public interface LessonService {
   Lesson getLessonById(Long id);
 
   Lesson updateLesson(Lesson lesson, Long id);
+
+  List<Lesson> getAllLessons();
 }

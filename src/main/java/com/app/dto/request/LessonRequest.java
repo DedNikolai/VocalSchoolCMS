@@ -18,4 +18,5 @@ public class LessonRequest {
   private Integer timeHour;
   private Integer timeMinutes;
   private Room room;
+  private Integer duration;
 }

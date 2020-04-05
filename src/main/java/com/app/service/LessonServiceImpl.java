@@ -46,4 +46,9 @@ public class LessonServiceImpl implements LessonService {
     lesson.setId(lessonFromDb.getId());
     return lessonRepository.save(lesson);
   }
+
+  @Override
+  public List<Lesson> getAllLessons() {
+    return lessonRepository.findAll();
+  }
 }
