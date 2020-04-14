@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {NavLink, Redirect} from 'react-router-dom';
 import {getTeacherById, updateTeacher, createTeacher} from "../../../store/actions/teacher";
 import {connect} from "react-redux";
@@ -22,6 +22,8 @@ import {useFormik} from 'formik';
 import './ManageTeacher.scss';
 import {colors} from '../../../constants/view';
 import Disciplines from '../../../constants/disciplines';
+import TimeTable from '../../../components/TimeTable/TimeTable';
+import TeacherFreeTimes from './TeacherFreeTimes/TeacherFreeTimes';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -108,106 +110,112 @@ function ManageTeacher(props) {
     const teacherDesciplines = id ? Disciplines.filter(discpline => teacher.disciplines.some(item => item === discpline)) : [];
     const checked = id ? formik.values.disciplines || teacher.disciplines : formik.values.disciplines || [];
     return (
-        <Paper>
-            <form className={classes.root} noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
-                <div>
-                    <TextField
-                        label="Ім'я"
-                        name='firstName'
-                        id="outlined-size-small"
-                        defaultValue={id ? teacher.firstName : ''}
-                        variant="outlined"
-                        size="small"
-                        onChange={formik.handleChange}
-                    />
-                    <TextField
-                        label="Прізвище"
-                        name='lastName'
-                        id="outlined-size-small"
-                        defaultValue={id ? teacher.lastName : ''}
-                        variant="outlined"
-                        size="small"
-                        onChange={formik.handleChange}
-                    />
-                    <TextField
-                        label="Вік"
-                        name='age'
-                        id="outlined-size-small"
-                        defaultValue={id ? teacher.age : ''}
-                        variant="outlined"
-                        size="small"
-                        onChange={formik.handleChange}
-                    />
-                </div>
-                <div>
-                    <TextField
-                        label="Email"
-                        name='email'
-                        id="outlined-size-small"
-                        defaultValue={id ? teacher.email : ''}
-                        variant="outlined"
-                        size="small"
-                        onChange={formik.handleChange}
-                    />
-                    <TextField
-                        label="Телефон"
-                        name='phone'
-                        id="outlined-size-small"
-                        defaultValue={id ? teacher.phone : ''}
-                        variant="outlined"
-                        size="small"
-                        onChange={formik.handleChange}
-                    />
-                </div>
-                <div>
-                    <FormControl className={classes.formControl}>
-                        <InputLabel id="demo-mutiple-checkbox-label">Дисципліни</InputLabel>
-                        <Select
-                            labelId="demo-mutiple-checkbox-label"
-                            id="demo-mutiple-checkbox"
-                            name='teachers'
-                            multiple
-                            value={formik.values.disciplines || teacherDesciplines}
-                            onChange={handleChange}
-                            input={<Input />}
-                            renderValue={selected => selected.map(descipline => descipline + ', ')}
-                            MenuProps={MenuProps}
-                        >
-                            {Disciplines.map(item => (
-                                <MenuItem key={item} value={item}>
-                                    <Checkbox checked={checked.indexOf(item) > -1} />
-                                    <ListItemText primary={item} />
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </div>
-                <div className='buttons-container'>
-                    <NavLink to='/admin/teachers'>
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            className={classes.button}
-                            startIcon={<DeleteIcon />}
-                        >
-                            Cancel
-                        </Button>
-                    </NavLink>
-                    <ThemeProvider theme={theme}>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            className={classes.button}
-                            startIcon={<SaveIcon />}
-                            style={{backgroundColor: colors.COLOR_GREEN}}
-                            type='submit'
-                        >
-                            Save
-                        </Button>
-                    </ThemeProvider>
-                </div>
-            </form>
-        </Paper>
+        <Fragment>
+            <h2>Особисті дані</h2>
+            <Paper>
+                <form className={classes.root} noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
+                    <div>
+                        <TextField
+                            label="Ім'я"
+                            name='firstName'
+                            id="outlined-size-small"
+                            defaultValue={id ? teacher.firstName : ''}
+                            variant="outlined"
+                            size="small"
+                            onChange={formik.handleChange}
+                        />
+                        <TextField
+                            label="Прізвище"
+                            name='lastName'
+                            id="outlined-size-small"
+                            defaultValue={id ? teacher.lastName : ''}
+                            variant="outlined"
+                            size="small"
+                            onChange={formik.handleChange}
+                        />
+                        <TextField
+                            label="Вік"
+                            name='age'
+                            id="outlined-size-small"
+                            defaultValue={id ? teacher.age : ''}
+                            variant="outlined"
+                            size="small"
+                            onChange={formik.handleChange}
+                        />
+                    </div>
+                    <div>
+                        <TextField
+                            label="Email"
+                            name='email'
+                            id="outlined-size-small"
+                            defaultValue={id ? teacher.email : ''}
+                            variant="outlined"
+                            size="small"
+                            onChange={formik.handleChange}
+                        />
+                        <TextField
+                            label="Телефон"
+                            name='phone'
+                            id="outlined-size-small"
+                            defaultValue={id ? teacher.phone : ''}
+                            variant="outlined"
+                            size="small"
+                            onChange={formik.handleChange}
+                        />
+                    </div>
+                    <div>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel id="demo-mutiple-checkbox-label">Дисципліни</InputLabel>
+                            <Select
+                                labelId="demo-mutiple-checkbox-label"
+                                id="demo-mutiple-checkbox"
+                                name='teachers'
+                                multiple
+                                value={formik.values.disciplines || teacherDesciplines}
+                                onChange={handleChange}
+                                input={<Input />}
+                                renderValue={selected => selected.map(descipline => descipline + ', ')}
+                                MenuProps={MenuProps}
+                            >
+                                {Disciplines.map(item => (
+                                    <MenuItem key={item} value={item}>
+                                        <Checkbox checked={checked.indexOf(item) > -1} />
+                                        <ListItemText primary={item} />
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </div>
+                    <div className='buttons-container'>
+                        <NavLink to='/admin/teachers'>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                className={classes.button}
+                                startIcon={<DeleteIcon />}
+                            >
+                                Cancel
+                            </Button>
+                        </NavLink>
+                        <ThemeProvider theme={theme}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                className={classes.button}
+                                startIcon={<SaveIcon />}
+                                style={{backgroundColor: colors.COLOR_GREEN}}
+                                type='submit'
+                            >
+                                Save
+                            </Button>
+                        </ThemeProvider>
+                    </div>
+                </form>
+            </Paper>
+            <h2>Особистий Розклад</h2>
+            <TimeTable lessons={teacher.lessons} freeTime={teacher.workTimes}/>
+            <TeacherFreeTimes teacher={teacher}/>
+        </Fragment>
     )
 }
 
@@ -217,6 +225,7 @@ ManageTeacher.propTypes = {
     getTeacher: PropTypes.func.isRequired,
     createTeacher: PropTypes.func.isRequired,
     updateTeacher: PropTypes.func.isRequired,
+    getTeacherFreeTimes: PropTypes.func.isRequired,
 };
 
 ManageTeacher.defaultProps = {
