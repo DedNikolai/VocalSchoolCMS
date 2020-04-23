@@ -14,7 +14,6 @@ export const getAllTeachers = () => dispatch => {
 };
 
 export const getTeacherById = id => dispatch => {
-    console.log(id)
     dispatch({type: TYPES.TEACHER_LOADING, payload: true})
     api.get(`/teachers/${id}`).then(res => {
         if (res.status === 200) {
@@ -54,5 +53,32 @@ export const createTeacher = data => dispatch => {
             dispatch(getAllTeachers());
             toastr.success('Teacher was created');
         }
-    }).finally(() => dispatch({type: TYPES.TEACHER_LOADING, payload: true}))
+    }).finally(() => dispatch({type: TYPES.TEACHER_LOADING, payload: false}))
+}
+
+export const createWorkTime = (data, id) => dispatch => {
+    api.post(`/worktimes/teacher/${id}`, data).then(res => {
+        if (res.status >= 200 && res.status < 300) {
+            dispatch(getTeacherById(id))
+            toastr.success('Time was created');
+        }
+    })
+}
+
+export const updateWorkTime = (data, timeId, teacherId) => dispatch => {
+    api.put(`/worktimes/${timeId}`, data).then(res => {
+        if (res.status >= 200 && res.status < 300) {
+            dispatch(getTeacherById(teacherId))
+            toastr.success('Time was updated');
+        }
+    })
+}
+
+export const deleteWorkTime = (timeId, teacherId) => dispatch => {
+    api.deleteApi(`/worktimes/${timeId}`).then(res => {
+        if (res.status >= 200 && res.status < 300) {
+            dispatch(getTeacherById(teacherId))
+            toastr.success('Time was deleted');
+        }
+    })
 }
