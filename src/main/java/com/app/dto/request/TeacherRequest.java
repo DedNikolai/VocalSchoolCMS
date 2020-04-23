@@ -4,6 +4,7 @@ import com.app.dto.response.UserResponse;
 import com.app.model.Discipline;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -21,4 +22,5 @@ public class TeacherRequest {
   private Set<Discipline> disciplines;
   private Set<PriceRequest> prices;
   private Set<ConfirmedLessonRequest> confirmedLessons;
+  private Set<TeacherWorkTimeRequest> workTimes;
 }

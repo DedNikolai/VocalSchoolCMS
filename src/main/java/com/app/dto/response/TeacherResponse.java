@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -23,13 +24,14 @@ public class TeacherResponse {
 //  @EqualsAndHashCode.Exclude
 //  @JsonView(View.Teacher.class)
   private Set<StudentResponse> students;
-//  @ToString.Exclude
-//  @EqualsAndHashCode.Exclude
-//  @JsonView(View.Teacher.class)
-//  private Set<LessonResponse> lessons;
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  @JsonView(View.Teacher.class)
+  private Set<LessonResponse> lessons;
   private Set<Discipline> disciplines;
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
   @JsonView(View.Teacher.class)
   private Set<PriceResponse> prices;
+  private Set<TeacherWorkTimeResponse> workTimes;
 }

@@ -13,9 +13,9 @@ import lombok.ToString;
 @Data
 public class LessonResponse {
   private Long id;
-//  @ToString.Exclude
-//  @EqualsAndHashCode.Exclude
-//  @JsonView(View.Lesson.class)
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  @JsonView(View.Lesson.class)
   private TeacherResponse teacher;
 //  @ToString.Exclude
 //  @EqualsAndHashCode.Exclude

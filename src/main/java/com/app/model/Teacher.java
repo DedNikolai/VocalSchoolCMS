@@ -20,6 +20,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -70,5 +71,8 @@ public class Teacher extends BaseEntiy {
   @OneToMany(mappedBy = "teacher")
   @ToString.Exclude
   private Set<ConfirmedLesson> confirmedLessons;
+
+  @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+  private Set<TeacherWorkTime> workTimes;
 
 }
