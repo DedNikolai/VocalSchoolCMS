@@ -17,7 +17,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 import Menu from '../../components/Menu/Menu';
-import AdminRouter from './AdminRouter/AdminRouter'
+import AdminRouter from './AdminRouter/AdminRouter';
+import ua from '../../languages/ua';
 
 const drawerWidth = 240;
 
@@ -127,7 +128,7 @@ function Admin(props) {
                         <MenuIcon />
                     </IconButton>
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                        Dashboard
+                        {ua.dashboard}
                     </Typography>
                     <IconButton color="inherit">
                         <ExitToAppOutlinedIcon onClick={userSignOut}/>

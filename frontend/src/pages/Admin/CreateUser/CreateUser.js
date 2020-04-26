@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {NavLink, Redirect} from 'react-router-dom';
-import {createUser, getUserById, updateUser} from "../../../store/actions/user";
+import {createUser} from "../../../store/actions/user";
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
-import Preloader from '../../../components/Preloader/index';
 import Paper from '@material-ui/core/Paper';
 import {createMuiTheme, makeStyles, ThemeProvider, useTheme} from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
@@ -19,7 +18,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import {green} from '@material-ui/core/colors';
 import {useFormik} from 'formik';
-import './ManageUser.scss';
+import './CreateUser.scss';
 import {colors} from '../../../constants/view';
 import {Roles} from '../../../constants/roles';
 import ua from '../../../languages/ua';
@@ -79,6 +78,14 @@ const validate = values => {
         errors.email = invalidEmail;
     }
 
+    if (!values.password) {
+        errors.password = noPassword;
+    }
+
+    if (values.password !== values.confirmedPassword) {
+        errors.confirmedPassword = confirmPassword;
+    }
+
     if (!values.roles) {
         errors.roles = noRole;
     }
@@ -86,22 +93,19 @@ const validate = values => {
     return errors;
 }
 
-function ManageUser(props) {
+function CreateUser(props) {
     const classes = useStyles();
-    const {user, userLoading, getUser, updateUser} = props;
-    const id = props.match.params.id;
+    const {createUser} = props;
     const theme = useTheme();
     const [changed, setChanged] = useState(false);
     const allRoles = Object.keys(Roles).map(key => Roles[key]);
     const {passwordLabel, confirmPasswordLabel, rolesLabel} = ua.pages.manageUsers.inputFields;
 
     const formik = useFormik({
-        initialValues: {...user},
+        initialValues: {},
         validate,
         onSubmit: value => {
-            const data = {...user};
-            Object.keys(value).forEach(key => data[key] = value[key]);
-            updateUser(id, data);
+            createUser(value);
             setChanged(true)
         },
         enableReinitialize: true
@@ -111,21 +115,13 @@ function ManageUser(props) {
         formik.setFieldValue('roles', event.target.value);
     };
 
-    useEffect(() => {
-        getUser(id);
-    }, []);
-
-
     if (changed) {
         return <Redirect to='/admin/users' />
     }
 
-    if (userLoading) {
-        return <div className="wrapper"><Preloader/></div>
-    }
+    const userRoles = [];
+    const checked = formik.values.roles || [];
 
-    const userRoles = allRoles.filter(role => user.roles.some(item => item === role));
-    const checked = formik.values.roles || user.roles;
     return (
         <Paper>
             <form className={classes.root} noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
@@ -134,12 +130,35 @@ function ManageUser(props) {
                         label={formik.errors.email && formik.errors.email || "Email"}
                         name='email'
                         id="outlined-size-small"
-                        value={formik.values.email}
                         variant="outlined"
                         size="small"
                         onChange={formik.handleChange}
                         error={formik.touched.email && formik.errors.email}
                         onBlur={formik.handleBlur}
+                    />
+                </div>
+                <div>
+                    <TextField
+                        label={formik.touched.password && formik.errors.password || passwordLabel}
+                        name='password'
+                        id="outlined-size-small"
+                        variant="outlined"
+                        size="small"
+                        onChange={formik.handleChange}
+                        type='password'
+                        onBlur={formik.handleBlur}
+                        error={formik.touched.password && formik.errors.password}
+                    />
+                    <TextField
+                        label={formik.touched.confirmedPassword && formik.errors.confirmedPassword || confirmPasswordLabel}
+                        name='confirmedPassword'
+                        id="outlined-size-small"
+                        variant="outlined"
+                        size="small"
+                        type='password'
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.touched.confirmedPassword && formik.errors.confirmedPassword}
                     />
                 </div>
                 <div>
@@ -197,27 +216,21 @@ function ManageUser(props) {
     )
 }
 
-ManageUser.propTypes = {
-    user: PropTypes.object,
-    userLoading: PropTypes.bool.isRequired,
-    getUser: PropTypes.func.isRequired,
-    updateUser: PropTypes.func.isRequired,
+CreateUser.propTypes = {
+    createUser: PropTypes.func.isRequired,
 };
 
-ManageUser.defaultProps = {
+CreateUser.defaultProps = {
     user: null,
 }
 
-const mapStateToProps = ({user}) => {
+const mapStateToProps = () => {
     return {
-        user: user.userById,
-        userLoading: user.userByIdLoading,
     }
 };
 
 const mapDispatchToProps = dispatch => ({
-    getUser: (id) => dispatch(getUserById(id)),
-    updateUser: (id, data) => dispatch(updateUser(id, data)),
+    createUser: data => dispatch(createUser(data)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManageUser);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateUser);
