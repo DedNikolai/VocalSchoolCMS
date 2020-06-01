@@ -17,6 +17,7 @@ import AddButton from '../../../components/TableButtons/AddButton/AddButton';
 import './Users.scss';
 import {deleteUser, getAllUsers} from "../../../store/actions/user";
 import Preloader from '../../../components/Preloader';
+import ua from '../../../languages/ua';
 
 const columns = [
     { id: 'email', label: 'Email', minWidth: 150, align: 'left' },
@@ -55,6 +56,7 @@ function Users(props) {
     return (
         <div className='students-list'>
             <div className='students-list__top-block'>
+                <h1>{ua.pages.users.title}</h1>
                 <NavLink to='/admin/users/add-new'>
                     <AddButton/>
                 </NavLink>

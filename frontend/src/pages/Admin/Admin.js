@@ -17,7 +17,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 import Menu from '../../components/Menu/Menu';
-import AdminRouter from './AdminRouter/AdminRouter'
+import AdminRouter from './AdminRouter/AdminRouter';
+import ua from '../../languages/ua';
+import colors from '../../constants/colors';
 
 const drawerWidth = 240;
 
@@ -27,6 +29,7 @@ const useStyles = makeStyles(theme => ({
     },
     toolbar: {
         paddingRight: 24, // keep right padding when drawer closed
+        backgroundColor: colors.primeryColor
     },
     toolbarIcon: {
         display: 'flex',
@@ -127,7 +130,7 @@ function Admin(props) {
                         <MenuIcon />
                     </IconButton>
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                        Dashboard
+                        {ua.dashboard}
                     </Typography>
                     <IconButton color="inherit">
                         <ExitToAppOutlinedIcon onClick={userSignOut}/>

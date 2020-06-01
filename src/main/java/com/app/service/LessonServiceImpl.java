@@ -3,8 +3,10 @@ package com.app.service;
 import com.app.exeption.ResourceNotFoundException;
 import com.app.model.Lesson;
 import com.app.model.Student;
+import com.app.model.Teacher;
 import com.app.repository.LessonRepository;
 import com.app.repository.StudentRepository;
+import com.app.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import java.util.List;
 public class LessonServiceImpl implements LessonService {
   private final LessonRepository lessonRepository;
   private final StudentRepository studentRepository;
+  private final TeacherRepository teacherRepository;
 
   @Override
   public List<Lesson> getLessonsByStudent(Long id) {
@@ -30,6 +33,12 @@ public class LessonServiceImpl implements LessonService {
   @Override
   public Lesson deleteLesson(Long id) {
     Lesson lesson = lessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));
+    Student student = studentRepository.findByLessonsContains(lesson);
+    student.getLessons().remove(lesson);
+    studentRepository.save(student);
+    Teacher teacher = teacherRepository.findByLessonsContains(lesson);
+    teacher.getLessons().remove(lesson);
+    teacherRepository.save(teacher);
     lessonRepository.delete(lesson);
     return lesson;
   }

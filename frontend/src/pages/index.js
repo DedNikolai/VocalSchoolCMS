@@ -8,6 +8,7 @@ import ForgotPassword from './ForgotPassword/ForgotPassword';
 import ResetPassword from './ResetPassword/ResetPassword';
 import Admin from './Admin/Admin';
 import {getCurrentUser} from "../store/actions/user";
+import Home from './Home/Home';
 
 function AppRouter(props) {
     const {currentUser, currentUserLoading, getCurrentUser, authLoading} = props;
@@ -26,6 +27,7 @@ function AppRouter(props) {
             <Route path="/admin/forgot-password" component={ForgotPassword}/>
             <Route path="/admin/reset-password" component={ResetPassword}/>
             <ProtectedRoute path="/admin" component={Admin} authenticated={!!currentUser}/>
+            <Route path="/" component={Home}/>
         </Switch>
     )
 };

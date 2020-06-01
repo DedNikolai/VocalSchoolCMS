@@ -10,9 +10,9 @@ import {hasRoles} from '../../utils/roles';
 import {Roles} from '../../constants/roles';
 import {connect} from 'react-redux';
 import SchoolIcon from '@material-ui/icons/School';
-import ScheduleIcon from '@material-ui/icons/Schedule';
 import FaceIcon from '@material-ui/icons/Face';
 import ListAltIcon from '@material-ui/icons/ListAlt';
+import ua from '../../languages/ua';
 import './Menu.scss';
 
 const teacherPermissions = [Roles.TEACHER, Roles.ADMIN, Roles.SUPER_ADMIN];
@@ -28,7 +28,7 @@ function Menu(props) {
                     <ListItemIcon>
                         <HomeIcon />
                     </ListItemIcon>
-                    <ListItemText primary="Головна" />
+                    <ListItemText primary={ua.menu.main} />
                 </ListItem>
             </NavLink>
             {
@@ -38,7 +38,7 @@ function Menu(props) {
                         <ListItemIcon>
                             <PeopleIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Користувачі" />
+                        <ListItemText primary={ua.menu.users} />
                     </ListItem>
                 </NavLink>
             }
@@ -49,7 +49,7 @@ function Menu(props) {
                         <ListItemIcon>
                             <ListAltIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Розклад" />
+                        <ListItemText primary={ua.menu.timetable} />
                     </ListItem>
                 </NavLink>
             }
@@ -60,7 +60,7 @@ function Menu(props) {
                         <ListItemIcon>
                             <FaceIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Учні" />
+                        <ListItemText primary={ua.menu.students} />
                     </ListItem>
                 </NavLink>
             }
@@ -71,7 +71,7 @@ function Menu(props) {
                         <ListItemIcon>
                             <SchoolIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Вчителі" />
+                        <ListItemText primary={ua.menu.teachers} />
                     </ListItem>
                 </NavLink>
             }

@@ -7,7 +7,7 @@ const indexCheck = (lesson, index) => {
 
 export const isLesson = (lessons, time, index) => {
   return lessons.some(lesson => {
-      const lessonStart = lesson.timeHour*60 + lesson.timeMinutes
+      const lessonStart = lesson.timeHour*60 + lesson.timeMinutes;
       const lessonEnd = lesson.timeHour*60 + lesson.timeMinutes + lesson.duration;
       const lessonTime = convertTimeToMinutes(time);
       if (lessonTime === lessonStart && indexCheck(lesson, index)) return true
@@ -45,8 +45,8 @@ export const isTimeClosed = (lessons, time, index) => {
         const lessonStart = lesson.timeHour*60 + lesson.timeMinutes;
         const lessonTime = convertTimeToMinutes(time);
         const lessonEnd = lesson.timeHour*60 + lesson.timeMinutes + lesson.duration;
-        if (lessonTime === lessonStart && index < (Day.indexOf(lesson.day)+1)*4) return true
-        if (lessonEnd - 30 === lessonTime && index < (Day.indexOf(lesson.day)+1)*4) return true;
+        if (lessonTime === lessonStart && Math.floor(index/4) === Day.indexOf(lesson.day)) return true
+        if (lessonEnd - 30 === lessonTime && Math.floor(index/4) === Day.indexOf(lesson.day)) return true;
         return false
     })
 }

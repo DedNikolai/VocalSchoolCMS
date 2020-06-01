@@ -104,29 +104,6 @@ public class UserControllerTest {
   }
 
   @Test
-  public void createUserTest() throws Exception {
-    String email = "testEmail@gmail.com";
-    String password = "123456";
-    Set<Role> roleSet = new HashSet<>();
-    roleSet.add(Role.ADMIN);
-
-    UserRequest userRequest = new UserRequest();
-    userRequest.setEmail(email);
-    userRequest.setRoles(roleSet);
-    userRequest.setPassword(password);
-    String userJson = objectMapper.writeValueAsString(userRequest);
-
-    MvcResult result = this.mockMvc.perform(post("/api/v1/users")
-        .content(userJson).contentType(MediaType.APPLICATION_JSON))
-        .andReturn();
-
-    UserResponse response = objectMapper.readValue(result.getResponse().getContentAsString(), UserResponse.class);
-
-    assertNotNull(response.getId());
-    assertEquals(email, response.getEmail());
-  }
-
-  @Test
   public void deleteUserTest() throws Exception {
     this.mockMvc.perform(delete("/api/v1/users/2")).andExpect(status().is(204));
   }

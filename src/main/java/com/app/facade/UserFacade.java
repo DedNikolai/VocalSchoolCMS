@@ -39,12 +39,6 @@ public class UserFacade {
     return modelMapper.map(user, UserResponse.class);
   }
 
-  public UserResponse createUser(UserRequest userRequest) {
-    User user = modelMapper.map(userRequest, User.class);
-    User createdUser = userService.createUser(user);
-    return modelMapper.map(createdUser, UserResponse.class);
-  }
-
   public UserResponse updateUser(Long id, UserRequest userRequest) {
     User user = modelMapper.map(userRequest, User.class);
     User updatedUser = userService.updateUser(id, user);

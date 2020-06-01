@@ -82,7 +82,7 @@ export const deleteUser = id => dispatch => {
 
 export const createUser = data => dispatch => {
     dispatch({type: TYPES.USER_BY_ID_LOADING, payload: true})
-    api.post('/users', data).then(res => {
+    api.post('/auth/signup', data).then(res => {
         if (res.status >= 200 && res.status < 300) {
             dispatch(getAllUsers());
             toastr.success('User was created');
