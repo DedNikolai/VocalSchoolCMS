@@ -21,6 +21,18 @@ const ua = {
                 invalidEmail: 'Некоректний email',
                 confirmPassword: 'Паролі не співпадають',
                 noRole: 'Виберіть рівень доступу',
+                noFirstName: 'Введіть Ім\'я',
+                noSecondName: 'Введіть прізвище',
+                noAge: 'Введіть вік',
+                noPhone: 'Введіть телефон',
+                noBalance: 'Введіть баланс',
+                noDisciplines: 'Виберіть диципліни',
+                noDay: 'Виберіть День',
+                noTime: 'Виберіть Час',
+                noRoom: 'Виберіть Клас',
+                noType: 'Виберіть Тип заняття',
+                noTeacher: 'Виберіть Вчителя',
+
             },
 
             inputFields: {

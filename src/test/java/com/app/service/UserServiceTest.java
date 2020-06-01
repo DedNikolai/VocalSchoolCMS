@@ -60,18 +60,6 @@ public class UserServiceTest {
   }
 
   @Test
-  public void verifyCreateUserTest() {
-    String expectedEmail = "test@mail.com";
-
-    Mockito.when(userRepository.save(mockUser)).thenReturn(mockUser);
-    User user = userService.createUser(mockUser);
-
-    Mockito.verify(userRepository).save(mockUser);
-
-    Assert.assertEquals(expectedEmail, user.getEmail());
-  }
-
-  @Test
   public void verifyUpdateUserTest() {
     String expectedEmail = "test2@mail.com";
     Long expectedId = 1L;

@@ -46,6 +46,7 @@ public class UserController {
     return ResponseEntity.ok(userFacade.authenticateUser(loginRequest));
   }
 
+  @PreAuthorize("hasAuthority('SUPER_ADMIN')")
   @PostMapping("auth/signup")
   public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
     return ResponseEntity.ok(userFacade.registerUser(signUpRequest));
@@ -54,13 +55,6 @@ public class UserController {
   @GetMapping("users/current")
   public ResponseEntity<UserResponse> getCurrentUser() {
     return ResponseEntity.ok(userFacade.getCurrentUser());
-  }
-
-  @PreAuthorize("hasAuthority('SUPER_ADMIN')")
-  @PostMapping("users")
-  public ResponseEntity createUser(@RequestBody UserRequest userRequest) {
-    UserResponse userResponse = userFacade.createUser(userRequest);
-    return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
   }
 
   @PreAuthorize("hasAuthority('SUPER_ADMIN')")

@@ -14,6 +14,8 @@ import CreateUser from '../CreateUser/CreateUser';
 import Users from '../Users/Users';
 import Lessons from '../Lessons/Lessons'
 import ManageLessons from '../ManageLessons/ManageLessons';
+import CreateStudnet from '../CreateStudent/CreateStudent';
+import CreateTeacher from '../CreateTeacher/CreateTeacher';
 
 const teacherPermissions = [Roles.TEACHER, Roles.ADMIN, Roles.SUPER_ADMIN];
 const adminPermissions = [Roles.ADMIN, Roles.SUPER_ADMIN];
@@ -28,10 +30,10 @@ function AdminRouter (props) {
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/users/add-new' component={CreateUser} />
             <AuthorizedRoute authorized={hasRoles(user, superAdmin)} path='/admin/users' component={Users} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/students/edit/:id' component={ManageStudent} />
-            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/students/add-new' component={ManageStudent} />
+            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/students/add-new' component={CreateStudnet} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/students' component={Students} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/teachers/edit/:id' component={ManageTeacher} />
-            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/teachers/add-new' component={ManageTeacher} />
+            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/teachers/add-new' component={CreateTeacher} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/teachers' component={Teachers} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/add-new' component={ManageLessons} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/edit/:id' component={ManageLessons} />

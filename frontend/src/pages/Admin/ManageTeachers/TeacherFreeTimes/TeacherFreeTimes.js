@@ -75,7 +75,9 @@ function TeacherFreeTimes(props) {
                     new Promise((resolve) => {
                         setTimeout(() => {
                             resolve();
-                            createTime(newData, teacher.id)
+                            const data = {day: 'Monday', endTime: '09:00', startTime: '09:00'};
+                            Object.keys(newData).forEach(key => data[key] = newData[key]);
+                            createTime(data, teacher.id)
                         }, 0);
                     }),
                 onRowUpdate: (newData, oldData) =>
@@ -111,7 +113,7 @@ function Time(props) {
             id="time"
             label="Час"
             type="time"
-            defaultValue={value || '09:00'}
+            value={value || '09:00'}
             className={classes.textField}
             InputLabelProps={{
                 shrink: true,

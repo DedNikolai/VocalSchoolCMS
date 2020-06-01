@@ -19,6 +19,7 @@ import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 import Menu from '../../components/Menu/Menu';
 import AdminRouter from './AdminRouter/AdminRouter';
 import ua from '../../languages/ua';
+import colors from '../../constants/colors';
 
 const drawerWidth = 240;
 
@@ -28,6 +29,7 @@ const useStyles = makeStyles(theme => ({
     },
     toolbar: {
         paddingRight: 24, // keep right padding when drawer closed
+        backgroundColor: colors.primeryColor
     },
     toolbarIcon: {
         display: 'flex',

@@ -1,5 +1,6 @@
 package com.app.repository;
 
+import com.app.model.Lesson;
 import com.app.model.Student;
 import com.app.model.Teacher;
 import org.springframework.data.domain.Page;
@@ -19,4 +20,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
       + "(:param is null or lower(s.firstName) like lower(CONCAT('%', :param, '%'))) or "
       + "(:param is null or lower(s.lastName) like lower(CONCAT('%', :param, '%')))")
   Page<Student> findAllByParams(@Param("param") String param, Pageable pageable);
+
+  Student findByLessonsContains(Lesson lessons);
 }

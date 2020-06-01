@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {NavLink, Redirect} from 'react-router-dom';
-import {createUser, getUserById, updateUser} from "../../../store/actions/user";
+import {getUserById, updateUser} from "../../../store/actions/user";
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
 import Preloader from '../../../components/Preloader/index';
 import Paper from '@material-ui/core/Paper';
-import {createMuiTheme, makeStyles, ThemeProvider, useTheme} from '@material-ui/core/styles';
+import {makeStyles, ThemeProvider, useTheme} from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -17,7 +17,6 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
-import {green} from '@material-ui/core/colors';
 import {useFormik} from 'formik';
 import './ManageUser.scss';
 import {colors} from '../../../constants/view';
@@ -62,14 +61,8 @@ const MenuProps = {
     },
 };
 
-const theme = createMuiTheme({
-    palette: {
-        primary: green,
-    },
-});
-
 const validate = values => {
-    const {noEmail, noPassword, invalidEmail, confirmPassword, noRole} = ua.pages.manageUsers.errors;
+    const {noEmail, invalidEmail, noRole} = ua.pages.manageUsers.errors;
     const errors = {};
     if (!values.email) {
         errors.email = noEmail;
@@ -93,15 +86,13 @@ function ManageUser(props) {
     const theme = useTheme();
     const [changed, setChanged] = useState(false);
     const allRoles = Object.keys(Roles).map(key => Roles[key]);
-    const {passwordLabel, confirmPasswordLabel, rolesLabel} = ua.pages.manageUsers.inputFields;
+    const {rolesLabel} = ua.pages.manageUsers.inputFields;
 
     const formik = useFormik({
         initialValues: {...user},
         validate,
         onSubmit: value => {
-            const data = {...user};
-            Object.keys(value).forEach(key => data[key] = value[key]);
-            updateUser(id, data);
+            updateUser(id, value);
             setChanged(true)
         },
         enableReinitialize: true
@@ -128,10 +119,10 @@ function ManageUser(props) {
     const checked = formik.values.roles || user.roles;
     return (
         <Paper>
-            <form className={classes.root} noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
+            <form className={classes.root} autoComplete="off" onSubmit={formik.handleSubmit}>
                 <div>
                     <TextField
-                        label={formik.errors.email && formik.errors.email || "Email"}
+                        label={formik.touched.email && formik.errors.email || "Email"}
                         name='email'
                         id="outlined-size-small"
                         value={formik.values.email}
@@ -174,6 +165,7 @@ function ManageUser(props) {
                             color="secondary"
                             className={classes.button}
                             startIcon={<DeleteIcon />}
+                            style={{backgroundColor: colors.secondaryColor}}
                         >
                             Cancel
                         </Button>

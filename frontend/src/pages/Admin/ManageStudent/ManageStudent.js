@@ -1,23 +1,23 @@
 import React, {useEffect, useState} from 'react';
 import {NavLink, Redirect} from 'react-router-dom';
-import {createStudent, getStudentById, updateStudent} from "../../../store/actions/student";
+import {getStudentById, updateStudent} from "../../../store/actions/student";
 import {getLessonsByStudent} from "../../../store/actions/lesson";
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
 import Preloader from '../../../components/Preloader/index';
 import Paper from '@material-ui/core/Paper';
-import {createMuiTheme, makeStyles, ThemeProvider, useTheme} from '@material-ui/core/styles';
+import {makeStyles, ThemeProvider, useTheme} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import PlusOneIcon from '@material-ui/icons/PlusOne';
-import {green} from '@material-ui/core/colors';
 import {useFormik} from 'formik';
 import './ManageStudent.scss';
 import {colors} from '../../../constants/view';
-import ManegeLesson from '../ManageLessons/ManageLessons';
+import CreateLesson from '../CreateLesson/CreateLesson';
 import StudentLessons from './StudentLessons/StudentLessons';
+import ua from "../../../languages/ua";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -46,26 +46,43 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
-};
+const validate = values => {
+    const {noEmail, invalidEmail, noFirstName, noSecondName, noAge, noPhone, noBalance} = ua.pages.manageUsers.errors;
+    const errors = {};
+    if (!values.email) {
+        errors.email = noEmail;
+    }
 
-const theme = createMuiTheme({
-    palette: {
-        primary: green,
-    },
-});
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+        errors.email = invalidEmail;
+    }
+
+    if (!values.firstName) {
+        errors.firstName = noFirstName;
+    }
+
+    if (!values.lastName) {
+        errors.lastName = noSecondName;
+    }
+
+    if (!values.age) {
+        errors.age = noAge;
+    }
+
+    if (!values.phone) {
+        errors.phone = noPhone;
+    }
+
+    if (!values.payBalance) {
+        errors.payBalance = noBalance;
+    }
+
+    return errors;
+}
 
 function ManageStudent(props) {
     const classes = useStyles();
-    const {student, studentLoading, getStudent, updateStudent, createStudent,
+    const {student, studentLoading, getStudent, updateStudent,
         studentLessons, studentLessonsLoading, getStudentLessons} = props;
     const id = props.match.params.id
     const theme = useTheme();
@@ -73,17 +90,13 @@ function ManageStudent(props) {
     const [addLesson, setAddLesson] = useState(false);
 
     const formik = useFormik({
-        initialValues: {},
+        initialValues: {...student},
+        validate,
         onSubmit: value => {
-            const data = {...student};
-            Object.keys(value).forEach(key => data[key] = value[key]);
-            if (id) {
-                updateStudent(id, data);
-            } else {
-                createStudent(value);
-            }
+            updateStudent(id, value);
             setChanged(true)
         },
+        enableReinitialize: true
     });
 
     useEffect(() => {
@@ -93,82 +106,89 @@ function ManageStudent(props) {
         }
     }, []);
 
-    const handleChange = event => {
-        formik.setFieldValue('teachers', event.target.value);
-    };
-
     if (changed) {
         return <Redirect to='/admin/students' />
     }
 
-    if (studentLessonsLoading || studentLoading && id) {
+    if (studentLessonsLoading || studentLoading) {
         return <div className="wrapper"><Preloader/></div>
     }
 
-    const checked = id ? formik.values.teachers || student.teachers : formik.values.teachers || [];
     return (
         <div className='manage-student'>
             <h2>Особисті дані</h2>
             <Paper>
-                <form className={classes.root} noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
+                <form className={classes.root} autoComplete="off" onSubmit={formik.handleSubmit}>
                     <div>
                         <TextField
-                            label="Ім'я"
+                            label={formik.touched.firstName && formik.errors.firstName || "Ім'я"}
                             name='firstName'
                             id="outlined-size-small"
-                            defaultValue={id ? student.firstName : ''}
+                            value={formik.values.firstName}
                             variant="outlined"
                             size="small"
                             onChange={formik.handleChange}
+                            error={formik.touched.firstName && formik.errors.firstName}
+                            onBlur={formik.handleBlur}
                         />
                         <TextField
-                            label="Прізвище"
+                            label={formik.touched.lastName && formik.errors.lastName || "Прізвище"}
                             name='lastName'
                             id="outlined-size-small"
-                            defaultValue={id ? student.lastName : ''}
+                            value={formik.values.lastName}
                             variant="outlined"
                             size="small"
                             onChange={formik.handleChange}
+                            error={formik.touched.lastName && formik.errors.lastName}
+                            onBlur={formik.handleBlur}
                         />
                         <TextField
-                            label="Вік"
+                            label={formik.touched.age && formik.errors.age || "Вік"}
                             name='age'
                             id="outlined-size-small"
-                            defaultValue={id ? student.age : ''}
+                            value={formik.values.age}
                             variant="outlined"
                             size="small"
                             onChange={formik.handleChange}
+                            error={formik.touched.age && formik.errors.age}
+                            onBlur={formik.handleBlur}
                         />
                     </div>
                     <div>
                         <TextField
-                            label="Email"
+                            label={formik.touched.email && formik.errors.email || "Email"}
                             name='email'
                             id="outlined-size-small"
-                            defaultValue={id ? student.email : ''}
+                            value={formik.values.email}
                             variant="outlined"
                             size="small"
                             onChange={formik.handleChange}
+                            error={formik.touched.email && formik.errors.email}
+                            onBlur={formik.handleBlur}
                         />
                         <TextField
-                            label="Телефон"
+                            label={formik.touched.phone && formik.errors.phone || "Телефон"}
                             name='phone'
                             id="outlined-size-small"
-                            defaultValue={id ? student.phone : ''}
+                            value={formik.values.phone}
                             variant="outlined"
                             size="small"
                             onChange={formik.handleChange}
+                            error={formik.touched.phone && formik.errors.phone}
+                            onBlur={formik.handleBlur}
                         />
                     </div>
                     <div>
                         <TextField
-                            label="Баланс"
+                            label={formik.touched.payBalance && formik.errors.payBalance || "Баланс"}
                             name='payBalance'
                             id="outlined-size-small"
-                            defaultValue={id ? student.payBalance : ''}
+                            value={formik.values.payBalance}
                             variant="outlined"
                             size="small"
                             onChange={formik.handleChange}
+                            error={formik.touched.payBalance && formik.errors.payBalance}
+                            onBlur={formik.handleBlur}
                         />
                     </div>
                     <div className='buttons-container'>
@@ -178,6 +198,7 @@ function ManageStudent(props) {
                                 color="secondary"
                                 className={classes.button}
                                 startIcon={<DeleteIcon />}
+                                style={{backgroundColor: colors.secondaryColor}}
                             >
                                 Cancel
                             </Button>
@@ -197,24 +218,24 @@ function ManageStudent(props) {
                     </div>
                 </form>
             </Paper>
-                <h2>Заняття</h2>
-                <StudentLessons lessons={studentLessons}/>
-                <div className='buttons-container'>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            className={classes.button}
-                            startIcon={<PlusOneIcon />}
-                            style={{backgroundColor: colors.COLOR_GREEN}}
-                            onClick={() => setAddLesson(true)}
-                        >
-                            Додаты заняття
-                        </Button>
-                </div>
+            <h2>Заняття</h2>
+            <StudentLessons lessons={studentLessons}/>
+            <div className='buttons-container'>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    startIcon={<PlusOneIcon />}
+                    style={{backgroundColor: colors.COLOR_GREEN}}
+                    onClick={() => setAddLesson(true)}
+                >
+                    Додаты заняття
+                </Button>
+            </div>
             {
                 addLesson &&
                 <div className='manage-student__add-lesson'>
-                    <ManegeLesson student={student} closeForm={() => setAddLesson(false)}/>
+                    <CreateLesson student={student} closeForm={() => setAddLesson(false)}/>
                 </div>
             }
         </div>
@@ -225,7 +246,6 @@ ManageStudent.propTypes = {
     student: PropTypes.object,
     studentLoading: PropTypes.bool.isRequired,
     getStudent: PropTypes.func.isRequired,
-    createStudent: PropTypes.func.isRequired,
     updateStudent: PropTypes.func.isRequired,
     allTeachers: PropTypes.array,
     studentLessons: PropTypes.array,
@@ -251,7 +271,6 @@ const mapStateToProps = ({student, teacher, lesson}) => {
 const mapDispatchToProps = dispatch => ({
     getStudent: (id) => dispatch(getStudentById(id)),
     updateStudent: (id, data) => dispatch(updateStudent(id, data)),
-    createStudent: data => dispatch(createStudent(data)),
     getStudentLessons: id => dispatch(getLessonsByStudent(id))
 });
 

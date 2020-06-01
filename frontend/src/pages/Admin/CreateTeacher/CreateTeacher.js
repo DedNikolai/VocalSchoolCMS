@@ -1,9 +1,8 @@
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment, useState} from 'react';
 import {NavLink, Redirect} from 'react-router-dom';
-import {createTeacher, getTeacherById, updateTeacher} from "../../../store/actions/teacher";
+import {createTeacher} from "../../../store/actions/teacher";
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
-import Preloader from '../../../components/Preloader/index';
 import Paper from '@material-ui/core/Paper';
 import {makeStyles, ThemeProvider, useTheme} from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
@@ -18,11 +17,9 @@ import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import {useFormik} from 'formik';
-import './ManageTeacher.scss';
+import './CreateTeacher.scss';
 import {colors} from '../../../constants/view';
 import Disciplines from '../../../constants/disciplines';
-import TimeTable from '../../../components/TimeTable/TimeTable';
-import TeacherFreeTimes from './TeacherFreeTimes/TeacherFreeTimes';
 import ua from "../../../languages/ua";
 
 const useStyles = makeStyles(theme => ({
@@ -51,17 +48,6 @@ const useStyles = makeStyles(theme => ({
         width: 100,
     },
 }));
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
-};
 
 const validate = values => {
     const {noEmail, invalidEmail, noFirstName, noSecondName, noAge, noPhone, noDisciplines} = ua.pages.manageUsers.errors;
@@ -97,26 +83,32 @@ const validate = values => {
     return errors;
 }
 
-function ManageTeacher(props) {
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
+
+function CreateTeacher(props) {
     const classes = useStyles();
-    const {teacher, teacherLoading, getTeacher, updateTeacher} = props;
-    const id = props.match.params.id;
+    const {createTeacher} = props;
     const theme = useTheme();
     const [changed, setChanged] = useState(false);
 
     const formik = useFormik({
-        initialValues: {...teacher},
+        initialValues: {},
         validate,
         onSubmit: value => {
-            updateTeacher(id, value);
+            createTeacher(value);
             setChanged(true)
         },
-        enableReinitialize: true
     });
-
-    useEffect(() => {
-        getTeacher(id);
-    }, []);
 
     const handleChange = event => {
         formik.setFieldValue('disciplines', event.target.value);
@@ -125,12 +117,9 @@ function ManageTeacher(props) {
     if (changed) {
         return <Redirect to='/admin/teachers' />
     }
-    if (teacherLoading) {
-        return <div className="wrapper"><Preloader/></div>
-    }
 
-    const teacherDesciplines = Disciplines.filter(discpline => teacher.disciplines.some(item => item === discpline));
-    const checked = formik.values.disciplines || teacher.disciplines;
+    const checked = formik.values.disciplines || [];
+
     return (
         <Fragment>
             <h2>Особисті дані</h2>
@@ -141,7 +130,7 @@ function ManageTeacher(props) {
                             label={formik.touched.firstName && formik.errors.firstName || "Ім'я"}
                             name='firstName'
                             id="outlined-size-small"
-                            value={formik.values.firstName}
+                            defaultValue={''}
                             variant="outlined"
                             size="small"
                             onChange={formik.handleChange}
@@ -152,7 +141,7 @@ function ManageTeacher(props) {
                             label={formik.touched.lastName && formik.errors.lastName || "Прізвище"}
                             name='lastName'
                             id="outlined-size-small"
-                            value={formik.values.lastName}
+                            defaultValue={''}
                             variant="outlined"
                             size="small"
                             onChange={formik.handleChange}
@@ -163,7 +152,7 @@ function ManageTeacher(props) {
                             label={formik.touched.age && formik.errors.age || "Вік"}
                             name='age'
                             id="outlined-size-small"
-                            value={formik.values.age}
+                            defaultValue={''}
                             variant="outlined"
                             size="small"
                             onChange={formik.handleChange}
@@ -176,7 +165,7 @@ function ManageTeacher(props) {
                             label={formik.touched.email && formik.errors.email || "Email"}
                             name='email'
                             id="outlined-size-small"
-                            value={formik.values.email}
+                            defaultValue={''}
                             variant="outlined"
                             size="small"
                             onChange={formik.handleChange}
@@ -187,7 +176,7 @@ function ManageTeacher(props) {
                             label={formik.touched.phone && formik.errors.phone || "Телефон"}
                             name='phone'
                             id="outlined-size-small"
-                            value={formik.values.phone}
+                            defaultValue={''}
                             variant="outlined"
                             size="small"
                             onChange={formik.handleChange}
@@ -201,9 +190,9 @@ function ManageTeacher(props) {
                             <Select
                                 labelId="demo-mutiple-checkbox-label"
                                 id="demo-mutiple-checkbox"
-                                name='teachers'
+                                name='disciplines'
                                 multiple
-                                value={formik.values.disciplines || teacherDesciplines}
+                                value={formik.values.disciplines || []}
                                 onChange={handleChange}
                                 input={<Input />}
                                 renderValue={selected => selected.map(descipline => descipline + ', ')}
@@ -227,7 +216,6 @@ function ManageTeacher(props) {
                                 color="secondary"
                                 className={classes.button}
                                 startIcon={<DeleteIcon />}
-                                style={{backgroundColor: colors.secondaryColor}}
                             >
                                 Cancel
                             </Button>
@@ -247,38 +235,27 @@ function ManageTeacher(props) {
                     </div>
                 </form>
             </Paper>
-            <h2>Особистий Розклад</h2>
-            <TimeTable lessons={teacher.lessons} freeTime={teacher.workTimes}/>
-            <h2>Робочі години</h2>
-            <TeacherFreeTimes teacher={teacher}/>
         </Fragment>
     )
 }
 
-ManageTeacher.propTypes = {
-    teacher: PropTypes.object,
-    teacherLoading: PropTypes.bool.isRequired,
-    getTeacher: PropTypes.func.isRequired,
+CreateTeacher.propTypes = {
     createTeacher: PropTypes.func.isRequired,
     updateTeacher: PropTypes.func.isRequired,
-    getTeacherFreeTimes: PropTypes.func.isRequired,
 };
 
-ManageTeacher.defaultProps = {
+CreateTeacher.defaultProps = {
     teacher: {},
 }
 
-const mapStateToProps = ({teacher}) => {
+const mapStateToProps = ({}) => {
     return {
-        teacher: teacher.teacherById,
-        teacherLoading: teacher.teacherByIdLoading,
+
     }
 };
 
 const mapDispatchToProps = dispatch => ({
-    getTeacher: (id) => dispatch(getTeacherById(id)),
-    updateTeacher: (id, data) => dispatch(updateTeacher(id, data)),
     createTeacher: data => dispatch(createTeacher(data)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManageTeacher);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateTeacher);

@@ -36,11 +36,6 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User createUser(User user) {
-    return userRepository.save(user);
-  }
-
-  @Override
   public User updateUser(Long id, User user) {
     User userFromDb = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
     user.setId(userFromDb.getId());
@@ -76,10 +71,7 @@ public class UserServiceImpl implements UserService {
     User user = new User();
     user.setEmail(signUpRequest.getEmail());
     user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-    Set<Role> roles = new HashSet<>();
-    roles.add(Role.TEACHER);
-    user.setRoles(roles);
-
+    user.setRoles(signUpRequest.getRoles());
     User registeredUser = userRepository.save(user);
     return registeredUser;
   }

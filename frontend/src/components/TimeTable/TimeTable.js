@@ -56,7 +56,7 @@ const times = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '1
 function TimeTable(props) {
     const classes = useStyles();
     const {lessons = [], freeTime = []} = props;
-    console.log(freeTime)
+
     const daysList = days.map(day => <TableCell className={classes.headCell} colspan="4">{day}</TableCell>);
     const roomsList = Array.apply(null, {length: 24}).map((room, index) => <TableCell className={classes.headCell} style={{top: 57}}>{index%4 + 1}</TableCell>);
     const timesList = times.map(time => {

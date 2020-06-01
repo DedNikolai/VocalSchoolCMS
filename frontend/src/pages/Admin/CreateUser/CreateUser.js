@@ -124,10 +124,10 @@ function CreateUser(props) {
 
     return (
         <Paper>
-            <form className={classes.root} noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
+            <form className={classes.root} autoComplete="off" onSubmit={formik.handleSubmit}>
                 <div>
                     <TextField
-                        label={formik.errors.email && formik.errors.email || "Email"}
+                        label={formik.touched.email && formik.errors.email || "Email"}
                         name='email'
                         id="outlined-size-small"
                         variant="outlined"
