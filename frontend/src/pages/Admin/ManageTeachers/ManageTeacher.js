@@ -23,6 +23,7 @@ import {colors} from '../../../constants/view';
 import Disciplines from '../../../constants/disciplines';
 import TimeTable from '../../../components/TimeTable/TimeTable';
 import TeacherFreeTimes from './TeacherFreeTimes/TeacherFreeTimes';
+import TeacherPrices from './TeacherPrices/TeacherPrices'
 import ua from "../../../languages/ua";
 
 const useStyles = makeStyles(theme => ({
@@ -251,6 +252,8 @@ function ManageTeacher(props) {
             <TimeTable lessons={teacher.lessons} freeTime={teacher.workTimes}/>
             <h2>Робочі години</h2>
             <TeacherFreeTimes teacher={teacher}/>
+            <h2>Ціни</h2>
+            <TeacherPrices teacher={teacher}/>
         </Fragment>
     )
 }

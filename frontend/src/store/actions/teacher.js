@@ -77,8 +77,36 @@ export const updateWorkTime = (data, timeId, teacherId) => dispatch => {
 export const deleteWorkTime = (timeId, teacherId) => dispatch => {
     api.deleteApi(`/worktimes/${timeId}`).then(res => {
         if (res.status >= 200 && res.status < 300) {
-            dispatch(getTeacherById(teacherId))
+            dispatch(getTeacherById(teacherId));
             toastr.success('Time was deleted');
+        }
+    })
+}
+
+export const createTeacherPrice = (data, teacherId) => dispatch => {
+    api.post(`/prices/teacher/${teacherId}`, data).then(res => {
+        if (res.status >= 200 && res.status < 300) {
+            dispatch(getTeacherById(teacherId));
+            toastr.success('Price was created');
+        }
+    })
+}
+
+export const updateTeacherPrice = (data, priceId, teacherId) => dispatch => {
+    console.log(data)
+    api.put(`/prices/${priceId}/teacher/${teacherId}`, data).then(res => {
+        if (res.status >= 200 && res.status < 300) {
+            dispatch(getTeacherById(teacherId));
+            toastr.success('Price was updated');
+        }
+    })
+}
+
+export const deletePrice = (priceId, teacherId) => dispatch => {
+    api.deleteApi(`/prices/${priceId}`).then(res => {
+        if (res.status >= 200 && res.status < 300) {
+            dispatch(getTeacherById(teacherId));
+            toastr.success('Price was deleted');
         }
     })
 }

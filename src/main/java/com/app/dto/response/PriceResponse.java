@@ -12,5 +12,4 @@ public class PriceResponse {
   private Discipline discipline;
   private Integer priceValue;
   private LessonType type;
-  private TeacherResponse teacher;
 }

@@ -168,11 +168,11 @@ function CreateLesson(props) {
     }
 
     const checkedTeacher = formik.values.teacher || {};
-    // const price = formik.values.teacher && formik.values.discipline && formik.values.type ? formik.values.teacher.prices.filter(price => {
-    //     return (
-    //         price.discipline === formik.values.discipline && price.type === formik.values.type
-    //     )
-    // })[0].priceValue : '';
+    const price = formik.values.teacher && formik.values.discipline && formik.values.type ? formik.values.teacher.prices.filter(price => {
+        return (
+            price.discipline === formik.values.discipline && price.type === formik.values.type
+        )
+    })[0].priceValue : '';
     return (
         <Paper>
             <form className={classes.root} noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
@@ -285,7 +285,7 @@ function CreateLesson(props) {
                 </div>
                 <div>
                     <FormControl className={classes.formControl}>
-                        <InputLabel id="demo-mutiple-checkbox-label">{formik.touched.discipline && formik.errors.discipline || 'Дисципліни'}</InputLabel>
+                        <InputLabel id="demo-mutiple-checkbox-label">{formik.touched.discipline && formik.errors.discipline || 'Дисципліна'}</InputLabel>
                         <Select
                             labelId="demo-mutiple-checkbox-label"
                             id="demo-mutiple-checkbox"
@@ -305,6 +305,17 @@ function CreateLesson(props) {
                             ))}
                         </Select>
                     </FormControl>
+                </div>
+                <div>
+                    <TextField
+                        label="Ціна"
+                        name='price'
+                        id="outlined-size-small"
+                        value={price}
+                        variant="outlined"
+                        size="small"
+                        disabled
+                    />
                 </div>
                 <div>
                     <FormControl className={classes.formControl}>
@@ -329,17 +340,6 @@ function CreateLesson(props) {
                         </Select>
                     </FormControl>
                 </div>
-                {/*<div>*/}
-                    {/*<TextField*/}
-                        {/*label="Ціна"*/}
-                        {/*name='price'*/}
-                        {/*id="outlined-size-small"*/}
-                        {/*value={price}*/}
-                        {/*variant="outlined"*/}
-                        {/*size="small"*/}
-                        {/*disabled*/}
-                    {/*/>*/}
-                {/*</div>*/}
                 <div className='buttons-container'>
                     <Button
                         variant="contained"

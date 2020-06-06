@@ -168,6 +168,11 @@ function ManageLessons(props) {
     const selectedDay = Days.filter(item => formik.values.day === item)[0];
     const checkedDay = formik.values.day || formik.values.day;
     const defaultTime = `${formik.values.timeHour}:${formik.values.timeMinutes ? formik.values.timeMinutes : formik.values.timeMinutes + '0'}`;
+    const price = formik.values.teacher && formik.values.discipline && formik.values.type ? formik.values.teacher.prices.filter(price => {
+        return (
+            price.discipline === formik.values.discipline && price.type === formik.values.type
+        )
+    })[0].priceValue : '';
 
     return (
         <Paper>
@@ -308,6 +313,17 @@ function ManageLessons(props) {
                     </FormControl>
                 </div>
                 <div>
+                    <TextField
+                        label="Ціна"
+                        name='price'
+                        id="outlined-size-small"
+                        value={price}
+                        variant="outlined"
+                        size="small"
+                        disabled
+                    />
+                </div>
+                <div>
                     <FormControl className={classes.formControl}>
                         <InputLabel id="demo-mutiple-checkbox-label">{formik.touched.room && formik.errors.room || 'Клас'}</InputLabel>
                         <Select
@@ -331,17 +347,6 @@ function ManageLessons(props) {
                         </Select>
                     </FormControl>
                 </div>
-                {/*<div>*/}
-                    {/*<TextField*/}
-                        {/*label="Ціна"*/}
-                        {/*name='price'*/}
-                        {/*id="outlined-size-small"*/}
-                        {/*defaultValue={''}*/}
-                        {/*variant="outlined"*/}
-                        {/*size="small"*/}
-                        {/*disabled*/}
-                    {/*/>*/}
-                {/*</div>*/}
                 <div className='buttons-container'>
                     {
                         id ?
