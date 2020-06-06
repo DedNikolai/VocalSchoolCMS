@@ -29,9 +29,6 @@ public class TeacherResponse {
   @JsonView(View.Teacher.class)
   private Set<LessonResponse> lessons;
   private Set<Discipline> disciplines;
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  @JsonView(View.Teacher.class)
   private Set<PriceResponse> prices;
   private Set<TeacherWorkTimeResponse> workTimes;
 }

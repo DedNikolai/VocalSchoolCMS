@@ -193,6 +193,7 @@ function CreateUser(props) {
                             color="secondary"
                             className={classes.button}
                             startIcon={<DeleteIcon />}
+                            style={{backgroundColor: colors.secondaryColor}}
                         >
                             Cancel
                         </Button>
