@@ -52,7 +52,7 @@ public class Student extends BaseEntiy {
   @EqualsAndHashCode.Exclude
   private Set<Teacher> teachers = new HashSet<>();
 
-  @OneToMany(mappedBy="student", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy="student", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
   private Set<Lesson> lessons = new HashSet<>();

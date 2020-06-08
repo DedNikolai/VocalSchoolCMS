@@ -144,7 +144,7 @@ function CreateLesson(props) {
         if (event.target.value === 'MAN') {
             formik.setFieldValue('duration', 60)
         } else {
-            formik.setFieldValue('duration', 60)
+            formik.setFieldValue('duration', 30)
         }
     };
 
