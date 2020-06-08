@@ -58,6 +58,8 @@ INSERT INTO prices
   (id, date_created, date_modified, teacher_id, discipline, price_value, lesson_type)
 VALUES
   (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 'VOCAL', 500, 'MAN'),
+  (3, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 'VOCAL', 400, 'MAN'),
+  (4, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 'VOCAL', 250, 'CHILD'),
   (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 'VOCAL', 300, 'CHILD');
 
 

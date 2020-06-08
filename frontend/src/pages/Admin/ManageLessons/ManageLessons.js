@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {NavLink, Redirect} from 'react-router-dom';
-import {getLessonById, updateLesson, createLesson} from "../../../store/actions/lesson";
+import {createLesson, getLessonById, updateLesson} from "../../../store/actions/lesson";
 import {getAllTeachers} from "../../../store/actions/teacher";
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
 import Preloader from '../../../components/Preloader/index';
 import Paper from '@material-ui/core/Paper';
-import {makeStyles, useTheme, createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
+import {makeStyles, ThemeProvider, useTheme} from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -18,7 +18,6 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
-import { green } from '@material-ui/core/colors';
 import {useFormik} from 'formik';
 import './ManageLesson.scss';
 import {colors} from '../../../constants/view';
@@ -137,6 +136,11 @@ function ManageLessons(props) {
 
     const handleChangeType = event => {
         formik.setFieldValue('type', event.target.value);
+        if (event.target.value === 'MAN') {
+            formik.setFieldValue('duration', 60)
+        } else {
+            formik.setFieldValue('duration', 30)
+        }
     };
 
     const handleChangeDay = event => {
@@ -356,6 +360,7 @@ function ManageLessons(props) {
                                     color="secondary"
                                     className={classes.button}
                                     startIcon={<DeleteIcon />}
+                                    style={{backgroundColor: colors.secondaryColor}}
                                 >
                                     Cancel
                                 </Button>
@@ -367,6 +372,7 @@ function ManageLessons(props) {
                                 className={classes.button}
                                 startIcon={<DeleteIcon />}
                                 onClick={closeForm}
+                                style={{backgroundColor: colors.secondaryColor}}
                             >
                                 Cancel
                             </Button>
