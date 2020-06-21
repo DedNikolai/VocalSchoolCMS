@@ -2,6 +2,7 @@ package com.app.service;
 
 import com.app.exeption.ResourceNotFoundException;
 import com.app.model.Lesson;
+import com.app.model.LessonDay;
 import com.app.model.Student;
 import com.app.model.Teacher;
 import com.app.repository.LessonRepository;
@@ -59,5 +60,11 @@ public class LessonServiceImpl implements LessonService {
   @Override
   public List<Lesson> getAllLessons() {
     return lessonRepository.findAll();
+  }
+
+  @Override
+  public List<Lesson> getAllbyDay(LessonDay lessonDay) {
+    List<Lesson> lessons = lessonRepository.findAllByDayOrderByTimeHour(lessonDay);
+    return lessons;
   }
 }

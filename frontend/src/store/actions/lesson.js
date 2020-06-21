@@ -65,3 +65,14 @@ export const getLessonsByStudent = (id) => dispatch => {
         dispatch({type: TYPES.LESSONS_BY_STUDENT_LOADING, payload: false})
     })
 };
+
+export const getLessonsByDate = day => dispatch => {
+    dispatch({type: TYPES.LESSONS_BY_DATE_LOADING, payload: true})
+    api.get(`/lessons/day/${day}`).then(res => {
+        if (res.status === 200) {
+            dispatch({type: TYPES.SAVE_LESSONS_BY_DATE, payload: res.data})
+        }
+    }).finally(() => {
+        dispatch({type: TYPES.LESSONS_BY_DATE_LOADING, payload: false})
+    })
+}

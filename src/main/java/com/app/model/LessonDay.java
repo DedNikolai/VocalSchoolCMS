@@ -6,5 +6,6 @@ public enum LessonDay {
   WEDNESDAY,
   THURSDAY,
   FRIDAY,
-  SUTURDAY
+  SUTURDAY,
+  SUNDAY
 }

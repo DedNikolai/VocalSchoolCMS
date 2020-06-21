@@ -4,6 +4,7 @@ import com.app.dto.request.LessonRequest;
 import com.app.dto.response.LessonResponse;
 import com.app.dto.view.View;
 import com.app.facade.LessonFacade;
+import com.app.model.LessonDay;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -66,6 +67,13 @@ public class LessonController {
   @JsonView(View.Lesson.class)
   public ResponseEntity<List<LessonResponse>> getLessons() {
     List<LessonResponse> response = lessonFacade.getAllLessons();
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("day/{lessonDay}")
+  @JsonView(View.Lesson.class)
+  public ResponseEntity<List<LessonResponse>> getLessonsByDay(@PathVariable LessonDay lessonDay) {
+    List<LessonResponse> response = lessonFacade.getAllLessonsByDay(lessonDay);
     return ResponseEntity.ok(response);
   }
 }

@@ -7,6 +7,8 @@ const initialState = {
     lessonByIdLoading: true,
     lessonsByStudent: [],
     lessonsByStudentLoading: true,
+    lessonsByDateLoading: true,
+    lessonsByDate: []
 }
 
 const lesson = (state = initialState, action) => {
@@ -23,6 +25,10 @@ const lesson = (state = initialState, action) => {
             return {...state, lessonsByStudent: action.payload}
         case TYPES.LESSONS_BY_STUDENT_LOADING:
             return {...state, lessonsByStudentLoading: action.payload}
+        case TYPES.LESSONS_BY_DATE_LOADING:
+            return {...state, lessonsByDateLoading: action.payload}
+        case TYPES.SAVE_LESSONS_BY_DATE:
+            return {...state, lessonsByDate: action.payload}
         default:
             return {...state}
     }
