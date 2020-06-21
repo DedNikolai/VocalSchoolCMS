@@ -4,6 +4,7 @@ import com.app.dto.request.LessonRequest;
 import com.app.dto.response.LessonResponse;
 import com.app.dto.response.StudentResponse;
 import com.app.model.Lesson;
+import com.app.model.LessonDay;
 import com.app.service.LessonService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -48,6 +49,12 @@ public class LessonFacade {
 
   public List<LessonResponse> getAllLessons() {
     List<Lesson> lessons = lessonService.getAllLessons();
+    List<LessonResponse> response = lessons.stream().map(lesson -> modelMapper.map(lesson, LessonResponse.class)).collect(Collectors.toList());
+    return response;
+  }
+
+  public List<LessonResponse> getAllLessonsByDay(LessonDay lessonDay) {
+    List<Lesson> lessons = lessonService.getAllbyDay(lessonDay);
     List<LessonResponse> response = lessons.stream().map(lesson -> modelMapper.map(lesson, LessonResponse.class)).collect(Collectors.toList());
     return response;
   }

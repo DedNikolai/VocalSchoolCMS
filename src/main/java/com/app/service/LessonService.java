@@ -1,6 +1,7 @@
 package com.app.service;
 
 import com.app.model.Lesson;
+import com.app.model.LessonDay;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface LessonService {
   Lesson updateLesson(Lesson lesson, Long id);
 
   List<Lesson> getAllLessons();
+
+  List<Lesson> getAllbyDay(LessonDay lessonDay);
 }
