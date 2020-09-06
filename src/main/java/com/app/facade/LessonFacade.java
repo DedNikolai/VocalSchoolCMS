@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,8 +54,8 @@ public class LessonFacade {
     return response;
   }
 
-  public List<LessonResponse> getAllLessonsByDay(LessonDay lessonDay) {
-    List<Lesson> lessons = lessonService.getAllbyDay(lessonDay);
+  public List<LessonResponse> getAllLessonsByDay(Date date) {
+    List<Lesson> lessons = lessonService.getAllbyDay(date);
     List<LessonResponse> response = lessons.stream().map(lesson -> modelMapper.map(lesson, LessonResponse.class)).collect(Collectors.toList());
     return response;
   }

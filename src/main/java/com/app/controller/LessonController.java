@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -70,10 +71,10 @@ public class LessonController {
     return ResponseEntity.ok(response);
   }
 
-  @GetMapping("day/{lessonDay}")
+  @GetMapping("day/{date}")
   @JsonView(View.Lesson.class)
-  public ResponseEntity<List<LessonResponse>> getLessonsByDay(@PathVariable LessonDay lessonDay) {
-    List<LessonResponse> response = lessonFacade.getAllLessonsByDay(lessonDay);
+  public ResponseEntity<List<LessonResponse>> getLessonsByDay(@PathVariable Date date) {
+    List<LessonResponse> response = lessonFacade.getAllLessonsByDay(date);
     return ResponseEntity.ok(response);
   }
 }

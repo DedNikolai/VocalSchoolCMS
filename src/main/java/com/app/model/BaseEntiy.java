@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.Date;
 
 @Data
@@ -23,9 +25,11 @@ public class BaseEntiy {
 
   @CreatedDate
   @Column(name = "date_created")
+  @Temporal(TemporalType.DATE)
   private Date createdDate;
 
   @LastModifiedDate
   @Column(name = "date_modified")
+  @Temporal(TemporalType.DATE)
   private Date modifiedDate;
 }

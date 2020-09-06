@@ -1,17 +1,28 @@
 package com.app.service;
 
 import com.app.exeption.ResourceNotFoundException;
+import com.app.model.ConfirmedLesson;
 import com.app.model.Lesson;
 import com.app.model.LessonDay;
+import com.app.model.Status;
 import com.app.model.Student;
 import com.app.model.Teacher;
+import com.app.model.TransferLesson;
+import com.app.repository.ConfirmedLessonRepository;
 import com.app.repository.LessonRepository;
 import com.app.repository.StudentRepository;
 import com.app.repository.TeacherRepository;
+import com.app.repository.TransferLessonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +30,8 @@ public class LessonServiceImpl implements LessonService {
   private final LessonRepository lessonRepository;
   private final StudentRepository studentRepository;
   private final TeacherRepository teacherRepository;
+  private final ConfirmedLessonRepository confirmedLessonRepository;
+  private final TransferLessonRepository transferLessonRepository;
 
   @Override
   public List<Lesson> getLessonsByStudent(Long id) {
@@ -63,8 +76,38 @@ public class LessonServiceImpl implements LessonService {
   }
 
   @Override
-  public List<Lesson> getAllbyDay(LessonDay lessonDay) {
-    List<Lesson> lessons = lessonRepository.findAllByDayOrderByTimeHour(lessonDay);
-    return lessons;
+  @Transactional
+  public List<Lesson> getAllbyDay(Date date) {
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(date);
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    String dateString = format.format(date);
+    Date parseDate = null;
+    try {
+      parseDate = format.parse(dateString);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    List<Lesson> lessons = lessonRepository.findAllByDayOrderByTimeHour(LessonDay.values()[cal.get(Calendar.DAY_OF_WEEK)-1]);
+    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(parseDate);
+    List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(parseDate);
+    List<Lesson> lessonList = lessons.stream().map(lesson -> {
+      boolean confirmed = confirmedLessons.stream().anyMatch(confirmedLesson -> confirmedLesson.getLesson().getId() == lesson.getId());
+      boolean transfered = transferLessons.stream().anyMatch(transferLesson -> transferLesson.getLesson().getId() == lesson.getId());
+      if (confirmed) {
+        lesson.setStatus(Status.CONFIRMED);
+      }
+
+      if (transfered) {
+        lesson.setStatus(Status.TRANSFERED);
+      }
+
+      if (!transfered && !confirmed) {
+        lesson.setStatus(null);
+      }
+
+      return lesson;
+    }).collect(Collectors.toList());
+    return lessonList;
   }
 }

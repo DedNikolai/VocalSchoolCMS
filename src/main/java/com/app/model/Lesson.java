@@ -54,4 +54,5 @@ public class Lesson extends BaseEntiy {
   @Enumerated(EnumType.STRING)
   private LessonDay day;
 
+  private Status status;
 }
