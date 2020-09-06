@@ -12,6 +12,8 @@ import {connect} from 'react-redux';
 import SchoolIcon from '@material-ui/icons/School';
 import FaceIcon from '@material-ui/icons/Face';
 import ListAltIcon from '@material-ui/icons/ListAlt';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import EditIcon from '@material-ui/icons/Edit';
 import ua from '../../languages/ua';
 import './Menu.scss';
 
@@ -72,6 +74,28 @@ function Menu(props) {
                             <SchoolIcon />
                         </ListItemIcon>
                         <ListItemText primary={ua.menu.teachers} />
+                    </ListItem>
+                </NavLink>
+            }
+            {
+                hasRoles(user, adminPermissions) &&
+                <NavLink to='/admin/confirmed-lessons' className='main-menu__item'>
+                    <ListItem button>
+                        <ListItemIcon>
+                            <AttachMoneyIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={ua.menu.lessons} />
+                    </ListItem>
+                </NavLink>
+            }
+            {
+                hasRoles(user, adminPermissions) &&
+                <NavLink to='/admin/transfer-lessons' className='main-menu__item'>
+                    <ListItem button>
+                        <ListItemIcon>
+                            <EditIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={ua.menu.transferLessons} />
                     </ListItem>
                 </NavLink>
             }

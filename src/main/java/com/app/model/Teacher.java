@@ -64,9 +64,9 @@ public class Teacher extends BaseEntiy {
   @ToString.Exclude
   private Set<Price> prices;
 
-  @OneToMany(mappedBy = "teacher")
-  @ToString.Exclude
-  private Set<ConfirmedLesson> confirmedLessons;
+//  @OneToMany(mappedBy = "teacher")
+//  @ToString.Exclude
+//  private Set<ConfirmedLesson> confirmedLessons;
 
   @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
   private Set<TeacherWorkTime> workTimes;

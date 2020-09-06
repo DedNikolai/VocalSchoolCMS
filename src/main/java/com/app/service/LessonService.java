@@ -3,6 +3,7 @@ package com.app.service;
 import com.app.model.Lesson;
 import com.app.model.LessonDay;
 
+import java.util.Date;
 import java.util.List;
 
 public interface LessonService {
@@ -18,5 +19,5 @@ public interface LessonService {
 
   List<Lesson> getAllLessons();
 
-  List<Lesson> getAllbyDay(LessonDay lessonDay);
+  List<Lesson> getAllbyDay(Date date);
 }

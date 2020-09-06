@@ -16,6 +16,8 @@ import Lessons from '../Lessons/Lessons'
 import ManageLessons from '../ManageLessons/ManageLessons';
 import CreateStudnet from '../CreateStudent/CreateStudent';
 import CreateTeacher from '../CreateTeacher/CreateTeacher';
+import ConfirmedLessons from '../ConfirmedLessons/ConfirmedLessons';
+import TransferLessons from '../TransferLessons/TransferLessons';
 
 const teacherPermissions = [Roles.TEACHER, Roles.ADMIN, Roles.SUPER_ADMIN];
 const adminPermissions = [Roles.ADMIN, Roles.SUPER_ADMIN];
@@ -38,6 +40,8 @@ function AdminRouter (props) {
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/add-new' component={ManageLessons} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/edit/:id' component={ManageLessons} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons' component={Lessons} />
+            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/confirmed-lessons' component={ConfirmedLessons} />
+            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/transfer-lessons' component={TransferLessons} />
             <AuthorizedRoute authorized={hasRoles(user, teacherPermissions)} path='/admin' component={MainPage} />
         </Switch>
     )

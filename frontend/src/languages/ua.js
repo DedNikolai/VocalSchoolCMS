@@ -4,7 +4,9 @@ const ua = {
         users: 'Користувачі',
         timetable: 'Розклад',
         students: 'Учні',
-        teachers: 'Вчителі'
+        teachers: 'Вчителі',
+        lessons: 'Уроки',
+        transferLessons: 'Перенесені Уроки'
     },
 
     dashboard: 'Панель Управління',

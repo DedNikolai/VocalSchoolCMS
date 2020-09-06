@@ -57,9 +57,9 @@ public class Student extends BaseEntiy {
   @EqualsAndHashCode.Exclude
   private Set<Lesson> lessons = new HashSet<>();
 
-  @OneToMany(mappedBy = "student")
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  private Set<ConfirmedLesson> confirmedLessons;
+//  @OneToMany(mappedBy = "student")
+//  @ToString.Exclude
+//  @EqualsAndHashCode.Exclude
+//  private Set<ConfirmedLesson> confirmedLessons;
 
 }

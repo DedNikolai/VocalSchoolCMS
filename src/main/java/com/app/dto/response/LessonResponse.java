@@ -5,10 +5,13 @@ import com.app.model.Discipline;
 import com.app.model.LessonDay;
 import com.app.model.LessonType;
 import com.app.model.Room;
+import com.app.model.Status;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.util.Date;
 
 @Data
 public class LessonResponse {
@@ -28,4 +31,6 @@ public class LessonResponse {
   private Integer timeHour;
   private Integer timeMinutes;
   private Integer duration;
+  private Status status;
+  private Date createdDate;
 }

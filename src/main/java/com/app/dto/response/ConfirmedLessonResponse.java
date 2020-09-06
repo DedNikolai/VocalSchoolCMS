@@ -1,15 +1,30 @@
 package com.app.dto.response;
 
-import com.app.model.Discipline;
-import com.app.model.LessonType;
-import com.app.model.Room;
+import com.app.dto.view.View;
+import com.app.model.Status;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import java.util.Date;
 
 @Data
 public class ConfirmedLessonResponse {
   private Long id;
+  private Date createdDate;
   private Integer price;
-  private Discipline discipline;
-  private LessonType type;
-  private Room room;
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  @JsonView(View.ConfirmedLesson.class)
+  private LessonResponse lesson;
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  @JsonView(View.ConfirmedLesson.class)
+  private StudentResponse student;
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  @JsonView(View.ConfirmedLesson.class)
+  private TeacherResponse teacher;
+  private Date lessonDate;
 }
