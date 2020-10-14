@@ -5,6 +5,7 @@ import student from './student/student';
 import teacher from './teacher/teacher';
 import lesson from './lesson/lesson';
 import confirmedLessons from './confirmedLesson/confirmedLesson';
+import transferLessons from './transferLessons/transferLessons';
 
 const rootReducer = combineReducers({
     user: user,
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
     teacher: teacher,
     lesson: lesson,
     confirmedLessons: confirmedLessons,
+    transferLessons: transferLessons,
     toastr: toastrReducer
 });
 

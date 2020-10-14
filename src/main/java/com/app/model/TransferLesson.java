@@ -1,7 +1,9 @@
 package com.app.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,11 +26,26 @@ public class TransferLesson extends BaseEntiy{
   @JoinColumn(name="lesson_id")
   private Lesson lesson;
 
-  @Enumerated(EnumType.ORDINAL)
+  @Enumerated(EnumType.STRING)
   @Column(name = "room")
   private Room room;
+
+  @ManyToOne
+  @JoinColumn(name = "teacher")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  private Teacher teacher;
+
+  @Column(name = "transfer_date")
+  @Temporal(TemporalType.DATE)
+  private Date transferDate;
 
   @Column(name = "lesson_date")
   @Temporal(TemporalType.DATE)
   private Date lessonDate;
+
+  @Column(name = "transfer_time")
+  private String transferTime;
+
+  private Status status;
 }

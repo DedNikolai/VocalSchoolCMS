@@ -8,4 +8,5 @@ public class View {
   public static class Price {};
   public static class LessonDate {};
   public static class ConfirmedLesson {};
+  public static class TransferLesson{};
 }
