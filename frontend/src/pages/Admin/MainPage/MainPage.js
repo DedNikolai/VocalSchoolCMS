@@ -18,9 +18,13 @@ import TableRow from '@material-ui/core/TableRow';
 import IconButton from '@material-ui/core/IconButton';
 import {getLessonsByDate} from "../../../store/actions/lesson";
 import {createConfirmedLesson} from "../../../store/actions/confirmedLesson";
+import {getTransferedLessonsByDate} from "../../../store/actions/transferLessons";
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CancelIcon from '@material-ui/icons/Cancel';
 import {createNewConfirmedLesson} from '../../../utils/confirmLesson';
+import TransferedLessonsList from './TransferedLessonsList/TransferedLessonsList';
+import EditIcon from '@material-ui/icons/Edit';
+import {NavLink} from 'react-router-dom';
 import './MainPage.scss'
 
 const useStyles = makeStyles(theme => ({
@@ -49,13 +53,15 @@ const columns = [
 
 
 function MainPage(props) {
-    const {lessonsLoading, lessons, getLessonsByDate, createConfirmedLesson} = props;
+    const {lessonsLoading, lessons, getLessonsByDate, createConfirmedLesson,
+        transferedLessons, transferedLessonsByDateLoading, getTransferedLessonsList} = props;
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     const [date, changeDate] = useState(new Date());
 
     useEffect(() => {
         getLessonsByDate(date);
+        getTransferedLessonsList(date);
     }, [date]);
 
     const showMinutes = (minutes) => {
@@ -85,100 +91,113 @@ function MainPage(props) {
                 </Grid>
             </Grid>
             {
-                lessonsLoading ?
+                lessonsLoading || transferedLessonsByDateLoading ?
                     <div className="wrapper"><Preloader/></div>
                     :
-                    <Paper className={classes.root}>
-                        <TableContainer className={classes.container}>
-                            <Table stickyHeader aria-label="sticky table">
-                                <TableHead>
-                                    <TableRow>
-                                        {columns.map(column => (
-                                            <TableCell
-                                                key={column.id}
-                                                align={column.align}
-                                                className={classes.headCell}
-                                                style={{ minWidth: column.minWidth, textAlign: column.align}}
-                                            >
-                                                {column.label}
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {lessons.map(row => {
-                                        return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                                {columns.map(column => {
-                                                    const value = row[column.id];
-                                                    if (column.id === 'actions') {
+                    <div>
+                        <h2>Планові уроки</h2>
+                        <Paper className={classes.root}>
+                            <TableContainer className={classes.container}>
+                                <Table stickyHeader aria-label="sticky table">
+                                    <TableHead>
+                                        <TableRow>
+                                            {columns.map(column => (
+                                                <TableCell
+                                                    key={column.id}
+                                                    align={column.align}
+                                                    className={classes.headCell}
+                                                    style={{ minWidth: column.minWidth, textAlign: column.align}}
+                                                >
+                                                    {column.label}
+                                                </TableCell>
+                                            ))}
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {lessons.map(row => {
+                                            return (
+                                                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                                    {columns.map(column => {
+                                                        const value = row[column.id];
+                                                        if (column.id === 'actions') {
+                                                            return (
+                                                                <TableCell className={classes.cell}>
+                                                                    <IconButton>
+                                                                        <NavLink to={`/admin/lessons/transfer/${row.id}/date/${date}`}>
+                                                                            <EditIcon/>
+                                                                        </NavLink>
+                                                                    </IconButton>
+                                                                    <IconButton onClick={() => confirmLesson(row)}>
+                                                                        <CheckBoxIcon/>
+                                                                    </IconButton>
+                                                                    <IconButton>
+                                                                        <CancelIcon/>
+                                                                    </IconButton>
+                                                                </TableCell>
+                                                            )
+                                                        }
+                                                        if (column.id === 'teacher') {
+                                                            return (
+                                                                <TableCell className={classes.cell}>
+                                                                    {row.teacher.firstName + ' ' + row.teacher.lastName}
+                                                                </TableCell>
+                                                            )
+                                                        }
+                                                        if (column.id === 'student') {
+                                                            return (
+                                                                <TableCell className={classes.cell}>
+                                                                    {row.student.firstName + ' ' + row.student.lastName}
+                                                                </TableCell>
+                                                            )
+                                                        }
+                                                        if (column.id === 'time') {
+                                                            return (
+                                                                <TableCell className={classes.cell}>
+                                                                    {row.timeHour + ':' + showMinutes(row.timeMinutes)}
+                                                                </TableCell>
+                                                            )
+                                                        }
                                                         return (
-                                                            <TableCell className={classes.cell}>
-                                                                <IconButton onClick={() => confirmLesson(row)}>
-                                                                    <CheckBoxIcon/>
-                                                                </IconButton>
-                                                                <IconButton>
-                                                                    <CancelIcon/>
-                                                                </IconButton>
+                                                            <TableCell key={column.id} align={column.align}>
+                                                                {column.format && typeof value === 'number' ? column.format(value) : value}
                                                             </TableCell>
-                                                        )
-                                                    }
-                                                    if (column.id === 'teacher') {
-                                                        return (
-                                                            <TableCell className={classes.cell}>
-                                                                {row.teacher.firstName + ' ' + row.teacher.lastName}
-                                                            </TableCell>
-                                                        )
-                                                    }
-                                                    if (column.id === 'student') {
-                                                        return (
-                                                            <TableCell className={classes.cell}>
-                                                                {row.student.firstName + ' ' + row.student.lastName}
-                                                            </TableCell>
-                                                        )
-                                                    }
-                                                    if (column.id === 'time') {
-                                                        return (
-                                                            <TableCell className={classes.cell}>
-                                                                {row.timeHour + ':' + showMinutes(row.timeMinutes)}
-                                                            </TableCell>
-                                                        )
-                                                    }
-                                                    return (
-                                                        <TableCell key={column.id} align={column.align}>
-                                                            {column.format && typeof value === 'number' ? column.format(value) : value}
-                                                        </TableCell>
-                                                    );
-                                                })}
-                                            </TableRow>
-                                        );
-                                    })}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Paper>
+                                                        );
+                                                    })}
+                                                </TableRow>
+                                            );
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Paper>
+                    </div>
             }
+            <h2>Перенесені уроки</h2>
+            <TransferedLessonsList tarnsferedLessons={transferedLessons} date={date}/>
         </Fragment>
     )
 }
 
 MainPage.propTypes = {
     lessonsLoading: PropTypes.bool.isRequired,
-    lessons: Preloader.array
+    lessons: Preloader.array,
 };
 
 MainPage.defaultProps = {
     lessons: []
 }
 
-const mapStateToProps = ({lesson}) => ({
+const mapStateToProps = ({lesson, transferLessons}) => ({
     lessonsLoading: lesson.lessonsByDateLoading,
-    lessons: lesson.lessonsByDate
+    lessons: lesson.lessonsByDate,
+    transferedLessons: transferLessons.transferedLessonsByDate,
+    transferedLessonsByDateLoading: transferLessons.transferedLessonsByDateLoading,
 })
 
 const mapDispatchToProps = dispatch => ({
     getLessonsByDate: (day) => dispatch(getLessonsByDate(day)),
-    createConfirmedLesson: (lesson, date) => dispatch(createConfirmedLesson(lesson, date))
+    createConfirmedLesson: (lesson, date) => dispatch(createConfirmedLesson(lesson, date)),
+    getTransferedLessonsList: date => dispatch(getTransferedLessonsByDate(date)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainPage);

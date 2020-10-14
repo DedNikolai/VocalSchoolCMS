@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
@@ -8,27 +8,30 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import IconButton from '@material-ui/core/IconButton';
-import {getAllLessons} from "../../../store/actions/transferLessons";
-import Preloader from '../../../components/Preloader/index';
-import {rowsPerPage} from '../../../constants/view';
-import './TransferLessons.scss'
+import {getLessonsByDate, deleteTrasferLesson} from "../../../../store/actions/transferLessons";
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import EditIcon from '@material-ui/icons/Edit';
+import {NavLink} from 'react-router-dom';
+import './TransferedLessonsList.scss';
 
 const columns = [
-    { id: 'date', label: 'Дата', minWidth: 150, align: 'center' },
-    { id: 'student', label: 'Учень', minWidth: 150, align: 'center' },
-    { id: 'teacher', label: 'Вчитель', minWidth: 150, align: 'center' },
-    { id: 'price', label: 'Вартість', minWidth: 50, align: 'center' },
+    { id: 'discipline', label: 'Дисципліна', minWidth: 150, align: 'left' },
+    { id: 'teacher', label: 'Вчитель', minWidth: 150, align: 'left' },
+    { id: 'student', label: 'Учень', minWidth: 150, align: 'left' },
+    { id: 'time', label: 'Час', minWidth: 50, align: 'center' },
+    { id: 'room', label: 'Класс', minWidth: 50, align: 'center' },
+    { id: 'duration', label: 'Трывалість', minWidth: 50, align: 'center' },
+    { id: 'status', label: 'Статус', minWidth: 50, align: 'center' },
     { id: 'actions', label: 'Дії', minWidth: 50, align: 'center' },
 ];
+
 
 const useStyles = makeStyles({
     root: {
         width: '100%',
-        backgroundColor: '#fff'
     },
     container: {
         maxHeight: 440,
@@ -39,31 +42,18 @@ const useStyles = makeStyles({
         textAlign: 'center'
     },
 
-    headCell: {
-        backgroundColor: '#fff',
-        fontWeight: 'bold'
-    },
 });
 
-function TransferLessons(props) {
+function TransferedLessonsList(props) {
     const classes = useStyles();
-    const {lessons, lessonsLoading, getLessons} = props;
-    const {content = [], totalElements, number} = lessons;
+    const {tarnsferedLessons, deleteTransfer, date} = props;
 
-    const handleChangePage = (event, page) => {
-        getLessons(page, rowsPerPage);
+    const deleteTrasferedLesson = id => {
+        deleteTransfer(id, date);
     };
-
-    useEffect(() => {
-        getLessons(0, rowsPerPage);
-    }, []);
 
     return (
         <div className='lessons-list'>
-            {
-                lessonsLoading ?
-                    <div className="wrapper"><Preloader/></div>
-                    :
                     <Paper className={classes.root}>
                         <TableContainer className={classes.container}>
                             <Table stickyHeader aria-label="sticky table">
@@ -73,7 +63,6 @@ function TransferLessons(props) {
                                             <TableCell
                                                 key={column.id}
                                                 align={column.align}
-                                                className={classes.headCell}
                                                 style={{ minWidth: column.minWidth, textAlign: column.align}}
                                             >
                                                 {column.label}
@@ -82,7 +71,7 @@ function TransferLessons(props) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {content.map(row => {
+                                    {tarnsferedLessons.map(row => {
                                         return (
                                             <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                                                 {columns.map(column => {
@@ -91,21 +80,57 @@ function TransferLessons(props) {
                                                         return (
                                                             <TableCell className={classes.cell}>
                                                                 <IconButton>
-                                                                    <DeleteOutline onClick={() => {}}/>
+                                                                    <NavLink to={`/admin/lessons/transfer/edit/${row.id}`}>
+                                                                        <EditIcon/>
+                                                                    </NavLink>
                                                                 </IconButton>
+                                                                <IconButton onClick={() => {}}>
+                                                                    <CheckBoxIcon/>
+                                                                </IconButton>
+                                                                <IconButton onClick={() => deleteTrasferedLesson(row.id)}>
+                                                                    <DeleteOutline/>
+                                                                </IconButton>
+                                                            </TableCell>
+                                                        )
+                                                    }
+                                                    if (column.id === 'discipline') {
+                                                        return (
+                                                            <TableCell align={column.align}>
+                                                                {row.lesson.discipline}
+                                                            </TableCell>
+                                                        )
+                                                    }
+                                                    if (column.id === 'time') {
+                                                        return (
+                                                            <TableCell className={classes.cell}>
+                                                                {row.transferTime}
+                                                            </TableCell>
+                                                        )
+                                                    }
+                                                    if (column.id === 'duration') {
+                                                        return (
+                                                            <TableCell className={classes.cell}>
+                                                                {row.lesson.duration}
+                                                            </TableCell>
+                                                        )
+                                                    }
+                                                    if (column.id === 'room') {
+                                                        return (
+                                                            <TableCell className={classes.cell}>
+                                                                {row.room}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'teacher') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell align={column.align}>
                                                                 {row.teacher.firstName + ' ' + row.teacher.lastName}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'student') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell align={column.align}>
                                                                 {row.lesson.student.firstName + ' ' + row.lesson.student.lastName}
                                                             </TableCell>
                                                         )
@@ -129,39 +154,29 @@ function TransferLessons(props) {
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                        <TablePagination
-                            rowsPerPageOptions={[rowsPerPage]}
-                            component="div"
-                            count={totalElements}
-                            rowsPerPage={rowsPerPage}
-                            page={number}
-                            onChangePage={handleChangePage}
-                        />
                     </Paper>
-            }
         </div>
     )
 }
 
-TransferLessons.propTypes = {
-    lessons: PropTypes.object,
-    lessonsLoading: PropTypes.bool.isRequired,
-    getAllLessons: PropTypes.func.isRequired,
+TransferedLessonsList.propTypes = {
+    tarnsferedLessons: PropTypes.array,
+    deleteTransfer: PropTypes.func.isRequired,
 };
 
-TransferLessons.defaultProps = {
-    lessons: {},
+TransferedLessonsList.defaultProps = {
+    tarnsferedLessons: [],
 }
 
 const mapStateToProps = ({transferLessons}) => {
     return {
-        lessons: transferLessons.transferedLessons,
-        lessonsLoading: transferLessons.transferedLessonsLoading,
+
     }
 };
 
 const mapDispatchToProps = dispatch => ({
-    getLessons: (page, size) => dispatch(getAllLessons(page, size)),
+    deleteTransfer: (id, date) => dispatch(deleteTrasferLesson(id, date)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TransferLessons);
+export default connect(mapStateToProps, mapDispatchToProps)(TransferedLessonsList);
+

@@ -95,6 +95,7 @@ function ManageStudent(props) {
         onSubmit: value => {
             updateStudent(id, value);
             setChanged(true)
+            console.log(value)
         },
         enableReinitialize: true
     });

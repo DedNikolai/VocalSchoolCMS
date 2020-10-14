@@ -3,7 +3,7 @@ import * as TYPES from '../../constants/lessons';
 const initialState = {
     lessons: {},
     lessonsLoading: true,
-    lessonById: null,
+    lessonById: {},
     lessonByIdLoading: true,
     lessonsByStudent: [],
     lessonsByStudentLoading: true,
