@@ -131,7 +131,9 @@ function MainPage(props) {
                                                                         <CheckBoxIcon/>
                                                                     </IconButton>
                                                                     <IconButton>
-                                                                        <CancelIcon/>
+                                                                        <NavLink to={`/admin/lessons/reject/${row.id}/date/${date}`}>
+                                                                            <CancelIcon/>
+                                                                        </NavLink>
                                                                     </IconButton>
                                                                 </TableCell>
                                                             )

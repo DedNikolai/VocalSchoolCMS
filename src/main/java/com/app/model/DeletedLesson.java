@@ -7,8 +7,6 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -17,13 +15,10 @@ import javax.persistence.TemporalType;
 import java.util.Date;
 
 @Entity
-@Table(name = "confirmed_lesson")
+@Table(name = "deleted_lesson")
 @Data
 @NoArgsConstructor
-public class ConfirmedLesson extends BaseEntiy {
-
-  @Column(name = "price")
-  private Integer price;
+public class DeletedLesson extends BaseEntiy {
 
   @ManyToOne
   @JoinColumn(name="lesson_id")
@@ -49,5 +44,8 @@ public class ConfirmedLesson extends BaseEntiy {
 
   @Column(name = "lesson_time")
   private String lessonTime;
+
+  @Column(name = "reason")
+  private String reason;
 
 }

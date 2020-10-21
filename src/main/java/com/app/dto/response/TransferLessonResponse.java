@@ -2,6 +2,7 @@ package com.app.dto.response;
 
 import com.app.dto.view.View;
 import com.app.model.Room;
+import com.app.model.Status;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,4 +25,5 @@ public class TransferLessonResponse {
   private TeacherResponse teacher;
   private Date transferDate;
   private String transferTime;
+  private Status status;
 }

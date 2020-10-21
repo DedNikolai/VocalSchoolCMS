@@ -9,4 +9,5 @@ public class View {
   public static class LessonDate {};
   public static class ConfirmedLesson {};
   public static class TransferLesson{};
+  public static class DeletedLesson{};
 }

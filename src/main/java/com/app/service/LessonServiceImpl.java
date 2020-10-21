@@ -2,6 +2,7 @@ package com.app.service;
 
 import com.app.exeption.ResourceNotFoundException;
 import com.app.model.ConfirmedLesson;
+import com.app.model.DeletedLesson;
 import com.app.model.Lesson;
 import com.app.model.LessonDay;
 import com.app.model.Status;
@@ -9,6 +10,7 @@ import com.app.model.Student;
 import com.app.model.Teacher;
 import com.app.model.TransferLesson;
 import com.app.repository.ConfirmedLessonRepository;
+import com.app.repository.DeletedLessonRepository;
 import com.app.repository.LessonRepository;
 import com.app.repository.StudentRepository;
 import com.app.repository.TeacherRepository;
@@ -32,6 +34,7 @@ public class LessonServiceImpl implements LessonService {
   private final TeacherRepository teacherRepository;
   private final ConfirmedLessonRepository confirmedLessonRepository;
   private final TransferLessonRepository transferLessonRepository;
+  private final DeletedLessonRepository deletedLessonRepository;
 
   @Override
   public List<Lesson> getLessonsByStudent(Long id) {
@@ -91,9 +94,12 @@ public class LessonServiceImpl implements LessonService {
     List<Lesson> lessons = lessonRepository.findAllByDayOrderByTimeHour(LessonDay.values()[cal.get(Calendar.DAY_OF_WEEK)-1]);
     List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(parseDate);
     List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(parseDate);
+    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(parseDate);
+
     List<Lesson> lessonList = lessons.stream().map(lesson -> {
       boolean confirmed = confirmedLessons.stream().anyMatch(confirmedLesson -> confirmedLesson.getLesson().getId() == lesson.getId());
       boolean transfered = transferLessons.stream().anyMatch(transferLesson -> transferLesson.getLesson().getId() == lesson.getId());
+      boolean deleted = deletedLessons.stream().anyMatch(deletedLesson -> deletedLesson.getLesson().getId() == lesson.getId());
       if (confirmed) {
         lesson.setStatus(Status.CONFIRMED);
       }
@@ -102,7 +108,11 @@ public class LessonServiceImpl implements LessonService {
         lesson.setStatus(Status.TRANSFERED);
       }
 
-      if (!transfered && !confirmed) {
+      if (deleted) {
+        lesson.setStatus(Status.DELETED);
+      }
+
+      if (!transfered && !confirmed && !deleted) {
         lesson.setStatus(null);
       }
 

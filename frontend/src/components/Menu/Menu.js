@@ -15,6 +15,7 @@ import ListAltIcon from '@material-ui/icons/ListAlt';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import EditIcon from '@material-ui/icons/Edit';
 import ua from '../../languages/ua';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import './Menu.scss';
 
 const teacherPermissions = [Roles.TEACHER, Roles.ADMIN, Roles.SUPER_ADMIN];
@@ -96,6 +97,17 @@ function Menu(props) {
                             <EditIcon />
                         </ListItemIcon>
                         <ListItemText primary={ua.menu.transferLessons} />
+                    </ListItem>
+                </NavLink>
+            }
+            {
+                hasRoles(user, adminPermissions) &&
+                <NavLink to='/admin/deleted-lessons' className='main-menu__item'>
+                    <ListItem button>
+                        <ListItemIcon>
+                            <DeleteOutline />
+                        </ListItemIcon>
+                        <ListItemText primary={ua.menu.deleted} />
                     </ListItem>
                 </NavLink>
             }

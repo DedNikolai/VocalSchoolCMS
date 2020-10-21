@@ -11,7 +11,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import IconButton from '@material-ui/core/IconButton';
-import {getLessonsByDate, deleteTrasferLesson} from "../../../../store/actions/transferLessons";
+import {getLessonsByDate, deleteTrasferLesson, confirmTransferedLesson} from "../../../../store/actions/transferLessons";
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import EditIcon from '@material-ui/icons/Edit';
 import {NavLink} from 'react-router-dom';
@@ -46,11 +46,22 @@ const useStyles = makeStyles({
 
 function TransferedLessonsList(props) {
     const classes = useStyles();
-    const {tarnsferedLessons, deleteTransfer, date} = props;
+    const {tarnsferedLessons, deleteTransfer, date, confirmTransfer} = props;
 
     const deleteTrasferedLesson = id => {
         deleteTransfer(id, date);
     };
+
+    const confirmTrasferedLesson = lesson => {
+        const confirmedLesson = {
+            lesson: lesson.lesson,
+            teacher: lesson.teacher,
+            student: lesson.lesson.student,
+            lessonDate: lesson.transferDate,
+            lessonTime: lesson.transferTime,
+        };
+        confirmTransfer(confirmedLesson, date);
+    }
 
     return (
         <div className='lessons-list'>
@@ -84,7 +95,7 @@ function TransferedLessonsList(props) {
                                                                         <EditIcon/>
                                                                     </NavLink>
                                                                 </IconButton>
-                                                                <IconButton onClick={() => {}}>
+                                                                <IconButton onClick={() => confirmTrasferedLesson(row)}>
                                                                     <CheckBoxIcon/>
                                                                 </IconButton>
                                                                 <IconButton onClick={() => deleteTrasferedLesson(row.id)}>
@@ -162,6 +173,7 @@ function TransferedLessonsList(props) {
 TransferedLessonsList.propTypes = {
     tarnsferedLessons: PropTypes.array,
     deleteTransfer: PropTypes.func.isRequired,
+    confirmTransfer: PropTypes.func.isRequired,
 };
 
 TransferedLessonsList.defaultProps = {
@@ -176,6 +188,7 @@ const mapStateToProps = ({transferLessons}) => {
 
 const mapDispatchToProps = dispatch => ({
     deleteTransfer: (id, date) => dispatch(deleteTrasferLesson(id, date)),
+    confirmTransfer: (lesson, date) => dispatch(confirmTransferedLesson(lesson, date)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TransferedLessonsList);
