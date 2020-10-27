@@ -2,6 +2,7 @@ import * as TYPES from '../constants/transferLessons';
 import api from '../api/FetchData';
 import {toastr} from 'react-redux-toastr';
 import {getAllStudents} from "./student";
+import {getLessonsByDate} from "./lesson";
 
 export const getAllLessons = (page, size) => dispatch => {
     dispatch({type: TYPES.TRANSFERED_LESSONS_LOADING, payload: true})
@@ -64,3 +65,12 @@ export const deleteTrasferLesson = (id, date) => dispatch => {
         }
     })
 }
+
+export const confirmTransferedLesson = (lesson, date) => dispatch => {
+    api.post(`/confirmed-lessons`, lesson).then(res => {
+        if (res.status >= 200 && res.status < 300) {
+            toastr.success('Lesson confirmed');
+            dispatch(getTransferedLessonsByDate(date));
+        }
+    })
+};

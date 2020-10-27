@@ -6,7 +6,8 @@ const ua = {
         students: 'Учні',
         teachers: 'Вчителі',
         lessons: 'Уроки',
-        transferLessons: 'Перенесені Уроки'
+        transferLessons: 'Перенесені Уроки',
+        deleted: 'Скасовані Уроки',
     },
 
     dashboard: 'Панель Управління',

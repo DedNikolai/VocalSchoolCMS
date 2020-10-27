@@ -1,7 +1,11 @@
 package com.app.service;
 
 import com.app.exeption.ResourceNotFoundException;
+import com.app.model.ConfirmedLesson;
+import com.app.model.Lesson;
+import com.app.model.Status;
 import com.app.model.TransferLesson;
+import com.app.repository.ConfirmedLessonRepository;
 import com.app.repository.TransferLessonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,11 +17,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class TransferLessonServiceImpl implements TransferLessonService{
   private final TransferLessonRepository transferLessonRepository;
+  private final ConfirmedLessonRepository confirmedLessonRepository;
   @Override
   public Page<TransferLesson> getAllOrderByDate(Pageable pageable) {
     return transferLessonRepository.findAllByOrderByCreatedDateAsc(pageable);
@@ -52,10 +58,22 @@ public class TransferLessonServiceImpl implements TransferLessonService{
     } catch (ParseException e) {
       e.printStackTrace();
     }
-
+    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(parseDate);
     List<TransferLesson> transferLessons = transferLessonRepository.findAllByTransferDate(parseDate);
 
-    return transferLessons;
+    List<TransferLesson> lessonList = transferLessons.stream().map(lesson -> {
+      boolean confirmed = confirmedLessons.stream().anyMatch(confirmedLesson -> {
+        return confirmedLesson.getLesson().getId() == lesson.getLesson().getId() && confirmedLesson.getLessonTime().equals(lesson.getTransferTime());
+      });
+
+      if (confirmed) {
+        lesson.setStatus(Status.CONFIRMED);
+      }
+
+      return lesson;
+    }).collect(Collectors.toList());
+
+    return lessonList;
   }
 
   @Override
