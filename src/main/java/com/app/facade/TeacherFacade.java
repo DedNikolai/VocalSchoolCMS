@@ -43,4 +43,9 @@ public class TeacherFacade {
   public void deleteTeacher(Long id) {
     teacherService.deleteTeacher(id);
   }
+
+  public List<TeacherResponse> teachersByDiscipline(String discipline) {
+    List<Teacher> teachers = teacherService.finAllByDiscipline(discipline);
+    return teachers.stream().map(teacher -> modelMapper.map(teacher, TeacherResponse.class)).collect(Collectors.toList());
+  }
 }

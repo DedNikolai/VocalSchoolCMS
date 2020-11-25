@@ -119,7 +119,7 @@ function MainPage(props) {
                                                 <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                                                     {columns.map(column => {
                                                         const value = row[column.id];
-                                                        if (column.id === 'actions') {
+                                                        if (column.id === 'actions' && !row.status) {
                                                             return (
                                                                 <TableCell className={classes.cell}>
                                                                     <IconButton>

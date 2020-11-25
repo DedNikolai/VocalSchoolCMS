@@ -1,7 +1,7 @@
 package com.app.service;
 
-import com.app.dto.request.TeacherRequest;
 import com.app.exeption.ResourceNotFoundException;
+import com.app.model.Discipline;
 import com.app.model.Student;
 import com.app.model.Teacher;
 import com.app.repository.StudentRepository;
@@ -39,6 +39,12 @@ public class TeacherServiceImpl implements TeacherService{
     Teacher teacherFromDb = getTeacherById(id);
     teacher.setId(teacherFromDb.getId());
     return teacherRepository.save(teacher);
+  }
+
+  @Override
+  public List<Teacher> finAllByDiscipline(String discipline) {
+    List<Teacher> teachers = teacherRepository.findByDisciplinesContains(Discipline.valueOf(discipline));
+    return teachers;
   }
 
   @Override

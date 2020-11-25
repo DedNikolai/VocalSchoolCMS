@@ -109,4 +109,16 @@ export const deletePrice = (priceId, teacherId) => dispatch => {
             toastr.success('Price was deleted');
         }
     })
-}
+};
+
+export const getTeachersByDiscipline = (discipline) => dispatch => {
+    dispatch({type: TYPES.TEACHERS_BY_DISCIPLINE_LOADING, payload: {teachersByDisciplineLoading: true}})
+    api.get(`/teachers/discipline?param=${discipline}`).then(res => {
+        if (res.status === 200) {
+            console.log(res.data)
+            dispatch({type: TYPES.SAVE_TEACHERS_BY_DISCIPLINE, payload: {teachersByDiscipline: res.data}})
+        }
+    }).finally(() => {
+        dispatch({type: TYPES.TEACHERS_BY_DISCIPLINE_LOADING, payload: {teachersByDisciplineLoading: false}})
+    })
+};

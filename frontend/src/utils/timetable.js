@@ -59,4 +59,12 @@ export const isFreeTime = (freeTimes, time, index) => {
         const tableTime = convertTimeToMinutes(time);
         return tableTime >= start && tableTime <= end;
     })
-}
+};
+
+export const isTeacherWorkTime = (time, teacherWorkTimes) => {
+    for (let i = 0; i < teacherWorkTimes.length; i++) {
+        const startTime = teacherWorkTimes[i].startTime;
+        const endTime = teacherWorkTimes[i].endTime;
+    }
+
+};

@@ -1,0 +1,9 @@
+@import "../../styles/constants";
+
+.MuiTab-textColorPrimary.Mui-selected {
+  color: $color-primery !important;
+}
+
+.PrivateTabIndicator-colorPrimary-196 {
+  background-color: $color-primery !important;
+}

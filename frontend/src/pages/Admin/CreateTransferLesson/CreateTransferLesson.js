@@ -24,6 +24,7 @@ import ua from "../../../languages/ua";
 import {getLessonById} from '../../../store/actions/lesson';
 import {getAllTeachers} from '../../../store/actions/teacher';
 import {createTransferLesson} from '../../../store/actions/transferLessons';
+import {NavLink} from 'react-router-dom'
 
 
 const useStyles = makeStyles(theme => ({
@@ -113,10 +114,6 @@ function CreateTransferLesson(props) {
         getTeachers();
         getLessonById(id);
     }, []);
-
-    const closeForm = () => {
-
-    };
 
     const handleChangeTeacher = event => {
         formik.setFieldValue('teacher', event.target.value);
@@ -248,16 +245,17 @@ function CreateTransferLesson(props) {
                     </FormControl>
                 </div>
                 <div className='buttons-container'>
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classes.button}
-                        startIcon={<DeleteIcon />}
-                        onClick={closeForm}
-                        style={{backgroundColor: colors.secondaryColor}}
-                    >
-                        Cancel
-                    </Button>
+                    <NavLink to='/admin' className='main-menu__item'>
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            className={classes.button}
+                            startIcon={<DeleteIcon />}
+                            style={{backgroundColor: colors.secondaryColor}}
+                        >
+                            Cancel
+                        </Button>
+                    </NavLink>
                     <ThemeProvider theme={theme}>
                         <Button
                             variant="contained"

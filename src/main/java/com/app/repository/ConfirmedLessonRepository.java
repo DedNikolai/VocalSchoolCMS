@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface ConfirmedLessonRepository extends JpaRepository<ConfirmedLesson, Long> {
-  Page<ConfirmedLesson> findAllByOrderByCreatedDateAsc(Pageable pageable);
+  Page<ConfirmedLesson> findAllByOrderByCreatedDateDesc(Pageable pageable);
 
   List<ConfirmedLesson> findAllByLessonDate(@Temporal(TemporalType.DATE)Date date);
 }
