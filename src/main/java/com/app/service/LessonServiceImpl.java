@@ -91,7 +91,7 @@ public class LessonServiceImpl implements LessonService {
     } catch (ParseException e) {
       e.printStackTrace();
     }
-    List<Lesson> lessons = lessonRepository.findAllByDayOrderByTimeHour(LessonDay.values()[cal.get(Calendar.DAY_OF_WEEK)-1]);
+    List<Lesson> lessons = lessonRepository.findAllByDayOrderByTime(LessonDay.values()[cal.get(Calendar.DAY_OF_WEEK)-1]);
     List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(parseDate);
     List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(parseDate);
     List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(parseDate);
@@ -119,5 +119,10 @@ public class LessonServiceImpl implements LessonService {
       return lesson;
     }).collect(Collectors.toList());
     return lessonList;
+  }
+
+  @Override
+  public List<Lesson> findAllbyLessonDay(String day) {
+    return lessonRepository.findAllByDay(LessonDay.valueOf(day));
   }
 }

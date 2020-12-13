@@ -33,11 +33,8 @@ public class Lesson extends BaseEntiy {
   @Column(name = "room")
   private Room room;
 
-  @Column(name = "time_hour")
-  private Integer timeHour;
-
-  @Column(name = "time_minutes")
-  private Integer timeMinutes;
+  @Column(name = "lesson_time")
+  private String time;
 
   @Column(name = "duration")
   private Integer duration;

@@ -20,4 +20,6 @@ public interface LessonService {
   List<Lesson> getAllLessons();
 
   List<Lesson> getAllbyDay(Date date);
+
+  List<Lesson> findAllbyLessonDay(String day);
 }

@@ -152,13 +152,7 @@ function MainPage(props) {
                                                                 </TableCell>
                                                             )
                                                         }
-                                                        if (column.id === 'time') {
-                                                            return (
-                                                                <TableCell className={classes.cell}>
-                                                                    {row.timeHour + ':' + showMinutes(row.timeMinutes)}
-                                                                </TableCell>
-                                                            )
-                                                        }
+
                                                         return (
                                                             <TableCell key={column.id} align={column.align}>
                                                                 {column.format && typeof value === 'number' ? column.format(value) : value}

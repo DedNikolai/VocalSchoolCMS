@@ -35,6 +35,7 @@ const ua = {
                 noRoom: 'Виберіть Клас',
                 noType: 'Виберіть Тип заняття',
                 noTeacher: 'Виберіть Вчителя',
+                notTeacherWorkTime: 'Це не робочий час цього вчителя',
 
             },
 

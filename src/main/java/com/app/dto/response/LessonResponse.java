@@ -28,8 +28,7 @@ public class LessonResponse {
   private Discipline discipline;
   private LessonType type;
   private LessonDay day;
-  private Integer timeHour;
-  private Integer timeMinutes;
+  private String time;
   private Integer duration;
   private Status status;
   private Date createdDate;

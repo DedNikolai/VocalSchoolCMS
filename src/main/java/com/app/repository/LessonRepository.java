@@ -12,5 +12,7 @@ import java.util.List;
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
   List<Lesson> findAllByStudent(Student student);
 
-  List<Lesson> findAllByDayOrderByTimeHour(LessonDay lessonDay);
+  List<Lesson> findAllByDayOrderByTime(LessonDay lessonDay);
+
+  List<Lesson> findAllByDay(LessonDay day);
 }

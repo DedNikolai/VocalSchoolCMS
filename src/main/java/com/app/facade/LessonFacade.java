@@ -59,4 +59,10 @@ public class LessonFacade {
     List<LessonResponse> response = lessons.stream().map(lesson -> modelMapper.map(lesson, LessonResponse.class)).collect(Collectors.toList());
     return response;
   }
+
+  public List<LessonResponse> findAllLessonsByLessonDay(String day) {
+    List<Lesson> lessons = lessonService.findAllbyLessonDay(day);
+    List<LessonResponse> response = lessons.stream().map(lesson -> modelMapper.map(lesson, LessonResponse.class)).collect(Collectors.toList());
+    return response;
+  }
 }
