@@ -15,8 +15,7 @@ public class LessonRequest {
   private Discipline discipline;
   private LessonType type;
   private LessonDay day;
-  private Integer timeHour;
-  private Integer timeMinutes;
+  private String time;
   private Room room;
   private Integer duration;
 }

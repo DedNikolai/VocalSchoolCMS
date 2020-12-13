@@ -47,7 +47,7 @@ function Menu(props) {
             }
             {
                 hasRoles(user, adminPermissions) &&
-                <NavLink to='/admin/lessons' className='main-menu__item'>
+                <NavLink to='/admin/timetable' className='main-menu__item'>
                     <ListItem button>
                         <ListItemIcon>
                             <ListAltIcon />
@@ -80,34 +80,12 @@ function Menu(props) {
             }
             {
                 hasRoles(user, adminPermissions) &&
-                <NavLink to='/admin/confirmed-lessons' className='main-menu__item'>
+                <NavLink to='/admin/lessons' className='main-menu__item'>
                     <ListItem button>
                         <ListItemIcon>
                             <AttachMoneyIcon />
                         </ListItemIcon>
                         <ListItemText primary={ua.menu.lessons} />
-                    </ListItem>
-                </NavLink>
-            }
-            {
-                hasRoles(user, adminPermissions) &&
-                <NavLink to='/admin/transfer-lessons' className='main-menu__item'>
-                    <ListItem button>
-                        <ListItemIcon>
-                            <EditIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={ua.menu.transferLessons} />
-                    </ListItem>
-                </NavLink>
-            }
-            {
-                hasRoles(user, adminPermissions) &&
-                <NavLink to='/admin/deleted-lessons' className='main-menu__item'>
-                    <ListItem button>
-                        <ListItemIcon>
-                            <DeleteOutline />
-                        </ListItemIcon>
-                        <ListItemText primary={ua.menu.deleted} />
                     </ListItem>
                 </NavLink>
             }

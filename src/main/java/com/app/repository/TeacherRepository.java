@@ -1,5 +1,6 @@
 package com.app.repository;
 
+import com.app.model.Discipline;
 import com.app.model.Lesson;
 import com.app.model.Student;
 import com.app.model.Teacher;
@@ -12,4 +13,6 @@ import java.util.List;
 public interface TeacherRepository extends JpaRepository<Teacher, Long> {
   List<Teacher> findAllByStudentsContains(Student student);
   Teacher findByLessonsContains(Lesson lesson);
+
+  List<Teacher> findByDisciplinesContains(Discipline disciplines);
 }

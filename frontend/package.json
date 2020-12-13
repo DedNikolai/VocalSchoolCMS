@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.9.3",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/pickers": "^3.2.10",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
@@ -20,6 +21,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.1",
     "react-stomp": "^4.3.0",
+    "react-swipeable-views": "^0.13.9",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "typeface-roboto": "0.0.75"

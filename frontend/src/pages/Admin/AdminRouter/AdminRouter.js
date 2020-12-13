@@ -23,6 +23,7 @@ import ManageTrasferLesson from '../ManageTransferLesson/ManageTransferLesson';
 import DeletedLessons from '../DeletedLessons/DeletedLessons';
 import DeletedLesson from '../DeletedLesson/DeletedLesson';
 import CreateDeleteLesson from '../CreateDeletedLesson/CreateDeleteLesson';
+import LessonsTab from '../../../components/LessonsTab/LessonsTab'
 
 const teacherPermissions = [Roles.TEACHER, Roles.ADMIN, Roles.SUPER_ADMIN];
 const adminPermissions = [Roles.ADMIN, Roles.SUPER_ADMIN];
@@ -47,11 +48,9 @@ function AdminRouter (props) {
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/transfer/:id/date/:current' component={CreateTransferLesson} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/reject/:id/date/:current' component={CreateDeleteLesson} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/transfer/edit/:id' component={ManageTrasferLesson} />
-            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons' component={Lessons} />
-            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/confirmed-lessons' component={ConfirmedLessons} />
+            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/timetable' component={Lessons} />
+            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons' component={LessonsTab} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/deleted-lessons/:id' component={DeletedLesson} />
-            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/deleted-lessons' component={DeletedLessons} />
-            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/transfer-lessons' component={TransferLessons} />
             <AuthorizedRoute authorized={hasRoles(user, teacherPermissions)} path='/admin' component={MainPage} />
         </Switch>
     )

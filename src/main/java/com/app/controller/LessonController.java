@@ -77,4 +77,11 @@ public class LessonController {
     List<LessonResponse> response = lessonFacade.getAllLessonsByDay(date);
     return ResponseEntity.ok(response);
   }
+
+  @GetMapping("lessonDay/{day}")
+  @JsonView(View.Lesson.class)
+  public ResponseEntity<List<LessonResponse>> getLessonsByLessonsDay(@PathVariable String day) {
+    List<LessonResponse> response = lessonFacade.findAllLessonsByLessonDay(day);
+    return ResponseEntity.ok(response);
+  }
 }

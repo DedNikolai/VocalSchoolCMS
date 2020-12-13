@@ -140,7 +140,7 @@ function DeletedLesson(props) {
                     />
                 </div>
                 <div className='buttons-container'>
-                    <NavLink to='/admin/deleted-lessons' className='main-menu__item'>
+                    <NavLink to='/admin/lessons' className='main-menu__item'>
                         <Button
                             variant="contained"
                             color="secondary"

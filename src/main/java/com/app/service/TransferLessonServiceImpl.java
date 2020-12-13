@@ -1,11 +1,14 @@
 package com.app.service;
 
+import com.app.exeption.AppException;
 import com.app.exeption.ResourceNotFoundException;
 import com.app.model.ConfirmedLesson;
+import com.app.model.DeletedLesson;
 import com.app.model.Lesson;
 import com.app.model.Status;
 import com.app.model.TransferLesson;
 import com.app.repository.ConfirmedLessonRepository;
+import com.app.repository.DeletedLessonRepository;
 import com.app.repository.TransferLessonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +27,8 @@ import java.util.stream.Collectors;
 public class TransferLessonServiceImpl implements TransferLessonService{
   private final TransferLessonRepository transferLessonRepository;
   private final ConfirmedLessonRepository confirmedLessonRepository;
+  private final DeletedLessonRepository deletedLessonRepository;
+
   @Override
   public Page<TransferLesson> getAllOrderByDate(Pageable pageable) {
     return transferLessonRepository.findAllByOrderByCreatedDateAsc(pageable);
@@ -36,6 +41,15 @@ public class TransferLessonServiceImpl implements TransferLessonService{
 
   @Override
   public TransferLesson createTransferLesson(TransferLesson request) {
+    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(request.getLessonDate());
+    List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(request.getLessonDate());
+    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(request.getLessonDate());
+    boolean confirmed = confirmedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == request.getLesson().getId());
+    boolean transfered = transferLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == request.getLesson().getId());
+    boolean deleted = deletedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == request.getLesson().getId());
+    if (confirmed || transfered  || deleted) {
+      throw new AppException("Lesson status is checked");
+    }
     return transferLessonRepository.save(request);
   }
 

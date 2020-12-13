@@ -9,7 +9,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import CancelIcon from '@material-ui/icons/Cancel';
 import IconButton from '@material-ui/core/IconButton';
 import {getLessonsByDate, deleteTrasferLesson, confirmTransferedLesson} from "../../../../store/actions/transferLessons";
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
@@ -87,7 +87,7 @@ function TransferedLessonsList(props) {
                                             <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                                                 {columns.map(column => {
                                                     const value = row[column.id];
-                                                    if (column.id === 'actions') {
+                                                    if (column.id === 'actions' && !row.status) {
                                                         return (
                                                             <TableCell className={classes.cell}>
                                                                 <IconButton>
@@ -99,7 +99,7 @@ function TransferedLessonsList(props) {
                                                                     <CheckBoxIcon/>
                                                                 </IconButton>
                                                                 <IconButton onClick={() => deleteTrasferedLesson(row.id)}>
-                                                                    <DeleteOutline/>
+                                                                    <CancelIcon/>
                                                                 </IconButton>
                                                             </TableCell>
                                                         )

@@ -119,7 +119,7 @@ function MainPage(props) {
                                                 <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                                                     {columns.map(column => {
                                                         const value = row[column.id];
-                                                        if (column.id === 'actions') {
+                                                        if (column.id === 'actions' && !row.status) {
                                                             return (
                                                                 <TableCell className={classes.cell}>
                                                                     <IconButton>
@@ -152,13 +152,7 @@ function MainPage(props) {
                                                                 </TableCell>
                                                             )
                                                         }
-                                                        if (column.id === 'time') {
-                                                            return (
-                                                                <TableCell className={classes.cell}>
-                                                                    {row.timeHour + ':' + showMinutes(row.timeMinutes)}
-                                                                </TableCell>
-                                                            )
-                                                        }
+
                                                         return (
                                                             <TableCell key={column.id} align={column.align}>
                                                                 {column.format && typeof value === 'number' ? column.format(value) : value}
