@@ -8,4 +8,5 @@ public enum LessonDay {
   THURSDAY,
   FRIDAY,
   SUTURDAY,
+  UNSET
 }

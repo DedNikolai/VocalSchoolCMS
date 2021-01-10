@@ -9,9 +9,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "lessons")
@@ -27,6 +31,8 @@ public class Lesson extends BaseEntiy {
 
   @ManyToOne
   @JoinColumn(name="student_id")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private Student student;
 
   @Enumerated(EnumType.STRING)
@@ -50,6 +56,9 @@ public class Lesson extends BaseEntiy {
   @Column(name = "lesson_day")
   @Enumerated(EnumType.STRING)
   private LessonDay day;
+
+  @Column(columnDefinition = "boolean default false")
+  private Boolean deleted = false;
 
   private Status status;
 }

@@ -1,5 +1,6 @@
 package com.app.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -44,14 +45,12 @@ public class Teacher extends BaseEntiy {
   @Column(name = "age")
   private Integer age;
 
-//  @OneToOne(cascade = CascadeType.ALL)
-//  @JoinColumn(name = "user_id", referencedColumnName = "id")
-//  private User user;
-
   @ManyToMany(mappedBy = "teachers", fetch = FetchType.EAGER)
   private Set<Student> students;
 
   @OneToMany(mappedBy="teacher", fetch = FetchType.EAGER)
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private Set<Lesson> lessons;
 
   @ElementCollection(fetch = FetchType.EAGER)
