@@ -31,7 +31,7 @@ function TeacherTableRow(props) {
     const {teacher, columns, deleteTeacher} = props;
     const classes = useStyles();
     const disciplines = teacher.disciplines.join(', ');
-    const students = teacher.students.length
+    const students = teacher.lessons.length;
     return (
         <TableRow hover role="checkbox" tabIndex={-1} >
             {columns.map(column => {
@@ -44,13 +44,13 @@ function TeacherTableRow(props) {
                                     <Edit/>
                                 </NavLink>
                             </IconButton>
-                            <IconButton>
-                                <DeleteOutline onClick={() => deleteTeacher(teacher.id)}/>
-                            </IconButton>
+                            {/*<IconButton>*/}
+                                {/*<DeleteOutline onClick={() => deleteTeacher(teacher.id)}/>*/}
+                            {/*</IconButton>*/}
                         </TableCell>
                     )
                 }
-                if (column.id === 'students') {
+                if (column.id === 'lessons') {
                     return (
                         <TableCell key={column.id} align={column.align}>
                             {students}
