@@ -29,7 +29,7 @@ const useStyles = makeStyles({
         borderBottom: 'none',
         borderRight: 'none',
         boxSizing: 'border-box',
-        height: '40px',
+        height: '20px',
     },
 
     headCell: {
@@ -62,7 +62,7 @@ function TimeTable(props) {
     const timesList = times.map(time => {
         return (
             <TableRow>
-                <TableCell className='lessons-timetable__cell lessons-timetable__cell--padding'>{time}</TableCell>
+                <TableCell className='lessons-timetable__cell lessons-timetable__cell--padding'><span className='lessons-timetable__cell-time' span>{time}</span></TableCell>
                 {Array.apply(null, {length: 24}).map((item, index) => {
                     return (
                         isLesson(lessons, time, index) ?

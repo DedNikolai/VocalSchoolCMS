@@ -220,7 +220,7 @@ function ManageStudent(props) {
                 </form>
             </Paper>
             <h2>Заняття</h2>
-            <StudentLessons lessons={studentLessons}/>
+            <StudentLessons lessons={studentLessons} studentId={student.id}/>
             <div className='buttons-container'>
                 <Button
                     variant="contained"

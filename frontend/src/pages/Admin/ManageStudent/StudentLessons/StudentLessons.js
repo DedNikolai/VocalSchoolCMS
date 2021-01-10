@@ -47,11 +47,7 @@ const useStyles = makeStyles({
 
 function StudentLessons(props) {
     const classes = useStyles();
-    const {lessons, deleteLessonById} = props;
-
-    const showMinutes = (minutes) => {
-        return minutes ? minutes : '0'+minutes;
-    }
+    const {lessons, deleteLessonById, studentId} = props;
 
     return (
         <div className='students-list'>
@@ -75,7 +71,7 @@ function StudentLessons(props) {
                                 <TableBody>
                                     {lessons.map(row => {
                                         return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                                 {columns.map(column => {
                                                     const value = row[column.id];
                                                     if (column.id === 'actions') {
@@ -87,7 +83,7 @@ function StudentLessons(props) {
                                                                     </NavLink>
                                                                 </IconButton>
                                                                 <IconButton>
-                                                                    <DeleteOutline onClick={() => deleteLessonById(row.id)}/>
+                                                                    <DeleteOutline onClick={() => deleteLessonById(row.id, studentId)}/>
                                                                 </IconButton>
                                                             </TableCell>
                                                         )
@@ -133,7 +129,7 @@ const mapStateToProps = ({}) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    deleteLessonById: id => dispatch(deleteLesson(id)),
+    deleteLessonById: (id, studentId) => dispatch(deleteLesson(id, studentId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudentLessons);

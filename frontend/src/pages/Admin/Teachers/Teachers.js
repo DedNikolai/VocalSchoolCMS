@@ -21,8 +21,8 @@ const columns = [
     { id: 'lastName', label: 'Прізвище', minWidth: 150, align: 'left' },
     { id: 'email', label: 'Email', minWidth: 150, align: 'left' },
     { id: 'disciplines', label: 'Дисципліни', minWidth: 150, align: 'left' },
-    { id: 'students', label: 'Кількість Студентів', minWidth: 50, align: 'center' },
-    { id: 'actions', label: 'Дії', minWidth: 50, align: 'center' },
+    { id: 'lessons', label: 'Кількість Уроків', minWidth: 50, align: 'center' },
+    { id: 'actions', label: 'Редагувати', minWidth: 50, align: 'center' },
 ];
 
 const useStyles = makeStyles({

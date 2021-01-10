@@ -24,6 +24,7 @@ import {colors} from '../../../constants/view';
 import Disciplines from '../../../constants/disciplines';
 import ua from "../../../languages/ua";
 import {freeClasseForCurrentTime, freeTeacherTimes} from "../../../utils/timetable";
+import teacher from "../../../store/reducers/teacher/teacher";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -160,7 +161,7 @@ function ManageLessons(props) {
 
     if (allTeachersLoading || lessonLoading && id) {
         return <div className="wrapper"><Preloader/></div>
-    }
+    };
 
     const checkedDiscipline = formik.values.discipline;
     const checkedTeacher = formik.values.teacher || {};
