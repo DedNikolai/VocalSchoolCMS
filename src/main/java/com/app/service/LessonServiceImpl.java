@@ -39,7 +39,7 @@ public class LessonServiceImpl implements LessonService {
   @Override
   public List<Lesson> getLessonsByStudent(Long id) {
     Student student = studentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Student", "id", id));
-    return lessonRepository.findAllByStudent(student);
+    return lessonRepository.findAllByStudent(student).stream().filter(lesson -> !lesson.getDeleted()).collect(Collectors.toList());
   }
 
   @Override
@@ -48,16 +48,15 @@ public class LessonServiceImpl implements LessonService {
   }
 
   @Override
+  @Transactional
   public Lesson deleteLesson(Long id) {
     Lesson lesson = lessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));
-    Student student = studentRepository.findByLessonsContains(lesson);
-    student.getLessons().remove(lesson);
-    studentRepository.save(student);
     Teacher teacher = teacherRepository.findByLessonsContains(lesson);
     teacher.getLessons().remove(lesson);
     teacherRepository.save(teacher);
-    lessonRepository.delete(lesson);
-    return lesson;
+    lesson.setTeacher(null);
+    lesson.setDeleted(true);
+    return lessonRepository.save(lesson);
   }
 
   @Override
@@ -75,7 +74,7 @@ public class LessonServiceImpl implements LessonService {
 
   @Override
   public List<Lesson> getAllLessons() {
-    return lessonRepository.findAll();
+    return lessonRepository.findAll().stream().filter(lesson -> !lesson.getDeleted()).collect(Collectors.toList());
   }
 
   @Override
@@ -117,12 +116,12 @@ public class LessonServiceImpl implements LessonService {
       }
 
       return lesson;
-    }).collect(Collectors.toList());
+    }).filter(lesson -> !lesson.getDeleted()).collect(Collectors.toList());
     return lessonList;
   }
 
   @Override
   public List<Lesson> findAllbyLessonDay(String day) {
-    return lessonRepository.findAllByDay(LessonDay.valueOf(day));
+    return lessonRepository.findAllByDay(LessonDay.valueOf(day)).stream().filter(lesson -> !lesson.getDeleted()).collect(Collectors.toList());
   }
 }
