@@ -1,8 +1,10 @@
 package com.app.facade;
 
 import com.app.dto.request.LoginRequest;
+import com.app.dto.request.PasswordRequest;
 import com.app.dto.request.SignUpRequest;
 import com.app.dto.request.UserRequest;
+import com.app.dto.response.ApiResponse;
 import com.app.dto.response.JwtAuthenticationResponse;
 import com.app.dto.response.UserResponse;
 import com.app.model.User;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,5 +56,13 @@ public class UserFacade {
     List<User> users = userService.getAllUsers();
     List<UserResponse> userResponseList = users.stream().map(user -> modelMapper.map(user, UserResponse.class)).collect(Collectors.toList());
     return userResponseList;
+  }
+
+  public ApiResponse resetPassword(HttpServletRequest request, String email) {
+    return userService.resetPassword(request, email);
+  }
+
+  public ApiResponse changePassword(PasswordRequest request) {
+    return userService.changePassword(request);
   }
 }
