@@ -1,8 +1,10 @@
 package com.app.controller;
 
 import com.app.dto.request.LoginRequest;
+import com.app.dto.request.PasswordRequest;
 import com.app.dto.request.SignUpRequest;
 import com.app.dto.request.UserRequest;
+import com.app.dto.response.ApiResponse;
 import com.app.dto.response.UserResponse;
 import com.app.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -69,5 +73,23 @@ public class UserController {
   public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
     userFacade.deleteUser(id);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
+
+  @PostMapping("/user/resetPassword")
+  public ResponseEntity<ApiResponse> resetPassword(HttpServletRequest request,
+                                                   @RequestBody String email) {
+    ApiResponse response = userFacade.resetPassword(request, email);
+    return ResponseEntity.ok(response);
+  }
+//
+//  @GetMapping("/user/changePassword")
+//  public String showChangePasswordPage(@RequestParam("token") String token) {
+//
+//  }
+
+  @PostMapping("/user/savePassword")
+  public ResponseEntity<ApiResponse> savePassword(@RequestBody PasswordRequest passwordRequest) {
+    ApiResponse response = userFacade.changePassword(passwordRequest);
+    return ResponseEntity.ok(response);
   }
 }

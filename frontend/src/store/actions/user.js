@@ -90,5 +90,31 @@ export const createUser = data => dispatch => {
     }).finally(() => dispatch({type: TYPES.USER_BY_ID_LOADING, payload: true}))
 };
 
+export const resetPassword = email => dispatch => {
+    api.post(`/user/resetPassword`, email).then(res => {
+        if (res.status >= 200 && res.status < 300) {
+            if (res.data.success) {
+                toastr.success(res.data.message);
+            } else {
+                toastr.error(res.data.message)
+            }
+
+        }
+    })
+};
+
+export const chengePassword = password => dispatch => {
+    api.post('/user/savePassword', password).then(res => {
+        if (res.status >= 200 && res.status < 300) {
+            if (res.data.success) {
+                toastr.success(res.data.message);
+            } else {
+                toastr.error(res.data.message)
+            }
+
+        }
+    })
+};
+
 
 
