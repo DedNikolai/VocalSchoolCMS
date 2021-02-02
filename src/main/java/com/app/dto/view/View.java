@@ -10,4 +10,5 @@ public class View {
   public static class ConfirmedLesson {};
   public static class TransferLesson{};
   public static class DeletedLesson{};
+  public static class Abonement{};
 }

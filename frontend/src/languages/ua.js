@@ -8,6 +8,7 @@ const ua = {
         lessons: 'Уроки',
         transferLessons: 'Перенесені Уроки',
         deleted: 'Скасовані Уроки',
+        abonements: 'Абонементи'
     },
 
     dashboard: 'Панель Управління',
@@ -36,6 +37,8 @@ const ua = {
                 noType: 'Виберіть Тип заняття',
                 noTeacher: 'Виберіть Вчителя',
                 notTeacherWorkTime: 'Це не робочий час цього вчителя',
+                noQuantity: 'Не встановлено кількість',
+                noPrice: 'Не встановлено ціну',
 
             },
 

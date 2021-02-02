@@ -79,3 +79,9 @@ INSERT INTO deleted_lesson
 VALUES
   (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 1, 2, 2, '2020-10-19', '14:00', 'puk'),
   (1, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 1, 2, 2, '2020-10-21', '14:00', 'puk');
+
+INSERT INTO abonements
+  (id, date_created, date_modified, student_id, teacher_id, quantity, price, discipline)
+VALUES
+  (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 1, 1, 4, 1300, 'VOCAL'),
+  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, 2, 8, 2000, 'VOCAL');

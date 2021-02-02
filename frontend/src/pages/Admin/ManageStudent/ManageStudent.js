@@ -16,7 +16,9 @@ import {useFormik} from 'formik';
 import './ManageStudent.scss';
 import {colors} from '../../../constants/view';
 import CreateLesson from '../CreateLesson/CreateLesson';
+import CreateAbonement from '../CreateAbonement/CreateAbonement';
 import StudentLessons from './StudentLessons/StudentLessons';
+import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import ua from "../../../languages/ua";
 
 const useStyles = makeStyles(theme => ({
@@ -84,10 +86,11 @@ function ManageStudent(props) {
     const classes = useStyles();
     const {student, studentLoading, getStudent, updateStudent,
         studentLessons, studentLessonsLoading, getStudentLessons} = props;
-    const id = props.match.params.id
+    const id = props.match.params.id;
     const theme = useTheme();
     const [changed, setChanged] = useState(false);
     const [addLesson, setAddLesson] = useState(false);
+    const [addAbonement, setAddAbonement] = useState(false);
 
     const formik = useFormik({
         initialValues: {...student},
@@ -230,13 +233,29 @@ function ManageStudent(props) {
                     style={{backgroundColor: colors.COLOR_GREEN}}
                     onClick={() => setAddLesson(true)}
                 >
-                    Додаты заняття
+                    Додати заняття
+                </Button>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    startIcon={<PlaylistAddCheckIcon />}
+                    style={{backgroundColor: colors.COLOR_GREEN}}
+                    onClick={() => setAddAbonement(true)}
+                >
+                    Додати абонемент
                 </Button>
             </div>
             {
                 addLesson &&
                 <div className='manage-student__add-lesson'>
                     <CreateLesson student={student} closeForm={() => setAddLesson(false)}/>
+                </div>
+            }
+            {
+                addAbonement &&
+                <div className='manage-student__add-lesson'>
+                    <CreateAbonement student={student} closeForm={() => setAddAbonement(false)}/>
                 </div>
             }
         </div>
