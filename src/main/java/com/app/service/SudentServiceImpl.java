@@ -1,6 +1,7 @@
 package com.app.service;
 
 import com.app.exeption.ResourceNotFoundException;
+import com.app.model.Abonement;
 import com.app.model.Lesson;
 import com.app.model.Student;
 import com.app.model.Teacher;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +28,8 @@ public class SudentServiceImpl implements StudentService {
   @Override
   public Student getStudntById(Long id) {
     Student student = studentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Student", "id", id));
+    Set<Abonement> abonements = student.getAbonements().stream().filter(abonement -> abonement.getIsActive()).collect(Collectors.toSet());
+    student.setAbonements(abonements);
     return student;
   }
 

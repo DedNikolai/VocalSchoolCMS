@@ -47,5 +47,11 @@ public class TransferLesson extends BaseEntiy{
   @Column(name = "transfer_time")
   private String transferTime;
 
+  @ManyToOne
+  @JoinColumn(name = "abonement")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  private Abonement abonement;
+
   private Status status;
 }

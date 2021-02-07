@@ -50,4 +50,10 @@ public class ConfirmedLesson extends BaseEntiy {
   @Column(name = "lesson_time")
   private String lessonTime;
 
+  @ManyToOne
+  @JoinColumn(name = "abonement")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  private Abonement abonement;
+
 }

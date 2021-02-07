@@ -51,9 +51,9 @@ public class ConfirmedLessonServiceImp implements ConfirmedLessonService {
       throw new AppException("Lesson status is checked");
     }
     Student student = studentRepository.findById(confirmedLesson.getStudent().getId()).orElseThrow(() -> new ResourceNotFoundException("Student", "id", confirmedLesson.getStudent().getId()));
-    int lessonPrice = confirmedLesson.getPrice();
-    int studentPayBalance = student.getPayBalance() - lessonPrice;
-    student.setPayBalance(studentPayBalance);
+//    int lessonPrice = confirmedLesson.getPrice();
+//    int studentPayBalance = student.getPayBalance() - lessonPrice;
+//    student.setPayBalance(studentPayBalance);
     studentRepository.save(student);
     return confirmedLessonRepository.save(confirmedLesson);
   }

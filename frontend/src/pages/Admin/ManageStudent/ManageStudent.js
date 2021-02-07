@@ -16,8 +16,12 @@ import {useFormik} from 'formik';
 import './ManageStudent.scss';
 import {colors} from '../../../constants/view';
 import CreateLesson from '../CreateLesson/CreateLesson';
+import CreateAbonement from '../CreateAbonement/CreateAbonement';
 import StudentLessons from './StudentLessons/StudentLessons';
+import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import ua from "../../../languages/ua";
+import StudentBalance from './StudentBalance/StudentBalance';
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -84,10 +88,11 @@ function ManageStudent(props) {
     const classes = useStyles();
     const {student, studentLoading, getStudent, updateStudent,
         studentLessons, studentLessonsLoading, getStudentLessons} = props;
-    const id = props.match.params.id
+    const id = props.match.params.id;
     const theme = useTheme();
     const [changed, setChanged] = useState(false);
     const [addLesson, setAddLesson] = useState(false);
+    const [addAbonement, setAddAbonement] = useState(false);
 
     const formik = useFormik({
         initialValues: {...student},
@@ -179,19 +184,6 @@ function ManageStudent(props) {
                             onBlur={formik.handleBlur}
                         />
                     </div>
-                    <div>
-                        <TextField
-                            label={formik.touched.payBalance && formik.errors.payBalance || "Баланс"}
-                            name='payBalance'
-                            id="outlined-size-small"
-                            value={formik.values.payBalance}
-                            variant="outlined"
-                            size="small"
-                            onChange={formik.handleChange}
-                            error={formik.touched.payBalance && formik.errors.payBalance}
-                            onBlur={formik.handleBlur}
-                        />
-                    </div>
                     <div className='buttons-container'>
                         <NavLink to='/admin/students'>
                             <Button
@@ -219,6 +211,12 @@ function ManageStudent(props) {
                     </div>
                 </form>
             </Paper>
+            <h2>Абонементи</h2>
+            <Paper>
+                <div className='balance-table-container'>
+                    <StudentBalance rows={student.abonements} />
+                </div>
+            </Paper>
             <h2>Заняття</h2>
             <StudentLessons lessons={studentLessons} studentId={student.id}/>
             <div className='buttons-container'>
@@ -230,13 +228,29 @@ function ManageStudent(props) {
                     style={{backgroundColor: colors.COLOR_GREEN}}
                     onClick={() => setAddLesson(true)}
                 >
-                    Додаты заняття
+                    Додати заняття
+                </Button>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    startIcon={<PlaylistAddCheckIcon />}
+                    style={{backgroundColor: colors.COLOR_GREEN}}
+                    onClick={() => setAddAbonement(true)}
+                >
+                    Додати абонемент
                 </Button>
             </div>
             {
                 addLesson &&
                 <div className='manage-student__add-lesson'>
                     <CreateLesson student={student} closeForm={() => setAddLesson(false)}/>
+                </div>
+            }
+            {
+                addAbonement &&
+                <div className='manage-student__add-lesson'>
+                    <CreateAbonement student={student} closeForm={() => setAddAbonement(false)}/>
                 </div>
             }
         </div>

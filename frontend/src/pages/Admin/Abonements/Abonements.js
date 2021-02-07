@@ -14,18 +14,18 @@ import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import Edit from '@material-ui/icons/Edit';
 import {NavLink} from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
-import Search from '../../../components/Search/Search';
-import AddButton from  '../../../components/TableButtons/AddButton/AddButton';
-import './Students.scss';
-import {getAllStudents, deleteStudent} from "../../../store/actions/student";
+import {getAllAbonements, deleteAbonement} from "../../../store/actions/abonements";
 import Preloader from '../../../components/Preloader/index';
 import {rowsPerPage} from '../../../constants/view';
+import moment from 'moment';
 
 const columns = [
-    { id: 'firstName', label: 'Ім\'я', minWidth: 150, align: 'left' },
-    { id: 'lastName', label: 'Прізвище', minWidth: 150, align: 'left' },
-    { id: 'email', label: 'Email', minWidth: 150, align: 'left' },
-    { id: 'phone', label: 'Телефон', minWidth: 50, align: 'center' },
+    { id: 'date', label: 'Дата', minWidth: 150, align: 'center' },
+    { id: 'student', label: 'Студент', minWidth: 150, align: 'center' },
+    { id: 'teacher', label: 'Вчитель', minWidth: 150, align: 'center' },
+    { id: 'discipline', label: 'Дисципліна', minWidth: 50, align: 'center' },
+    { id: 'price', label: 'Ціна', minWidth: 50, align: 'center' },
+    { id: 'quantity', label: 'К-ть Занять', minWidth: 50, align: 'center' },
     { id: 'actions', label: 'Редагувати', minWidth: 50, align: 'center' },
 ];
 
@@ -49,34 +49,24 @@ const useStyles = makeStyles({
     },
 });
 
-function Students(props) {
+function Abonements(props) {
     const classes = useStyles();
-    const {students, studentsLoading, getAllStudents, deleteStudent} = props;
-    const {content = [], totalElements, number} = students;
+    const {abonements, abonementsLoading, getAbonements, deleteById} = props;
+    const {content = [], totalElements, number} = abonements;
     const [param, setParam] = useState('');
 
     useEffect(() => {
-        getAllStudents(0, rowsPerPage, param);
+        getAbonements(0, rowsPerPage, param);
     }, []);
 
     const handleChangePage = (event, page) => {
-        getAllStudents(page, rowsPerPage, param);
+        getAbonements(page, rowsPerPage, param);
     };
 
     return (
         <div className='students-list'>
-            <div className='students-list__top-block'>
-                <Search
-                    searchParam={param}
-                    setSearchParam={value => setParam(value)}
-                    search={(param) => getAllStudents(0, rowsPerPage, param)}
-                />
-                <NavLink to='/admin/students/add-new'>
-                    <AddButton/>
-                </NavLink>
-            </div>
             {
-                studentsLoading ?
+                abonementsLoading ?
                     <div className="wrapper"><Preloader/></div>
                     :
                     <Paper className={classes.root}>
@@ -106,13 +96,34 @@ function Students(props) {
                                                         return (
                                                             <TableCell className={classes.cell}>
                                                                 <IconButton>
-                                                                    <NavLink to={`/admin/students/edit/${row.id}`}>
+                                                                    <NavLink to={`/admin/abonements/edit/${row.id}`}>
                                                                         <Edit/>
                                                                     </NavLink>
                                                                 </IconButton>
-                                                                {/*<IconButton>*/}
-                                                                    {/*<DeleteOutline onClick={() => deleteStudent(row.id)}/>*/}
-                                                                {/*</IconButton>*/}
+                                                                <IconButton>
+                                                                <DeleteOutline onClick={() => deleteById(row.id, 0, rowsPerPage)}/>
+                                                                </IconButton>
+                                                            </TableCell>
+                                                        )
+                                                    }
+                                                    if (column.id === 'date') {
+                                                        return (
+                                                            <TableCell className={classes.cell}>
+                                                                {row.createdDate.split('-').reverse().join('-')}
+                                                            </TableCell>
+                                                        )
+                                                    }
+                                                    if (column.id === 'student') {
+                                                        return (
+                                                            <TableCell className={classes.cell}>
+                                                                {row.student.firstName + ' ' + row.student.lastName}
+                                                            </TableCell>
+                                                        )
+                                                    }
+                                                    if (column.id === 'teacher') {
+                                                        return (
+                                                            <TableCell className={classes.cell}>
+                                                                {row.teacher.firstName + ' ' + row.teacher.lastName}
                                                             </TableCell>
                                                         )
                                                     }
@@ -142,27 +153,27 @@ function Students(props) {
     );
 }
 
-Students.propTypes = {
-    students: PropTypes.object,
-    studentsLoading: PropTypes.bool.isRequired,
-    getAllStudents: PropTypes.func.isRequired,
-    deleteStudent: PropTypes.func.isRequired,
+Abonements.propTypes = {
+    abonements: PropTypes.object,
+    abonementsLoading: PropTypes.bool.isRequired,
+    getAbonements: PropTypes.func.isRequired,
+    deleteById: PropTypes.func.isRequired,
 };
 
-Students.defaultProps = {
-    students: {},
+Abonements.defaultProps = {
+    abonements: {},
 }
 
-const mapStateToProps = ({student}) => {
+const mapStateToProps = ({abonement}) => {
     return {
-        students: student.students,
-        studentsLoading: student.studentsLoading,
+        abonements: abonement.abonements,
+        abonementsLoading: abonement.abonementsLoading,
     }
 };
 
 const mapDispatchToProps = dispatch => ({
-    getAllStudents: (page, size, param) => dispatch(getAllStudents(page, size, param)),
-    deleteStudent: (id) => dispatch(deleteStudent(id)),
+    getAbonements: (page, size, param) => dispatch(getAllAbonements(page, size, param)),
+    deleteById: (id, page, size) => dispatch(deleteAbonement(id, page, size))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Students);
+export default connect(mapStateToProps, mapDispatchToProps)(Abonements);
