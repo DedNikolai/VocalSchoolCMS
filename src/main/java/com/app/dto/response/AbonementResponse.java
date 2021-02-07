@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.Set;
 
 @Data
 public class AbonementResponse {
@@ -24,4 +25,8 @@ public class AbonementResponse {
   private Integer quantity;
   private Integer price;
   private Discipline discipline;
+  private Integer transferedQuantity;
+  private Set<ConfirmedLessonResponse> confirmedLessons;
+  private Set<TransferLessonResponse> transferLessons;
+  private Set<DeletedLessonResponse> deletedLessons;
 }

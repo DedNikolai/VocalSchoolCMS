@@ -41,9 +41,6 @@ public class Student extends BaseEntiy {
   @Column(name = "age")
   private Integer age;
 
-  @Column(name = "pay_balance")
-  private Integer payBalance;
-
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "students_teachers",
       joinColumns = {@JoinColumn(name = "student_id")},
@@ -56,6 +53,11 @@ public class Student extends BaseEntiy {
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
   private Set<Lesson> lessons = new HashSet<>();
+
+  @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  private Set<Abonement> abonements;
 
 //  @OneToMany(mappedBy = "student")
 //  @ToString.Exclude

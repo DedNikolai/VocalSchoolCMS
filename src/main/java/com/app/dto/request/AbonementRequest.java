@@ -14,4 +14,7 @@ public class AbonementRequest {
   private Integer quantity;
   private Integer price;
   private Discipline discipline;
+//  private Date startedDate;
+//  private Date endDate;
+  private Integer transferedQuantity;
 }

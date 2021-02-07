@@ -43,3 +43,12 @@ export const getAbonementById = id => dispatch => {
         dispatch({type: TYPES.ABONEMENT_LOADING, payload: false});
     })
 };
+
+export const deleteAbonement = (id, page, size) => dispatch => {
+    api.deleteApi(`/abonements/${id}`).then(res => {
+        if (res.status >= 200 && res.status < 300) {
+            dispatch(getAllAbonements(page, size));
+            toastr.success('Abonement was deleted');
+        }
+    })
+};

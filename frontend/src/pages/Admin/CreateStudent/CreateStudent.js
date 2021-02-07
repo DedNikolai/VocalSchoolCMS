@@ -160,19 +160,6 @@ function CreateStudent(props) {
                             onBlur={formik.handleBlur}
                         />
                     </div>
-                    <div>
-                        <TextField
-                            label={formik.touched.payBalance && formik.errors.payBalance || "Баланс"}
-                            name='payBalance'
-                            id="outlined-size-small"
-                            value={formik.values.payBalance}
-                            variant="outlined"
-                            size="small"
-                            onChange={formik.handleChange}
-                            error={formik.touched.payBalance && formik.errors.payBalance}
-                            onBlur={formik.handleBlur}
-                        />
-                    </div>
                     <div className='buttons-container'>
                         <NavLink to='/admin/students'>
                             <Button

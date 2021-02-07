@@ -20,6 +20,8 @@ import CreateAbonement from '../CreateAbonement/CreateAbonement';
 import StudentLessons from './StudentLessons/StudentLessons';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import ua from "../../../languages/ua";
+import StudentBalance from './StudentBalance/StudentBalance';
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -182,19 +184,6 @@ function ManageStudent(props) {
                             onBlur={formik.handleBlur}
                         />
                     </div>
-                    <div>
-                        <TextField
-                            label={formik.touched.payBalance && formik.errors.payBalance || "Баланс"}
-                            name='payBalance'
-                            id="outlined-size-small"
-                            value={formik.values.payBalance}
-                            variant="outlined"
-                            size="small"
-                            onChange={formik.handleChange}
-                            error={formik.touched.payBalance && formik.errors.payBalance}
-                            onBlur={formik.handleBlur}
-                        />
-                    </div>
                     <div className='buttons-container'>
                         <NavLink to='/admin/students'>
                             <Button
@@ -221,6 +210,12 @@ function ManageStudent(props) {
                         </ThemeProvider>
                     </div>
                 </form>
+            </Paper>
+            <h2>Абонементи</h2>
+            <Paper>
+                <div className='balance-table-container'>
+                    <StudentBalance rows={student.abonements} />
+                </div>
             </Paper>
             <h2>Заняття</h2>
             <StudentLessons lessons={studentLessons} studentId={student.id}/>

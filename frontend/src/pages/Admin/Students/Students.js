@@ -25,7 +25,7 @@ const columns = [
     { id: 'firstName', label: 'Ім\'я', minWidth: 150, align: 'left' },
     { id: 'lastName', label: 'Прізвище', minWidth: 150, align: 'left' },
     { id: 'email', label: 'Email', minWidth: 150, align: 'left' },
-    { id: 'payBalance', label: 'Баланс', minWidth: 50, align: 'center' },
+    { id: 'phone', label: 'Телефон', minWidth: 50, align: 'center' },
     { id: 'actions', label: 'Редагувати', minWidth: 50, align: 'center' },
 ];
 

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -18,7 +19,11 @@ public class StudentResponse {
   private String lastName;
   private Integer age;
   private Integer payBalance;
-//  @ToString.Exclude
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  @JsonView(View.Student.class)
+  private Set<AbonementResponse> abonements;
+//  @ToString.ExcludeRes
 //  @EqualsAndHashCode.Exclude
 //  @JsonView(View.Student.class)
 //  private Set<TeacherResponse> teachers;

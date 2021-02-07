@@ -14,7 +14,7 @@ import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import Edit from '@material-ui/icons/Edit';
 import {NavLink} from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
-import {getAllAbonements} from "../../../store/actions/abonements";
+import {getAllAbonements, deleteAbonement} from "../../../store/actions/abonements";
 import Preloader from '../../../components/Preloader/index';
 import {rowsPerPage} from '../../../constants/view';
 import moment from 'moment';
@@ -51,7 +51,7 @@ const useStyles = makeStyles({
 
 function Abonements(props) {
     const classes = useStyles();
-    const {abonements, abonementsLoading, getAbonements} = props;
+    const {abonements, abonementsLoading, getAbonements, deleteById} = props;
     const {content = [], totalElements, number} = abonements;
     const [param, setParam] = useState('');
 
@@ -101,7 +101,7 @@ function Abonements(props) {
                                                                     </NavLink>
                                                                 </IconButton>
                                                                 <IconButton>
-                                                                <DeleteOutline onClick={() => {}}/>
+                                                                <DeleteOutline onClick={() => deleteById(row.id, 0, rowsPerPage)}/>
                                                                 </IconButton>
                                                             </TableCell>
                                                         )
@@ -109,7 +109,7 @@ function Abonements(props) {
                                                     if (column.id === 'date') {
                                                         return (
                                                             <TableCell className={classes.cell}>
-                                                                {row.createdDate}
+                                                                {row.createdDate.split('-').reverse().join('-')}
                                                             </TableCell>
                                                         )
                                                     }
@@ -157,6 +157,7 @@ Abonements.propTypes = {
     abonements: PropTypes.object,
     abonementsLoading: PropTypes.bool.isRequired,
     getAbonements: PropTypes.func.isRequired,
+    deleteById: PropTypes.func.isRequired,
 };
 
 Abonements.defaultProps = {
@@ -172,6 +173,7 @@ const mapStateToProps = ({abonement}) => {
 
 const mapDispatchToProps = dispatch => ({
     getAbonements: (page, size, param) => dispatch(getAllAbonements(page, size, param)),
+    deleteById: (id, page, size) => dispatch(deleteAbonement(id, page, size))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Abonements);

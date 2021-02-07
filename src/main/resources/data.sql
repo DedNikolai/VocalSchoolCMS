@@ -14,10 +14,10 @@ VALUES
   (1, 'SUPER_ADMIN');
 
 INSERT INTO students
-  (id, date_created, date_modified, email, photo, phone, first_name, last_name, age, pay_balance)
+  (id, date_created, date_modified, email, photo, phone, first_name, last_name, age)
 VALUES
-  (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 'student1@ukr.com', 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', '063-438-01-90', 'Ivan', 'Ivanov', 36, 1000),
-  (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 'student2@ukr.com', 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', '093-825-01-90', 'Andrey', 'Sidorov', 30, 400);
+  (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 'student1@ukr.com', 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', '063-438-01-90', 'Ivan', 'Ivanov', 36),
+  (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 'student2@ukr.com', 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', '093-825-01-90', 'Andrey', 'Sidorov', 30);
 
 
 INSERT INTO taechers
@@ -57,31 +57,31 @@ VALUES
 INSERT INTO prices
   (id, date_created, date_modified, teacher_id, discipline, price_value, lesson_type)
 VALUES
-  (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 'VOCAL', 500, 'MAN'),
-  (3, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 'VOCAL', 400, 'MAN'),
-  (4, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 'VOCAL', 250, 'CHILD'),
-  (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 'VOCAL', 300, 'CHILD');
+  (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 'VOCAL', 0, 'MAN'),
+  (3, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 'VOCAL', 250, 'MAN'),
+  (4, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 'VOCAL', 150, 'CHILD'),
+  (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 'VOCAL', 0, 'CHILD');
+
+INSERT INTO abonements
+  (id, date_created, date_modified, student_id, teacher_id, quantity, price, discipline, transfered_quantity, is_active)
+VALUES
+  (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 1, 1, 4, 1300, 'VOCAL', 1, true),
+  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, 2, 8, 2000, 'VOCAL', 2, true);
 
 INSERT INTO confirmed_lesson
-  (id, date_created, date_modified, price, student, teacher, lesson_id, lesson_date)
+  (id, date_created, date_modified, price, student, teacher, lesson_id, lesson_date, abonement)
 VALUES
-  (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 300, 1, 1, 1, '2020-08-24'),
-  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 500, 2, 2, 1, '2020-08-25');
+  (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 300, 1, 1, 1, '2020-08-24', 1),
+  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 500, 2, 2, 1, '2020-08-25', 1);
 
 INSERT INTO transfer_lessons
-  (id, date_created, date_modified, teacher, lesson_id, lesson_date, room, transfer_date, transfer_time)
+  (id, date_created, date_modified, teacher, lesson_id, lesson_date, room, transfer_date, transfer_time, abonement)
 VALUES
-  (1, '2020-09-09 21:30:00', '2020-01-29 21:30:00', 1, 1, '2020-09-07', 'ROOM1', '2020-10-05', '10:30'),
-  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, 1, '2020-08-25', 'ROOM3', '2020-10-05', '12:00');
+  (1, '2020-09-09 21:30:00', '2020-01-29 21:30:00', 1, 1, '2020-09-07', 'ROOM1', '2020-10-05', '10:30', 1),
+  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, 1, '2020-08-25', 'ROOM3', '2020-10-05', '12:00', 2);
 
 INSERT INTO deleted_lesson
   (id, date_created, date_modified, teacher, lesson_id, student, lesson_date, lesson_time, reason)
 VALUES
   (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 1, 2, 2, '2020-10-19', '14:00', 'puk'),
   (1, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 1, 2, 2, '2020-10-21', '14:00', 'puk');
-
-INSERT INTO abonements
-  (id, date_created, date_modified, student_id, teacher_id, quantity, price, discipline)
-VALUES
-  (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 1, 1, 4, 1300, 'VOCAL'),
-  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, 2, 8, 2000, 'VOCAL');

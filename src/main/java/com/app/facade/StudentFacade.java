@@ -18,7 +18,8 @@ public class StudentFacade {
 
   public StudentResponse getById(Long id) {
     Student student = studentService.getStudntById(id);
-    return modelMapper.map(student, StudentResponse.class);
+    StudentResponse studentResponse = modelMapper.map(student, StudentResponse.class);
+    return studentResponse;
   }
 
   public StudentResponse cretaeStudent(StudentRequest studentRequest) {
