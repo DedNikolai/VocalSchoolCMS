@@ -54,4 +54,7 @@ public class TransferLesson extends BaseEntiy{
   private Abonement abonement;
 
   private Status status;
+
+  @Column(name = "is_active")
+  private Boolean isActive;
 }

@@ -1,6 +1,7 @@
 package com.app.controller;
 
 import com.app.dto.request.ConfirmedLessonRequest;
+import com.app.dto.response.ApiResponse;
 import com.app.dto.response.ConfirmedLessonResponse;
 import com.app.dto.view.View;
 import com.app.facade.ConfirmedLessonFacade;
@@ -35,8 +36,8 @@ public class ConfirmedLessonController {
 
   @PostMapping
   @JsonView(View.ConfirmedLesson.class)
-  public ResponseEntity<ConfirmedLessonResponse> createLesson(@RequestBody ConfirmedLessonRequest request) {
-    ConfirmedLessonResponse response = confirmedLessonFacade.createLesson(request);
+  public ResponseEntity<ApiResponse> createLesson(@RequestBody ConfirmedLessonRequest request) {
+    ApiResponse response = confirmedLessonFacade.createLesson(request);
     return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 

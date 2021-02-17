@@ -1,6 +1,7 @@
 package com.app.facade;
 
 import com.app.dto.request.ConfirmedLessonRequest;
+import com.app.dto.response.ApiResponse;
 import com.app.dto.response.ConfirmedLessonResponse;
 import com.app.model.ConfirmedLesson;
 import com.app.service.ConfirmedLessonService;
@@ -21,10 +22,9 @@ public class ConfirmedLessonFacade {
     return modelMapper.map(confirmedLesson, ConfirmedLessonResponse.class);
   }
 
-  public ConfirmedLessonResponse createLesson(ConfirmedLessonRequest request) {
+  public ApiResponse createLesson(ConfirmedLessonRequest request) {
     ConfirmedLesson lesson = modelMapper.map(request, ConfirmedLesson.class);
-    ConfirmedLesson createdLesson = confirmedLessonService.createLesson(lesson);
-    return modelMapper.map(createdLesson, ConfirmedLessonResponse.class);
+    return confirmedLessonService.createLesson(lesson);
   }
 
   public Page<ConfirmedLessonResponse> findAll(Pageable pageable) {

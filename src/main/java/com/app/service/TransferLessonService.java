@@ -1,5 +1,8 @@
 package com.app.service;
 
+import com.app.dto.response.ApiResponse;
+import com.app.model.ConfirmedLesson;
+import com.app.model.Student;
 import com.app.model.TransferLesson;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,11 +15,15 @@ public interface TransferLessonService {
 
   TransferLesson getById(Long id);
 
-  TransferLesson createTransferLesson(TransferLesson request);
+  ApiResponse createTransferLesson(TransferLesson request);
 
   TransferLesson updateLesson(TransferLesson request, Long id);
+
+  ApiResponse confirmTransferLesson(ConfirmedLesson confirmedLesson, Long trasferLessonId);
 
   List<TransferLesson> findAllbyTransferDate(Date date);
 
   void deleteLesson(Long id);
+
+  List<TransferLesson> findAllStudentActiveLessons(Long studentId);
 }

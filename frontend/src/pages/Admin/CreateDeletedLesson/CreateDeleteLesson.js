@@ -72,10 +72,8 @@ function CreateDeleteLesson(props) {
     const formik = useFormik({
         initialValues: {
             lesson: currentLesson,
-            teacher: currentLesson.teacher,
-            student: currentLesson.student,
             lessonDate: lessonDate,
-            lessonTime: `${currentLesson.timeHour}:${currentLesson.timeMinutes ? currentLesson.timeMinutes : currentLesson.timeMinutes + '0'}`,
+            lessonTime: currentLesson.time,
             reason: '',
         },
 
@@ -106,7 +104,7 @@ function CreateDeleteLesson(props) {
                         label="Учень"
                         name='student'
                         id="outlined-size-small"
-                        value={formik.values.student.firstName + ' ' + formik.values.student.lastName}
+                        value={formik.values.lesson.student.firstName + ' ' + formik.values.lesson.student.lastName}
                         variant="outlined"
                         size="small"
                         disabled
@@ -114,10 +112,10 @@ function CreateDeleteLesson(props) {
                 </div>
                 <div>
                     <TextField
-                        label="Учень"
+                        label="Вчитель"
                         name='teacher'
                         id="outlined-size-small"
-                        value={formik.values.teacher.firstName + ' ' + formik.values.teacher.lastName}
+                        value={formik.values.lesson.teacher.firstName + ' ' + formik.values.lesson.teacher.lastName}
                         variant="outlined"
                         size="small"
                         disabled
@@ -126,7 +124,7 @@ function CreateDeleteLesson(props) {
                 <div>
                     <TextField
                         id="date"
-                        label="Початкова дата заняття"
+                        label="Дата заняття"
                         type="date"
                         value={formik.values.lessonDate.slice(0, 10)}
                         className={classes.textField}

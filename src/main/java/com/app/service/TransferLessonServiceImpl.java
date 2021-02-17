@@ -1,19 +1,24 @@
 package com.app.service;
 
+import com.app.dto.response.ApiResponse;
 import com.app.exeption.AppException;
 import com.app.exeption.ResourceNotFoundException;
+import com.app.model.Abonement;
 import com.app.model.ConfirmedLesson;
 import com.app.model.DeletedLesson;
-import com.app.model.Lesson;
 import com.app.model.Status;
+import com.app.model.Student;
 import com.app.model.TransferLesson;
+import com.app.repository.AbonementRepository;
 import com.app.repository.ConfirmedLessonRepository;
 import com.app.repository.DeletedLessonRepository;
+import com.app.repository.StudentRepository;
 import com.app.repository.TransferLessonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,6 +33,8 @@ public class TransferLessonServiceImpl implements TransferLessonService{
   private final TransferLessonRepository transferLessonRepository;
   private final ConfirmedLessonRepository confirmedLessonRepository;
   private final DeletedLessonRepository deletedLessonRepository;
+  private final AbonementRepository abonementRepository;
+  private final StudentRepository studentRepository;
 
   @Override
   public Page<TransferLesson> getAllOrderByDate(Pageable pageable) {
@@ -40,7 +47,8 @@ public class TransferLessonServiceImpl implements TransferLessonService{
   }
 
   @Override
-  public TransferLesson createTransferLesson(TransferLesson request) {
+  @Transactional
+  public ApiResponse createTransferLesson(TransferLesson request) {
     List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(request.getLessonDate());
     List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(request.getLessonDate());
     List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(request.getLessonDate());
@@ -50,7 +58,27 @@ public class TransferLessonServiceImpl implements TransferLessonService{
     if (confirmed || transfered  || deleted) {
       throw new AppException("Lesson status is checked");
     }
-    return transferLessonRepository.save(request);
+
+    Abonement abonement = abonementRepository.findFirstByStudentAndIsActiveTrueOrderByCreatedDate(request.getLesson().getStudent());
+
+    if (abonement == null) {
+      return new ApiResponse(false, "В даного учня немає проплачених занять");
+    }
+
+    if (abonement.getTransferedQuantity() == abonement.getTransferLessons().size()) {
+      return new ApiResponse(false, "По діючому абонементу вже не можна переносити заняття");
+    }
+
+    request.setAbonement(abonement);
+    TransferLesson savedTransferLesson = transferLessonRepository.save(request);
+    abonement.getTransferLessons().add(savedTransferLesson);
+    abonement.setUsedLessons(abonement.getUsedLessons()+1);
+    if (abonement.getQuantity() == abonement.getConfirmedLessons().size()) {
+      abonement.setIsActive(false);
+    }
+    abonementRepository.save(abonement);
+
+    return new ApiResponse(true, "Урок перенесено");
   }
 
   @Override
@@ -61,6 +89,40 @@ public class TransferLessonServiceImpl implements TransferLessonService{
   }
 
   @Override
+  @Transactional
+  public ApiResponse confirmTransferLesson(ConfirmedLesson confirmedLesson, Long trasferLessonId) {
+    TransferLesson transferLesson = transferLessonRepository.findById(trasferLessonId).orElseThrow(() -> new ResourceNotFoundException("TransferLesson", "id", trasferLessonId));
+    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(confirmedLesson.getLessonDate());
+    List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(confirmedLesson.getLessonDate());
+    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(confirmedLesson.getLessonDate());
+    boolean confirmed = confirmedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == confirmedLesson.getLesson().getId() && confirmedLesson.getTime().equals(lesson.getTime()));
+    boolean transfered = transferLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == confirmedLesson.getLesson().getId() && lesson.getTransferTime().equals(confirmedLesson.getTime()));
+    boolean deleted = deletedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == confirmedLesson.getLesson().getId() && lesson.getLesson().getTime().equals(confirmedLesson.getTime()));
+    if (confirmed || transfered  || deleted) {
+      throw new AppException("Lesson status is checked");
+    }
+
+    Abonement abonement = abonementRepository.findFirstByStudentAndIsActiveTrueOrderByCreatedDate(confirmedLesson.getStudent());
+
+    if (abonement == null) {
+      return new ApiResponse(false, "В даного учня немає проплачених занять");
+    }
+
+    confirmedLesson.setAbonement(abonement);
+    ConfirmedLesson savedConfirmedLesson = confirmedLessonRepository.save(confirmedLesson);
+    abonement.getConfirmedLessons().add(savedConfirmedLesson);
+    abonement.setUsedLessons(abonement.getUsedLessons()+1);
+    if (abonement.getQuantity() == abonement.getUsedLessons()) {
+      abonement.setIsActive(false);
+    }
+    abonementRepository.save(abonement);
+    transferLesson.setStatus(Status.CONFIRMED);
+    transferLessonRepository.save(transferLesson);
+    return new ApiResponse(true, "Урок підтверджено");
+  }
+
+  @Override
+  @Transactional
   public List<TransferLesson> findAllbyTransferDate(Date date) {
     Calendar cal = Calendar.getInstance();
     cal.setTime(date);
@@ -72,27 +134,30 @@ public class TransferLessonServiceImpl implements TransferLessonService{
     } catch (ParseException e) {
       e.printStackTrace();
     }
-    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(parseDate);
+
     List<TransferLesson> transferLessons = transferLessonRepository.findAllByTransferDate(parseDate);
 
-    List<TransferLesson> lessonList = transferLessons.stream().map(lesson -> {
-      boolean confirmed = confirmedLessons.stream().anyMatch(confirmedLesson -> {
-        return confirmedLesson.getLesson().getId() == lesson.getLesson().getId() && confirmedLesson.getLessonTime().equals(lesson.getTransferTime());
-      });
-
-      if (confirmed) {
-        lesson.setStatus(Status.CONFIRMED);
-      }
-
-      return lesson;
-    }).collect(Collectors.toList());
-
-    return lessonList;
+    return transferLessons;
   }
 
   @Override
   public void deleteLesson(Long id) {
     TransferLesson transferLesson = transferLessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("TransferLesson", "id", id));
+    Abonement abonement = abonementRepository.findFirstByTransferLessonsContains(transferLesson);
+
+    if (abonement != null) {
+      abonement.getConfirmedLessons().remove(transferLesson);
+      abonement.setUsedLessons(abonement.getUsedLessons() - 1);
+      abonement.setIsActive(true);
+      abonementRepository.save(abonement);
+    }
+
     transferLessonRepository.delete(transferLesson);
+  }
+
+  @Override
+  public List<TransferLesson> findAllStudentActiveLessons(Long studentId) {
+    List<TransferLesson> transferLessons = transferLessonRepository.findAllByIsActiveTrue();
+    return transferLessons.stream().filter(transferLesson -> transferLesson.getLesson().getStudent().getId() == studentId).collect(Collectors.toList());
   }
 }

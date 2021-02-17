@@ -29,7 +29,9 @@ export const getTransferedLessonsByDate = date => dispatch => {
 export const createTransferLesson = lesson => dispatch => {
     api.post(`/transfered-lessons`, lesson).then(res => {
         if (res.status >= 200 && res.status < 300) {
-            toastr.success('Lesson transfered');
+            if (res.data.success) {
+                toastr.success(res.data.message);
+            } else toastr.error(res.data.message);
         }
     })
 }
@@ -66,11 +68,14 @@ export const deleteTrasferLesson = (id, date) => dispatch => {
     })
 }
 
-export const confirmTransferedLesson = (lesson, date) => dispatch => {
-    api.post(`/confirmed-lessons`, lesson).then(res => {
+export const confirmTransferedLesson = (lesson, date, transferLessonId) => dispatch => {
+    api.post(`/transfered-lessons/${transferLessonId}/confirm`, lesson).then(res => {
         if (res.status >= 200 && res.status < 300) {
-            toastr.success('Lesson confirmed');
-            dispatch(getTransferedLessonsByDate(date));
+            if (res.data.success) {
+                toastr.success(res.data.message);
+                dispatch(getTransferedLessonsByDate(date));
+            }
         }
     })
 };
+

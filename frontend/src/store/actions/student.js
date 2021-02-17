@@ -54,4 +54,15 @@ export const createStudent = data => dispatch => {
             toastr.success('Student was created');
         }
     }).finally(() => dispatch({type: TYPES.STUDENT_LOADING, payload: true}))
-}
+};
+
+export const getStudentTransfers = id => dispatch => {
+    dispatch({type: TYPES.STUDENT_TRANSFERS_LOADING, payload: true})
+    api.get(`/transfered-lessons/student/${id}`).then(res => {
+        if (res.status === 200) {
+            dispatch({type: TYPES.LOAD_STUDENT_TRANSFERS, payload: res.data})
+        }
+    }).finally(() => {
+        dispatch({type: TYPES.STUDENT_TRANSFERS_LOADING, payload: false})
+    })
+};

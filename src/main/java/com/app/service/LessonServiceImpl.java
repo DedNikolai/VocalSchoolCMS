@@ -96,9 +96,9 @@ public class LessonServiceImpl implements LessonService {
     List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(parseDate);
 
     List<Lesson> lessonList = lessons.stream().map(lesson -> {
-      boolean confirmed = confirmedLessons.stream().anyMatch(confirmedLesson -> confirmedLesson.getLesson().getId() == lesson.getId());
-      boolean transfered = transferLessons.stream().anyMatch(transferLesson -> transferLesson.getLesson().getId() == lesson.getId());
-      boolean deleted = deletedLessons.stream().anyMatch(deletedLesson -> deletedLesson.getLesson().getId() == lesson.getId());
+      boolean confirmed = confirmedLessons.stream().anyMatch(confirmedLesson -> confirmedLesson.getLesson().getId() == lesson.getId() && confirmedLesson.getTime().equals(lesson.getTime()));
+      boolean transfered = transferLessons.stream().anyMatch(transferLesson -> transferLesson.getLesson().getId() == lesson.getId() && transferLesson.getTransferTime().equals(lesson.getTime()));
+      boolean deleted = deletedLessons.stream().anyMatch(deletedLesson -> deletedLesson.getLesson().getId() == lesson.getId() && deletedLesson.getLesson().getTime().equals(lesson.getTime()));
       if (confirmed) {
         lesson.setStatus(Status.CONFIRMED);
       }

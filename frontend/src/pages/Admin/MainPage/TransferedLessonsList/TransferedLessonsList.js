@@ -53,14 +53,16 @@ function TransferedLessonsList(props) {
     };
 
     const confirmTrasferedLesson = lesson => {
+        const price = lesson.teacher.prices.filter(price => price.type === lesson.lesson.type && lesson.lesson.discipline === price.discipline)[0].priceValue;
         const confirmedLesson = {
             lesson: lesson.lesson,
             teacher: lesson.teacher,
             student: lesson.lesson.student,
             lessonDate: lesson.transferDate,
-            lessonTime: lesson.transferTime,
+            time: lesson.transferTime,
+            price: price
         };
-        confirmTransfer(confirmedLesson, date);
+        confirmTransfer(confirmedLesson, date, lesson.id);
     }
 
     return (
@@ -188,7 +190,7 @@ const mapStateToProps = ({transferLessons}) => {
 
 const mapDispatchToProps = dispatch => ({
     deleteTransfer: (id, date) => dispatch(deleteTrasferLesson(id, date)),
-    confirmTransfer: (lesson, date) => dispatch(confirmTransferedLesson(lesson, date)),
+    confirmTransfer: (lesson, date, id) => dispatch(confirmTransferedLesson(lesson, date, id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TransferedLessonsList);

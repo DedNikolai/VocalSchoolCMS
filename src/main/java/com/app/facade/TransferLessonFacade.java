@@ -1,7 +1,12 @@
 package com.app.facade;
 
+import com.app.dto.request.ConfirmedLessonRequest;
+import com.app.dto.request.StudentRequest;
 import com.app.dto.request.TransferLessonRequest;
+import com.app.dto.response.ApiResponse;
 import com.app.dto.response.TransferLessonResponse;
+import com.app.model.ConfirmedLesson;
+import com.app.model.Student;
 import com.app.model.TransferLesson;
 import com.app.service.TransferLessonService;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +35,9 @@ public class TransferLessonFacade {
     return modelMapper.map(lesson, TransferLessonResponse.class);
   }
 
-  public TransferLessonResponse createLesson(TransferLessonRequest request) {
+  public ApiResponse createLesson(TransferLessonRequest request) {
     TransferLesson transferLesson = modelMapper.map(request, TransferLesson.class);
-    TransferLesson lesson = transferLessonService.createTransferLesson(transferLesson);
-    return modelMapper.map(lesson, TransferLessonResponse.class);
+    return transferLessonService.createTransferLesson(transferLesson);
   }
 
   public TransferLessonResponse updateLesson(TransferLessonRequest request, Long id) {
@@ -50,5 +54,15 @@ public class TransferLessonFacade {
     List<TransferLesson> transferLessons = transferLessonService.findAllbyTransferDate(date);
     List<TransferLessonResponse> lessons = transferLessons.stream().map(transferLesson -> modelMapper.map(transferLesson, TransferLessonResponse.class)).collect(Collectors.toList());
     return lessons;
+  }
+
+  public ApiResponse confirmTransferLesson(ConfirmedLessonRequest request, Long transferId) {
+    ConfirmedLesson confirmedLesson = modelMapper.map(request, ConfirmedLesson.class);
+    return transferLessonService.confirmTransferLesson(confirmedLesson, transferId);
+  }
+
+  public List<TransferLessonResponse> findAllActiveByStudent(Long studentId) {
+    List<TransferLesson> transferLesson = transferLessonService.findAllStudentActiveLessons(studentId);
+    return transferLesson.stream().map(lesson -> modelMapper.map(lesson, TransferLessonResponse.class)).collect(Collectors.toList());
   }
 }
