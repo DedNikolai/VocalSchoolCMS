@@ -48,12 +48,15 @@ public class ConfirmedLesson extends BaseEntiy {
   private Date lessonDate;
 
   @Column(name = "lesson_time")
-  private String lessonTime;
+  private String time;
 
   @ManyToOne
   @JoinColumn(name = "abonement")
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
   private Abonement abonement;
+
+  @Column(name = "paid")
+  private Boolean isPaid;
 
 }

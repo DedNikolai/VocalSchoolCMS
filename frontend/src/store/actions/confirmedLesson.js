@@ -17,8 +17,10 @@ export const getAllLessons = (page, size) => dispatch => {
 export const createConfirmedLesson = (lesson, date) => dispatch => {
     api.post(`/confirmed-lessons`, lesson).then(res => {
         if (res.status >= 200 && res.status < 300) {
-            toastr.success('Lesson confirmed');
-            dispatch(getLessonsByDate(date));
+            if (res.data.success) {
+                toastr.success(res.data.message);
+                dispatch(getLessonsByDate(date));
+            } else toastr.error(res.data.message);
         }
     })
 };

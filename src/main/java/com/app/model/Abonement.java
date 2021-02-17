@@ -64,17 +64,11 @@ public class Abonement extends BaseEntiy {
   @EqualsAndHashCode.Exclude
   private Set<TransferLesson> transferLessons = new HashSet<>();
 
-  @OneToMany(mappedBy="abonement", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  private Set<DeletedLesson> deletedLessons = new HashSet<>();
-
-
   @Column(name = "transfered_quantity")
   private Integer transferedQuantity;
 
-  @Column(name = "transfered_lessons")
-  private Integer transferedLessons;
+  @Column(name = "used_quantity")
+  private Integer usedLessons;
 
   @Column(name = "is_active")
   private Boolean isActive;

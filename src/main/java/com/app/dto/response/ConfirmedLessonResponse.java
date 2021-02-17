@@ -27,5 +27,6 @@ public class ConfirmedLessonResponse {
   @JsonView(View.ConfirmedLesson.class)
   private TeacherResponse teacher;
   private Date lessonDate;
-  private String lessonTime;
+  private String time;
+  private Boolean isPaid;
 }

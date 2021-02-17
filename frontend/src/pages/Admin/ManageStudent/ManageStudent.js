@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {NavLink, Redirect} from 'react-router-dom';
-import {getStudentById, updateStudent} from "../../../store/actions/student";
+import {getStudentById, getStudentTransfers, updateStudent} from "../../../store/actions/student";
 import {getLessonsByStudent} from "../../../store/actions/lesson";
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
@@ -21,6 +21,7 @@ import StudentLessons from './StudentLessons/StudentLessons';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import ua from "../../../languages/ua";
 import StudentBalance from './StudentBalance/StudentBalance';
+import StudentTransfers from './StudentTransfers/StudentTransfers';
 
 
 const useStyles = makeStyles(theme => ({
@@ -87,7 +88,8 @@ const validate = values => {
 function ManageStudent(props) {
     const classes = useStyles();
     const {student, studentLoading, getStudent, updateStudent,
-        studentLessons, studentLessonsLoading, getStudentLessons} = props;
+        studentLessons, studentLessonsLoading, getStudentLessons,
+        studentTransfers, studentTransfersLoading, loadStudentTransfers} = props;
     const id = props.match.params.id;
     const theme = useTheme();
     const [changed, setChanged] = useState(false);
@@ -100,7 +102,6 @@ function ManageStudent(props) {
         onSubmit: value => {
             updateStudent(id, value);
             setChanged(true)
-            console.log(value)
         },
         enableReinitialize: true
     });
@@ -109,6 +110,7 @@ function ManageStudent(props) {
         if (id) {
             getStudent(id);
             getStudentLessons(id);
+            loadStudentTransfers(id)
         }
     }, []);
 
@@ -119,7 +121,7 @@ function ManageStudent(props) {
     if (studentLessonsLoading || studentLoading) {
         return <div className="wrapper"><Preloader/></div>
     }
-
+    console.log(studentTransfers)
     return (
         <div className='manage-student'>
             <h2>Особисті дані</h2>
@@ -219,6 +221,12 @@ function ManageStudent(props) {
             </Paper>
             <h2>Заняття</h2>
             <StudentLessons lessons={studentLessons} studentId={student.id}/>
+            <h2>Перенесені уроки</h2>
+            {
+                studentTransfersLoading ? <Preloader/> :
+                    <StudentTransfers tarnsferedLessons={studentTransfers} />
+            }
+
             <div className='buttons-container'>
                 <Button
                     variant="contained"
@@ -279,14 +287,17 @@ const mapStateToProps = ({student, teacher, lesson}) => {
         student: student.studentById,
         studentLoading: student.studentByIdLoading,
         studentLessons: lesson.lessonsByStudent,
-        studentLessonsLoading: lesson.lessonsByStudentLoading
+        studentLessonsLoading: lesson.lessonsByStudentLoading,
+        studentTransfers: student.studentTransferLessons,
+        studentTransfersLoading: student.studentTransferLessonsLoading,
     }
 };
 
 const mapDispatchToProps = dispatch => ({
     getStudent: (id) => dispatch(getStudentById(id)),
     updateStudent: (id, data) => dispatch(updateStudent(id, data)),
-    getStudentLessons: id => dispatch(getLessonsByStudent(id))
+    getStudentLessons: id => dispatch(getLessonsByStudent(id)),
+    loadStudentTransfers: id => dispatch(getStudentTransfers(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManageStudent);

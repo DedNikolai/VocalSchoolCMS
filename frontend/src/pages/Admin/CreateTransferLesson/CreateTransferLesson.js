@@ -99,7 +99,7 @@ function CreateTransferLesson(props) {
             lesson: currentLesson,
             teacher: currentLesson.teacher,
             lessonDate: lessonDate,
-            transferTime: `${currentLesson.timeHour}:${currentLesson.timeMinutes ? currentLesson.timeMinutes : currentLesson.timeMinutes + '0'}`,
+            transferTime: currentLesson.time,
             room: currentLesson.room,
             transferDate: lessonDate
         },

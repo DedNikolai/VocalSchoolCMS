@@ -28,5 +28,6 @@ public class AbonementResponse {
   private Integer transferedQuantity;
   private Set<ConfirmedLessonResponse> confirmedLessons;
   private Set<TransferLessonResponse> transferLessons;
-  private Set<DeletedLessonResponse> deletedLessons;
+  private Boolean isActive;
+  private Integer usedLessons;
 }

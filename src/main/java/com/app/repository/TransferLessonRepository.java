@@ -18,4 +18,6 @@ public interface TransferLessonRepository extends JpaRepository<TransferLesson, 
   Page<TransferLesson> findAllByOrderByCreatedDateAsc(Pageable pageable);
 
   List<TransferLesson> findAllByTransferDate(@Temporal(TemporalType.DATE)Date date);
+
+  List<TransferLesson> findAllByIsActiveTrue();
 }

@@ -15,6 +15,10 @@ import IconButton from '@material-ui/core/IconButton';
 import {getAllLessons, deleteConfirmedLesson} from "../../../store/actions/confirmedLesson";
 import Preloader from '../../../components/Preloader/index';
 import {rowsPerPage} from '../../../constants/view';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import { withStyles } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
 import './ConfirmedLessons.scss'
 
 const columns = [
@@ -22,6 +26,7 @@ const columns = [
     { id: 'student', label: 'Учень', minWidth: 150, align: 'center' },
     { id: 'teacher', label: 'Вчитель', minWidth: 150, align: 'center' },
     { id: 'price', label: 'Вартість', minWidth: 50, align: 'center' },
+    { id: 'paid', label: 'Виплата', minWidth: 50, align: 'center' },
     { id: 'actions', label: 'Дії', minWidth: 50, align: 'center' },
 ];
 
@@ -39,11 +44,26 @@ const useStyles = makeStyles({
         textAlign: 'center'
     },
 
+    cellRight: {
+        padding: '2px',
+        textAlign: 'right'
+    },
+
     headCell: {
         backgroundColor: '#fff',
         fontWeight: 'bold'
     },
 });
+
+const GreenCheckbox = withStyles({
+    root: {
+        color: green[400],
+        '&$checked': {
+            color: green[600],
+        },
+    },
+    checked: {},
+})((props) => <Checkbox color="default" {...props} />);
 
 function ConfirmedLessons(props) {
     const classes = useStyles();
@@ -53,6 +73,7 @@ function ConfirmedLessons(props) {
     const handleChangePage = (event, page) => {
         getLessons(page, rowsPerPage);
     };
+
 
     useEffect(() => {
         getLessons(0, rowsPerPage);
@@ -115,6 +136,16 @@ function ConfirmedLessons(props) {
                                                             <TableCell className={classes.cell}>
                                                                 {row.lessonDate}
                                                             </TableCell>
+                                                        )
+                                                    }
+                                                    if (column.id === 'paid') {
+                                                        return (
+                                                            <TableCell className={classes.cellRight}>
+                                                                <FormControlLabel
+                                                                    control={<GreenCheckbox checked={row.isPaid} name="checkedG" />}
+                                                                />
+                                                            </TableCell>
+
                                                         )
                                                     }
                                                     return (

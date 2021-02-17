@@ -26,6 +26,7 @@ const columns = [
     { id: 'discipline', label: 'Дисципліна', minWidth: 50, align: 'center' },
     { id: 'price', label: 'Ціна', minWidth: 50, align: 'center' },
     { id: 'quantity', label: 'К-ть Занять', minWidth: 50, align: 'center' },
+    { id: 'status', label: 'Статус', minWidth: 50, align: 'center' },
     { id: 'actions', label: 'Редагувати', minWidth: 50, align: 'center' },
 ];
 
@@ -124,6 +125,13 @@ function Abonements(props) {
                                                         return (
                                                             <TableCell className={classes.cell}>
                                                                 {row.teacher.firstName + ' ' + row.teacher.lastName}
+                                                            </TableCell>
+                                                        )
+                                                    }
+                                                    if (column.id === 'status') {
+                                                        return (
+                                                            <TableCell className={classes.cell}>
+                                                                {row.isActive ? ' ' : 'Використаний'}
                                                             </TableCell>
                                                         )
                                                     }

@@ -154,6 +154,14 @@ function ManageAbonement(props) {
                         size="small"
                         disabled
                     />
+                    <TextField
+                        label={"Статус"}
+                        id="outlined-size-small"
+                        value={formik.values.isActive ? 'Активний' : 'Вичерпаний'}
+                        variant="outlined"
+                        size="small"
+                        disabled
+                    />
                 </div>
                 <div>
                     <FormControl className={classes.formControl}>

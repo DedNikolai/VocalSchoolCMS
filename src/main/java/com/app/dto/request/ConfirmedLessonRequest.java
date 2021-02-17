@@ -13,5 +13,6 @@ public class ConfirmedLessonRequest {
   private StudentRequest student;
   private TeacherRequest teacher;
   private Date lessonDate;
-  private String lessonTime;
+  private String time;
+  private Boolean isPaid;
 }

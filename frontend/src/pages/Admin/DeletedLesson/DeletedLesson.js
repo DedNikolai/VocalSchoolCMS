@@ -100,7 +100,7 @@ function DeletedLesson(props) {
                 <div>
                     <TextField
                         id="date"
-                        label="Початкова дата заняття"
+                        label="Дата заняття"
                         type="date"
                         value={deletedLesson.lessonDate.slice(0, 10)}
                         className={classes.textField}
