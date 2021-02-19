@@ -11,4 +11,5 @@ public class View {
   public static class TransferLesson{};
   public static class DeletedLesson{};
   public static class Abonement{};
+  public static class Credit{};
 }

@@ -24,6 +24,7 @@ import LessonsTab from '../../../components/LessonsTab/LessonsTab';
 import Abonements from '../Abonements/Abonements';
 import CreateAbonement from '../CreateAbonement/CreateAbonement';
 import ManageAbonement from '../ManageAbonement/ManageAbonement';
+import Credit from '../Credit/Credits';
 
 const teacherPermissions = [Roles.TEACHER, Roles.ADMIN, Roles.SUPER_ADMIN];
 const adminPermissions = [Roles.ADMIN, Roles.SUPER_ADMIN];
@@ -54,6 +55,7 @@ function AdminRouter (props) {
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/abonements/edit/:id' component={ManageAbonement} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/abonements/create' component={CreateAbonement} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/abonements' component={Abonements} />
+            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/credits' component={Credit} />
             <AuthorizedRoute authorized={hasRoles(user, teacherPermissions)} path='/admin' component={MainPage} />
         </Switch>
     )
