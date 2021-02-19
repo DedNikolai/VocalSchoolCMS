@@ -22,6 +22,7 @@ import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import ua from "../../../languages/ua";
 import StudentBalance from './StudentBalance/StudentBalance';
 import StudentTransfers from './StudentTransfers/StudentTransfers';
+import StudentCredits from './StudentCredits/StudentCredits';
 
 
 const useStyles = makeStyles(theme => ({
@@ -120,8 +121,8 @@ function ManageStudent(props) {
 
     if (studentLessonsLoading || studentLoading) {
         return <div className="wrapper"><Preloader/></div>
-    }
-    console.log(studentTransfers)
+    };
+
     return (
         <div className='manage-student'>
             <h2>Особисті дані</h2>
@@ -226,7 +227,8 @@ function ManageStudent(props) {
                 studentTransfersLoading ? <Preloader/> :
                     <StudentTransfers tarnsferedLessons={studentTransfers} />
             }
-
+            <h2>Заборгованості</h2>
+            <StudentCredits studentId={student.id}/>
             <div className='buttons-container'>
                 <Button
                     variant="contained"

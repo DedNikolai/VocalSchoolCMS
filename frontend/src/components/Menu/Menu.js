@@ -15,6 +15,7 @@ import ListAltIcon from '@material-ui/icons/ListAlt';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import ua from '../../languages/ua';
+import CreditCardIcon from '@material-ui/icons/CreditCard';
 import './Menu.scss';
 
 const teacherPermissions = [Roles.TEACHER, Roles.ADMIN, Roles.SUPER_ADMIN];
@@ -96,6 +97,17 @@ function Menu(props) {
                             <PlaylistAddCheckIcon />
                         </ListItemIcon>
                         <ListItemText primary={ua.menu.abonements} />
+                    </ListItem>
+                </NavLink>
+            }
+            {
+                hasRoles(user, adminPermissions) &&
+                <NavLink to='/admin/credits' className='main-menu__item'>
+                    <ListItem button>
+                        <ListItemIcon>
+                            <CreditCardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={ua.menu.credits} />
                     </ListItem>
                 </NavLink>
             }

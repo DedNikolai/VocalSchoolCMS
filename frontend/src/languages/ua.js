@@ -8,7 +8,8 @@ const ua = {
         lessons: 'Уроки',
         transferLessons: 'Перенесені Уроки',
         deleted: 'Скасовані Уроки',
-        abonements: 'Абонементи'
+        abonements: 'Абонементи',
+        credits: 'Заборгованості',
     },
 
     dashboard: 'Панель Управління',

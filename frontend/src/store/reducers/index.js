@@ -8,6 +8,7 @@ import confirmedLessons from './confirmedLesson/confirmedLesson';
 import transferLessons from './transferLessons/transferLessons';
 import deletedLessons from './deletedLesson/deletedLesson';
 import abonement from './abonement/abonement';
+import credit from './credit/credit';
 
 const rootReducer = combineReducers({
     user: user,
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
     transferLessons: transferLessons,
     deletedLessons: deletedLessons,
     abonement: abonement,
+    credit: credit,
     toastr: toastrReducer
 });
 

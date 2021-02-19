@@ -59,6 +59,11 @@ public class Student extends BaseEntiy {
   @EqualsAndHashCode.Exclude
   private Set<Abonement> abonements;
 
+  @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  private Set<Credit> credits;
+
 //  @OneToMany(mappedBy = "student")
 //  @ToString.Exclude
 //  @EqualsAndHashCode.Exclude
