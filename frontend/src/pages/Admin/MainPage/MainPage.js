@@ -17,6 +17,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import IconButton from '@material-ui/core/IconButton';
 import {getLessonsByDate} from "../../../store/actions/lesson";
+import {createCredit} from "../../../store/actions/credits";
 import {createConfirmedLesson} from "../../../store/actions/confirmedLesson";
 import {getTransferedLessonsByDate} from "../../../store/actions/transferLessons";
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
@@ -25,6 +26,7 @@ import {createNewConfirmedLesson} from '../../../utils/confirmLesson';
 import TransferedLessonsList from './TransferedLessonsList/TransferedLessonsList';
 import EditIcon from '@material-ui/icons/Edit';
 import {NavLink} from 'react-router-dom';
+import CreditCardIcon from '@material-ui/icons/CreditCard';
 import './MainPage.scss'
 
 const useStyles = makeStyles(theme => ({
@@ -54,7 +56,7 @@ const columns = [
 
 function MainPage(props) {
     const {lessonsLoading, lessons, getLessonsByDate, createConfirmedLesson,
-        transferedLessons, transferedLessonsByDateLoading, getTransferedLessonsList} = props;
+        transferedLessons, transferedLessonsByDateLoading, getTransferedLessonsList, createCreditForStudent} = props;
     const classes = useStyles();
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     const [date, changeDate] = useState(new Date());
@@ -64,13 +66,13 @@ function MainPage(props) {
         getTransferedLessonsList(date);
     }, [date]);
 
-    const showMinutes = (minutes) => {
-        return minutes ? minutes : '0'+minutes;
-    }
-
     const confirmLesson = (lesson) => {
         createConfirmedLesson(createNewConfirmedLesson(lesson, date), date)
-    }
+    };
+
+    const createStudentCredit = (lesson) => {
+        createCreditForStudent(createNewConfirmedLesson(lesson, date), date);
+    };
 
     return (
         <Fragment>
@@ -135,6 +137,9 @@ function MainPage(props) {
                                                                             <CancelIcon/>
                                                                         </NavLink>
                                                                     </IconButton>
+                                                                    <IconButton>
+                                                                        <CreditCardIcon onClick={() => createStudentCredit(row)} />
+                                                                    </IconButton>
                                                                 </TableCell>
                                                             )
                                                         }
@@ -174,26 +179,22 @@ function MainPage(props) {
     )
 }
 
-MainPage.propTypes = {
-    lessonsLoading: PropTypes.bool.isRequired,
-    lessons: Preloader.array,
-};
-
 MainPage.defaultProps = {
     lessons: []
-}
+};
 
 const mapStateToProps = ({lesson, transferLessons}) => ({
     lessonsLoading: lesson.lessonsByDateLoading,
     lessons: lesson.lessonsByDate,
     transferedLessons: transferLessons.transferedLessonsByDate,
     transferedLessonsByDateLoading: transferLessons.transferedLessonsByDateLoading,
-})
+});
 
 const mapDispatchToProps = dispatch => ({
     getLessonsByDate: (day) => dispatch(getLessonsByDate(day)),
     createConfirmedLesson: (lesson, date) => dispatch(createConfirmedLesson(lesson, date)),
     getTransferedLessonsList: date => dispatch(getTransferedLessonsByDate(date)),
-})
+    createCreditForStudent: (credit, date) => dispatch(createCredit(credit, date)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainPage);

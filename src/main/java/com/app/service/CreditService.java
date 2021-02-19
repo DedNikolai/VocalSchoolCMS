@@ -1,6 +1,7 @@
 package com.app.service;
 
 import com.app.dto.response.ApiResponse;
+import com.app.model.ConfirmedLesson;
 import com.app.model.Credit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,5 +15,5 @@ public interface CreditService {
 
   ApiResponse deleteCredit(Long id);
 
-  ApiResponse createCredit(Credit credit);
+  ApiResponse createCredit(ConfirmedLesson confirmedLesson);
 }

@@ -1,8 +1,10 @@
 package com.app.facade;
 
+import com.app.dto.request.ConfirmedLessonRequest;
 import com.app.dto.request.CreditRequest;
 import com.app.dto.response.ApiResponse;
 import com.app.dto.response.CreditResponse;
+import com.app.model.ConfirmedLesson;
 import com.app.model.Credit;
 import com.app.service.CreditService;
 import lombok.RequiredArgsConstructor;
@@ -35,8 +37,8 @@ public class CreditFacade {
     return response;
   }
 
-  public ApiResponse createCredit(CreditRequest creditRequest) {
-    Credit credit = modelMapper.map(creditRequest, Credit.class);
-    return creditService.createCredit(credit);
+  public ApiResponse createCredit(ConfirmedLessonRequest request) {
+    ConfirmedLesson confirmedLesson = modelMapper.map(request, ConfirmedLesson.class);
+    return creditService.createCredit(confirmedLesson);
   }
 }

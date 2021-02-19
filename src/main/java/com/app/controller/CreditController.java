@@ -1,5 +1,6 @@
 package com.app.controller;
 
+import com.app.dto.request.ConfirmedLessonRequest;
 import com.app.dto.request.CreditRequest;
 import com.app.dto.response.ApiResponse;
 import com.app.dto.response.CreditResponse;
@@ -44,7 +45,7 @@ public class CreditController {
 
   @PostMapping
   @JsonView(View.Credit.class)
-  public ResponseEntity<ApiResponse> createCredit(@RequestBody CreditRequest request) {
+  public ResponseEntity<ApiResponse> createCredit(@RequestBody ConfirmedLessonRequest request) {
     ApiResponse response = creditFacade.createCredit(request);
     return ResponseEntity.ok(response);
   }

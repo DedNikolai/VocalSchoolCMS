@@ -2,8 +2,10 @@ package com.app.service;
 
 import com.app.dto.response.ApiResponse;
 import com.app.exeption.ResourceNotFoundException;
+import com.app.model.ConfirmedLesson;
 import com.app.model.Credit;
 import com.app.model.Student;
+import com.app.repository.ConfirmedLessonRepository;
 import com.app.repository.CreditRepository;
 import com.app.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import java.util.List;
 public class CreditServiceImpl implements CreditService{
   private final CreditRepository creditRepository;
   private final StudentRepository studentRepository;
+  private final ConfirmedLessonRepository confirmedLessonRepository;
 
   @Override
   public List<Credit> findAllStudentCredits(Long id) {
@@ -38,7 +41,14 @@ public class CreditServiceImpl implements CreditService{
   }
 
   @Override
-  public ApiResponse createCredit(Credit credit) {
+  public ApiResponse createCredit(ConfirmedLesson confirmedLesson) {
+    ConfirmedLesson savedLesson = confirmedLessonRepository.save(confirmedLesson);
+    Credit credit = new Credit();
+    credit.setLesson(savedLesson.getLesson());
+    credit.setStudent(savedLesson.getStudent());
+    credit.setTeacher(savedLesson.getTeacher());
+    credit.setLessonDate(savedLesson.getLessonDate());
+    credit.setTime(savedLesson.getTime());
     Credit savedCredit = creditRepository.save(credit);
     if (savedCredit.getId() != null) {
       return new  ApiResponse(true, "Записано в кредит");

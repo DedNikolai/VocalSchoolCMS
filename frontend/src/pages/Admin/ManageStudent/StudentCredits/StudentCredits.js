@@ -10,7 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import IconButton from '@material-ui/core/IconButton';
-import {deleteCredit, getStudentCredits} from "../../../../store/actions/credits";
+import {deleteStudentCredit, getStudentCredits} from "../../../../store/actions/credits";
 import Preloader from '../../../../components/Preloader/index';
 
 const columns = [
@@ -82,7 +82,7 @@ function StudentCredits(props) {
                                                         return (
                                                             <TableCell className={classes.cell}>
                                                                 <IconButton>
-                                                                    <DeleteOutline onClick={() => deleteCreditById(row.id)}/>
+                                                                    <DeleteOutline onClick={() => deleteCreditById(row.id, studentId)}/>
                                                                 </IconButton>
                                                             </TableCell>
                                                         )
@@ -136,7 +136,7 @@ const mapStateToProps = ({credit}) => {
 
 const mapDispatchToProps = dispatch => ({
     getCredits: (id) => dispatch(getStudentCredits(id)),
-    deleteCreditById: (id) => dispatch(deleteCredit(id)),
+    deleteCreditById: (id, studentId) => dispatch(deleteStudentCredit(id, studentId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudentCredits);
