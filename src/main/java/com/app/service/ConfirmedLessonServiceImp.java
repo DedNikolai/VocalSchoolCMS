@@ -6,10 +6,12 @@ import com.app.exeption.ResourceNotFoundException;
 import com.app.model.Abonement;
 import com.app.model.ConfirmedLesson;
 import com.app.model.DeletedLesson;
+import com.app.model.Teacher;
 import com.app.model.TransferLesson;
 import com.app.repository.AbonementRepository;
 import com.app.repository.ConfirmedLessonRepository;
 import com.app.repository.DeletedLessonRepository;
+import com.app.repository.TeacherRepository;
 import com.app.repository.TransferLessonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +29,7 @@ public class ConfirmedLessonServiceImp implements ConfirmedLessonService {
   private final TransferLessonRepository transferLessonRepository;
   private final DeletedLessonRepository deletedLessonRepository;
   private final AbonementRepository abonementRepository;
+  private final TeacherRepository teacherRepository;
 
   @Override
   public ConfirmedLesson getLessonById(Long id) {
@@ -86,5 +90,32 @@ public class ConfirmedLessonServiceImp implements ConfirmedLessonService {
   @Override
   public Page<ConfirmedLesson> findAllOrderByDate(Pageable pageable) {
     return confirmedLessonRepository.findAllByOrderByCreatedDateDesc(pageable);
+  }
+
+  @Override
+  public List<ConfirmedLesson> findAllByTeacherNoPaid(Long teacherId) {
+    Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() -> new ResourceNotFoundException("Teacher", "id", teacherId));
+    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByTeacherAndIsPaidFalse(teacher);
+    return confirmedLessons;
+  }
+
+  @Override
+  public ApiResponse payConfirmedLesson(Long id) {
+    ConfirmedLesson lessonFromDb = confirmedLessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));
+    lessonFromDb.setIsPaid(true);
+    confirmedLessonRepository.save(lessonFromDb);
+    return new ApiResponse(true, "Урок проплачено вчытелю");
+  }
+
+  @Override
+  public ApiResponse payAllConfirmedLessons(Long teacherId) {
+    Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() -> new ResourceNotFoundException("Teacher", "id", teacherId));
+    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByTeacherAndIsPaidFalse(teacher);
+    List<ConfirmedLesson> paidLessons = confirmedLessons.stream().map(confirmedLesson -> {
+      confirmedLesson.setIsPaid(true);
+      return confirmedLesson;
+    }).collect(Collectors.toList());
+    confirmedLessonRepository.saveAll(paidLessons);
+    return new ApiResponse(true, "Усі Уроки проплачено вчытелю");
   }
 }

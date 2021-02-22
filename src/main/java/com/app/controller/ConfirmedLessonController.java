@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/v1/confirmed-lessons")
@@ -52,6 +55,27 @@ public class ConfirmedLessonController {
   @JsonView(View.ConfirmedLesson.class)
   public ResponseEntity<Page<ConfirmedLessonResponse>> getAllSortedByDate(Pageable pageable) {
     Page<ConfirmedLessonResponse> response = confirmedLessonFacade.findAll(pageable);
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("not-paid/teacher/{id}")
+  @JsonView(View.ConfirmedLesson.class)
+  public ResponseEntity<List<ConfirmedLessonResponse>> getAllTeacherNoPaid(@PathVariable Long id) {
+    List<ConfirmedLessonResponse> response = confirmedLessonFacade.findAllByTeacherNoPaid(id);
+    return ResponseEntity.ok(response);
+  }
+
+  @PutMapping("pay/{id}")
+  @JsonView(View.ConfirmedLesson.class)
+  public ResponseEntity<ApiResponse> payConfirmedLesson(@PathVariable Long id) {
+    ApiResponse response = confirmedLessonFacade.payConfirmedLesson(id);
+    return ResponseEntity.ok(response);
+  }
+
+  @PutMapping("pay-all/teacher/{id}")
+  @JsonView(View.ConfirmedLesson.class)
+  public ResponseEntity<ApiResponse> payAllConfirmedLesson(@PathVariable Long id) {
+    ApiResponse response = confirmedLessonFacade.payAllConfirmedLessons(id);
     return ResponseEntity.ok(response);
   }
 }

@@ -25,6 +25,7 @@ import TimeTable from '../../../components/TimeTable/TimeTable';
 import TeacherFreeTimes from './TeacherFreeTimes/TeacherFreeTimes';
 import TeacherPrices from './TeacherPrices/TeacherPrices'
 import ua from "../../../languages/ua";
+import TeachersConfirmedLessons from './TeachersConfirmedLessons/TeachersConfirmedLessons';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -254,6 +255,8 @@ function ManageTeacher(props) {
             <TeacherFreeTimes teacher={teacher}/>
             <h2>Ціни</h2>
             <TeacherPrices teacher={teacher}/>
+            <h2>Не проплачені урокі</h2>
+            <TeachersConfirmedLessons teacherId={teacher.id}/>
         </Fragment>
     )
 }

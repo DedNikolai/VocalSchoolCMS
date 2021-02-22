@@ -64,6 +64,13 @@ function TeacherTableRow(props) {
                         </TableCell>
                     )
                 }
+                // if (column.id === 'nonPaid') {
+                //     return (
+                //         <TableCell key={column.id} align={column.align}>
+                //             {teacher.confirmedLessons.length}
+                //         </TableCell>
+                //     )
+                // }
                 return (
                     <TableCell key={column.id} align={column.align}>
                         {column.format && typeof value === 'number' ? column.format(value) : value}

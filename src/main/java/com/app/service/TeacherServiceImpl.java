@@ -1,9 +1,11 @@
 package com.app.service;
 
 import com.app.exeption.ResourceNotFoundException;
+import com.app.model.ConfirmedLesson;
 import com.app.model.Discipline;
 import com.app.model.Student;
 import com.app.model.Teacher;
+import com.app.repository.ConfirmedLessonRepository;
 import com.app.repository.StudentRepository;
 import com.app.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import java.util.List;
 public class TeacherServiceImpl implements TeacherService{
   private final TeacherRepository teacherRepository;
   private final StudentRepository studentRepository;
+//  private final ConfirmedLessonRepository confirmedLessonRepository;
 
   @Override
   public Teacher getTeacherById(Long id) {
