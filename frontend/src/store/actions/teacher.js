@@ -1,6 +1,8 @@
 import * as TYPES from '../constants/teacher';
 import api from '../api/FetchData';
 import {toastr} from 'react-redux-toastr'
+import {getAllLessons} from "./confirmedLesson";
+import {getLessonsByDate} from "./lesson";
 
 export const getAllTeachers = () => dispatch => {
     dispatch({type: TYPES.ALL_TEACHERS_LOADING, payload: {teachersLoading: true}})
@@ -115,10 +117,42 @@ export const getTeachersByDiscipline = (discipline) => dispatch => {
     dispatch({type: TYPES.TEACHERS_BY_DISCIPLINE_LOADING, payload: {teachersByDisciplineLoading: true}})
     api.get(`/teachers/discipline?param=${discipline}`).then(res => {
         if (res.status === 200) {
-            console.log(res.data)
             dispatch({type: TYPES.SAVE_TEACHERS_BY_DISCIPLINE, payload: {teachersByDiscipline: res.data}})
         }
     }).finally(() => {
         dispatch({type: TYPES.TEACHERS_BY_DISCIPLINE_LOADING, payload: {teachersByDisciplineLoading: false}})
+    })
+};
+
+export const getConfirmedLesson = (id) => dispatch => {
+    dispatch({type: TYPES.TEACHERS_CONFIRMED_LESSONS_LOADING, payload: true});
+    api.get(`/confirmed-lessons/not-paid/teacher/${id}`).then(res => {
+        if (res.status >= 200 && res.status < 300) {
+            dispatch({type: TYPES.SAVE_TEACHERS_CONFIRMED_LESSONS, payload: res.data});
+        }
+    }).finally(() => {
+        dispatch({type: TYPES.TEACHERS_CONFIRMED_LESSONS_LOADING, payload: false});
+    });
+};
+
+export const payAllLessons = teacherId => dispatch => {
+    api.put(`/confirmed-lessons/pay-all/teacher/${teacherId}`).then(res => {
+        if (res.status >= 200 && res.status < 300) {
+            if (res.data.success) {
+                dispatch(getTeacherById(teacherId));
+                toastr.success(res.data.message);
+            } else toastr.error(res.data.message);
+        }
+    })
+};
+
+export const payLesson = (lessonId, teacherId) => dispatch => {
+    api.put(`/confirmed-lessons/pay/${lessonId}`).then(res => {
+        if (res.status >= 200 && res.status < 300) {
+            if (res.data.success) {
+                dispatch(getTeacherById(teacherId));
+                toastr.success(res.data.message);
+            } else toastr.error(res.data.message);
+        }
     })
 };

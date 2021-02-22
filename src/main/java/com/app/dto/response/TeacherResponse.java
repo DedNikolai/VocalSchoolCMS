@@ -31,4 +31,8 @@ public class TeacherResponse {
   private Set<Discipline> disciplines;
   private Set<PriceResponse> prices;
   private Set<TeacherWorkTimeResponse> workTimes;
+//  @ToString.Exclude
+//  @EqualsAndHashCode.Exclude
+//  @JsonView(View.Teacher.class)
+//  private List<ConfirmedLessonResponse> confirmedLessons;
 }

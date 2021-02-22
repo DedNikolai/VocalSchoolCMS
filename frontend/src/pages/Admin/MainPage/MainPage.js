@@ -6,7 +6,6 @@ import Paper from '@material-ui/core/Paper';
 import clsx from 'clsx';
 import {makeStyles} from "@material-ui/core/styles/index";
 import {connect} from "react-redux";
-import PropTypes from 'prop-types';
 import Preloader from '../../../components/Preloader/index';
 import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import Table from '@material-ui/core/Table';

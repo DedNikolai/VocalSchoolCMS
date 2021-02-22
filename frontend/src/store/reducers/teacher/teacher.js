@@ -7,7 +7,9 @@ const initialState = {
     teacherByIdLoading: true,
     teachersByDiscipline: [],
     teachersByDisciplineLoading: true,
-}
+    teachersConfirmedLessons: [],
+    teachersConfirmedLessonsLoading: true,
+};
 
 const teacher = (state = initialState, action) => {
     switch (action.type) {
@@ -23,6 +25,10 @@ const teacher = (state = initialState, action) => {
             return {...state, teachersByDiscipline: action.payload.teachersByDiscipline}
         case TYPES.TEACHERS_BY_DISCIPLINE_LOADING:
             return {...state, teachersByDisciplineLoading: action.payload.teachersByDisciplineLoading}
+        case TYPES.TEACHERS_CONFIRMED_LESSONS_LOADING:
+            return {...state, teachersConfirmedLessonsLoading: action.payload}
+        case TYPES.SAVE_TEACHERS_CONFIRMED_LESSONS:
+            return {...state, teachersConfirmedLessons: action.payload}
         default:
             return {...state}
     }

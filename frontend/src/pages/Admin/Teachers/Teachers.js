@@ -22,6 +22,7 @@ const columns = [
     { id: 'email', label: 'Email', minWidth: 150, align: 'left' },
     { id: 'disciplines', label: 'Дисципліни', minWidth: 150, align: 'left' },
     { id: 'lessons', label: 'Кількість Уроків', minWidth: 50, align: 'center' },
+    // { id: 'nonPaid', label: 'Не оплачені уроки', minWidth: 50, align: 'center' },
     { id: 'actions', label: 'Редагувати', minWidth: 50, align: 'center' },
 ];
 
