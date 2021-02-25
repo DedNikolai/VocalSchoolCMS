@@ -6,6 +6,8 @@ import com.app.model.LessonType;
 import com.app.model.Room;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class LessonRequest {
   private Long id;
@@ -18,4 +20,6 @@ public class LessonRequest {
   private String time;
   private Room room;
   private Integer duration;
+  private Boolean isTestLesson;
+  private Date lessonDate;
 }

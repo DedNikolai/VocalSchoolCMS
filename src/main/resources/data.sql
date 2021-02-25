@@ -17,7 +17,8 @@ INSERT INTO students
   (id, date_created, date_modified, email, photo, phone, first_name, last_name, age)
 VALUES
   (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 'student1@ukr.com', 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', '063-438-01-90', 'Ivan', 'Ivanov', 36),
-  (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 'student2@ukr.com', 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', '093-825-01-90', 'Andrey', 'Sidorov', 30);
+  (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 'student2@ukr.com', 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', '093-825-01-90', 'Andrey', 'Sidorov', 30),
+  (3, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 'student3@ukr.com', 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', '099-111-01-90', 'Petya', 'Kakin', 23);
 
 
 INSERT INTO taechers
@@ -41,12 +42,13 @@ VALUES
   (2, 'VOCAL');
 
 INSERT INTO lessons
-  (id, date_created, date_modified, teacher_id, student_id, room, discipline, lesson_type, lesson_day, lesson_time, duration)
+  (id, date_created, date_modified, teacher_id, student_id, room, discipline, lesson_type, lesson_day, lesson_time, duration, is_test, lesson_date, is_active)
 VALUES
-  (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 1, 'ROOM1', 'VOCAL', 'MAN', 'MONDAY', '12:00', 60),
-  (4, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 2, 'ROOM1', 'VOCAL', 'MAN', 'MONDAY', '13:00', 60),
-  (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 2, 'ROOM2', 'SOLFEGGIO', 'MAN', 'MONDAY', '14:00', 60),
-  (3, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 1, 'ROOM3', 'VOCAL', 'CHILD', 'FRIDAY', '10:30', 30);
+  (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 1, 'ROOM1', 'VOCAL', 'MAN', 'MONDAY', '12:00', 60, false, null, true),
+  (4, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 2, 'ROOM1', 'VOCAL', 'MAN', 'MONDAY', '13:00', 60, false, null, true),
+  (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 2, 'ROOM2', 'SOLFEGGIO', 'MAN', 'MONDAY', '14:00', 60, false, null, true),
+  (3, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 1, 'ROOM3', 'VOCAL', 'CHILD', 'FRIDAY', '10:30', 30, false, null, true),
+  (5, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 3, 'ROOM4', 'VOCAL', 'MAN', 'THURSDAY', '14:00', 60, true, '2021-02-25', true);
 
 INSERT INTO teacher_worktime
   (id, date_created, date_modified, lesson_day, start_time, end_time, teacher)

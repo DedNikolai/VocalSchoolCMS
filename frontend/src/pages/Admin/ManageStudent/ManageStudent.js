@@ -123,6 +123,9 @@ function ManageStudent(props) {
         return <div className="wrapper"><Preloader/></div>
     };
 
+    const tableLessons = studentLessons.filter(lesson => !lesson.isTestLesson);
+    const testLessons = studentLessons.filter(lesson => lesson.isTestLesson);
+
     return (
         <div className='manage-student'>
             <h2>Особисті дані</h2>
@@ -220,8 +223,10 @@ function ManageStudent(props) {
                     <StudentBalance rows={student.abonements} />
                 </div>
             </Paper>
-            <h2>Заняття</h2>
-            <StudentLessons lessons={studentLessons} studentId={student.id}/>
+            <h2>Планові заняття</h2>
+            <StudentLessons lessons={tableLessons} studentId={student.id}/>
+            <h2>Тестові заняття</h2>
+            <StudentLessons lessons={testLessons} studentId={student.id}/>
             <h2>Перенесені уроки</h2>
             {
                 studentTransfersLoading ? <Preloader/> :

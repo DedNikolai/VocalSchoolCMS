@@ -162,10 +162,6 @@ function Admin(props) {
     );
 }
 
-Admin.propTypes = {
-    userSignOut: PropTypes.func
-}
-
 const mapStateToProps = ({user}) => ({
 
 })

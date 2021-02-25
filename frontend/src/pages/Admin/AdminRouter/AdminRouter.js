@@ -61,21 +61,12 @@ function AdminRouter (props) {
     )
 }
 
-AdminRouter.propTypes = {
-    user: PropTypes.object.isRequired,
-}
-
-
 export const AuthorizedRoute = ({component: Component, authorized, ...rest}) => (
     <Route {...rest} render={(props) => authorized
         ? <Route component={Component} {...props} />
         : <Redirect to='/admin/login' />} />
 )
 
-AuthorizedRoute.propTypes = {
-    component: PropTypes.func.isRequired,
-    authorized: PropTypes.bool.isRequired,
-}
 
 const mapStateToProps = ({user}) => {
     return {

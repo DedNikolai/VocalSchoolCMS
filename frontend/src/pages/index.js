@@ -50,11 +50,6 @@ AppRouter.propTypes = {
 
 AppRouter.defaultProps = {
     currentUser: null,
-}
-
-ProtectedRoute.propTypes = {
-    component: PropTypes.func.isRequired,
-    authenticated: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = ({user}) => {

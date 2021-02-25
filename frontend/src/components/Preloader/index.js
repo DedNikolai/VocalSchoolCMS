@@ -7,7 +7,7 @@ import {colors} from "../../constants/view";
 
 const styles = theme => ({
   progress: {
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing(2)
   }
 })
 
@@ -15,7 +15,7 @@ function Preloader (props) {
   const {classes} = props
   return (
     <div className='preloader'>
-      <CircularProgress className={classes.progress} color={colors.secondaryColor} />
+      <CircularProgress className={classes.progress} color={'inherit'} />
     </div>
   )
 }
