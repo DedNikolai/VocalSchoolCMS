@@ -84,41 +84,41 @@ function TransferLessons(props) {
                                 <TableBody>
                                     {content.map(row => {
                                         return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                                 {columns.map(column => {
                                                     const value = row[column.id];
                                                     if (column.id === 'actions') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
-                                                                <IconButton>
-                                                                    <DeleteOutline onClick={() => {}}/>
+                                                            <TableCell className={classes.cell} key={column.id}>
+                                                                <IconButton onClick={() => {}}>
+                                                                    <DeleteOutline/>
                                                                 </IconButton>
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'teacher') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.teacher.firstName + ' ' + row.teacher.lastName}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'student') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.lesson.student.firstName + ' ' + row.lesson.student.lastName}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'date') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.lessonDate}
                                                             </TableCell>
                                                         )
                                                     }
                                                     return (
-                                                        <TableCell key={column.id} align={column.align}>
+                                                        <TableCell key={column.id} align={column.align} key={column.id}>
                                                             {column.format && typeof value === 'number' ? column.format(value) : value}
                                                         </TableCell>
                                                     );
@@ -143,15 +143,9 @@ function TransferLessons(props) {
     )
 }
 
-TransferLessons.propTypes = {
-    lessons: PropTypes.object,
-    lessonsLoading: PropTypes.bool.isRequired,
-    getAllLessons: PropTypes.func.isRequired,
-};
-
 TransferLessons.defaultProps = {
     lessons: {},
-}
+};
 
 const mapStateToProps = ({transferLessons}) => {
     return {

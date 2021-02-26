@@ -1,7 +1,6 @@
 import React, {Fragment, useEffect} from 'react';
 import {getAllLessons} from "../../../store/actions/lesson";
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
 import Preloader from '../../../components/Preloader/index';
 import TimeTable from '../../../components/TimeTable/TimeTable';
 
@@ -23,12 +22,6 @@ function Lessons(props) {
         </Fragment>
     )
 }
-
-Lessons.propTypes = {
-    allLessons: PropTypes.array,
-    allLessonsLoading: PropTypes.bool.isRequired,
-    getAllLessons: PropTypes.func.isRequired,
-};
 
 Lessons.defaultProps = {
     allLessons: [],

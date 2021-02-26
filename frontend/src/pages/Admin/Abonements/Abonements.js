@@ -90,47 +90,47 @@ function Abonements(props) {
                                 <TableBody>
                                     {content.map(row => {
                                         return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                                 {columns.map(column => {
                                                     const value = row[column.id];
                                                     if (column.id === 'actions') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 <IconButton>
                                                                     <NavLink to={`/admin/abonements/edit/${row.id}`}>
                                                                         <Edit/>
                                                                     </NavLink>
                                                                 </IconButton>
-                                                                <IconButton>
-                                                                <DeleteOutline onClick={() => deleteById(row.id, 0, rowsPerPage)}/>
+                                                                <IconButton onClick={() => deleteById(row.id, 0, rowsPerPage)}>
+                                                                <DeleteOutline/>
                                                                 </IconButton>
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'date') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.createdDate.split('-').reverse().join('-')}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'student') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.student.firstName + ' ' + row.student.lastName}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'teacher') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.teacher.firstName + ' ' + row.teacher.lastName}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'status') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.isActive ? ' ' : 'Використаний'}
                                                             </TableCell>
                                                         )

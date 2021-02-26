@@ -76,21 +76,21 @@ function StudentLessons(props) {
                                                     const value = row[column.id];
                                                     if (column.id === 'actions') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 <IconButton>
                                                                     <NavLink to={`/admin/lessons/edit/${row.id}`}>
                                                                         <Edit/>
                                                                     </NavLink>
                                                                 </IconButton>
-                                                                <IconButton>
-                                                                    <DeleteOutline onClick={() => deleteLessonById(row.id, studentId)}/>
+                                                                <IconButton onClick={() => deleteLessonById(row.id, studentId)}>
+                                                                    <DeleteOutline/>
                                                                 </IconButton>
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'teacher') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={row.id}>
                                                                 {row.teacher ? row.teacher.firstName + ' ' + row.teacher.lastName : ''}
                                                             </TableCell>
                                                         )

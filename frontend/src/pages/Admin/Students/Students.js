@@ -99,12 +99,12 @@ function Students(props) {
                                 <TableBody>
                                     {content.map(row => {
                                         return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                                 {columns.map(column => {
                                                     const value = row[column.id];
                                                     if (column.id === 'actions') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 <IconButton>
                                                                     <NavLink to={`/admin/students/edit/${row.id}`}>
                                                                         <Edit/>

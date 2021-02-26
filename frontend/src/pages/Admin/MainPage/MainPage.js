@@ -137,8 +137,8 @@ function MainPage(props) {
                                                                             <CancelIcon/>
                                                                         </NavLink>
                                                                     </IconButton>
-                                                                    <IconButton>
-                                                                        <CreditCardIcon onClick={() => createStudentCredit(row)} />
+                                                                    <IconButton onClick={() => createStudentCredit(row)}>
+                                                                        <CreditCardIcon/>
                                                                     </IconButton>
                                                                 </TableCell>
                                                             )

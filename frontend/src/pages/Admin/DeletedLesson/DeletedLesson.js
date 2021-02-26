@@ -157,12 +157,6 @@ function DeletedLesson(props) {
     )
 }
 
-DeletedLesson.propTypes = {
-    getDeletedLessonById: PropTypes.func.isRequired,
-    deletedLessonByIdLoading: PropTypes.bool.isRequired,
-    transferLesson: PropTypes.object,
-};
-
 DeletedLesson.defaultProps = {
     deletedLesson: {}
 }

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import './index.scss'
-import {colors} from "../../constants/view";
 
 const styles = theme => ({
   progress: {

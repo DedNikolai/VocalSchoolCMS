@@ -261,15 +261,6 @@ function ManageTeacher(props) {
     )
 }
 
-ManageTeacher.propTypes = {
-    teacher: PropTypes.object,
-    teacherLoading: PropTypes.bool.isRequired,
-    getTeacher: PropTypes.func.isRequired,
-    createTeacher: PropTypes.func.isRequired,
-    updateTeacher: PropTypes.func.isRequired,
-    getTeacherFreeTimes: PropTypes.func.isRequired,
-};
-
 ManageTeacher.defaultProps = {
     teacher: {},
 }

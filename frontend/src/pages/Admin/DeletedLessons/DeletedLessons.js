@@ -86,14 +86,14 @@ function DeletedLessons(props) {
                                 <TableBody>
                                     {content.map(row => {
                                         return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                                 {columns.map(column => {
                                                     const value = row[column.id];
                                                     if (column.id === 'actions') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
-                                                                <IconButton>
-                                                                    <DeleteOutline onClick={() => {}}/>
+                                                            <TableCell className={classes.cell} key={row.id}>
+                                                                <IconButton onClick={() => {}}>
+                                                                    <DeleteOutline/>
                                                                 </IconButton>
                                                                 <NavLink to={`/admin/deleted-lessons/${row.id}`} className='main-menu__item'>
                                                                     <IconButton>
@@ -105,28 +105,28 @@ function DeletedLessons(props) {
                                                     }
                                                     if (column.id === 'teacher') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.teacher.firstName + ' ' + row.teacher.lastName}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'student') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.student.firstName + ' ' + row.student.lastName}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'date') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.lessonDate}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'time') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.lessonTime}
                                                             </TableCell>
                                                         )
@@ -157,16 +157,9 @@ function DeletedLessons(props) {
     )
 }
 
-DeletedLessons.propTypes = {
-    lessons: PropTypes.object,
-    lessonsLoading: PropTypes.bool.isRequired,
-    getAllLessons: PropTypes.func.isRequired,
-    deleteLesson: PropTypes.func.isRequired,
-};
-
 DeletedLessons.defaultProps = {
     lessons: {},
-}
+};
 
 const mapStateToProps = ({deletedLessons}) => {
     return {

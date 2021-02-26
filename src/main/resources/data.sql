@@ -84,11 +84,11 @@ VALUES
   (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, 1, '2020-08-25', 'ROOM3', '2020-10-05', '12:00', 2, false );
 
 INSERT INTO deleted_lesson
-  (id, date_created, date_modified, lesson_id, lesson_date, reason)
+  (id, date_created, date_modified, student_id, teacher_id, lesson_id, lesson_date, reason)
 VALUES
-  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, '2020-10-19', 'puk'),
-  (1, '2020-01-29 21:30:00', '2020-02-29 21:30:00',2, '2020-10-21', 'puk');
-
+  (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 1, 1, 1, '2020-08-24', 'puk-puk'),
+  (3, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 2, 1, 2, '2020-02-24', 'puk-puk'),
+  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 1, 2, 3, '2020-08-25', 'puk-puk');
 
 INSERT INTO credits
   (id, date_created, date_modified, student, teacher, lesson_id, lesson_date, lesson_time)
