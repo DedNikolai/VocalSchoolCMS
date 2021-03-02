@@ -1,6 +1,7 @@
 package com.app.dto.request;
 
 import com.app.model.Room;
+import com.app.model.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -17,4 +18,6 @@ public class TransferLessonRequest {
   @JsonFormat(pattern="yyyy-MM-dd")
   private Date transferDate;
   private String transferTime;
+  private Status status;
+  private Boolean isActive;
 }

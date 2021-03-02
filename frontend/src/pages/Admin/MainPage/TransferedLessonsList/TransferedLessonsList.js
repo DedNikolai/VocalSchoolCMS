@@ -86,12 +86,12 @@ function TransferedLessonsList(props) {
                                 <TableBody>
                                     {tarnsferedLessons.map(row => {
                                         return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                                 {columns.map(column => {
                                                     const value = row[column.id];
-                                                    if (column.id === 'actions' && !row.status) {
+                                                    if (column.id === 'actions' && row.status != 'CONFIRMED') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 <IconButton>
                                                                     <NavLink to={`/admin/lessons/transfer/edit/${row.id}`}>
                                                                         <EditIcon/>
@@ -100,57 +100,54 @@ function TransferedLessonsList(props) {
                                                                 <IconButton onClick={() => confirmTrasferedLesson(row)}>
                                                                     <CheckBoxIcon/>
                                                                 </IconButton>
-                                                                <IconButton onClick={() => deleteTrasferedLesson(row.id)}>
-                                                                    <CancelIcon/>
-                                                                </IconButton>
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'discipline') {
                                                         return (
-                                                            <TableCell align={column.align}>
+                                                            <TableCell align={column.align} key={column.id}>
                                                                 {row.lesson.discipline}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'time') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.transferTime}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'duration') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.lesson.duration}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'room') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.room}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'teacher') {
                                                         return (
-                                                            <TableCell align={column.align}>
+                                                            <TableCell align={column.align} key={column.id}>
                                                                 {row.teacher.firstName + ' ' + row.teacher.lastName}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'student') {
                                                         return (
-                                                            <TableCell align={column.align}>
+                                                            <TableCell align={column.align} key={column.id}>
                                                                 {row.lesson.student.firstName + ' ' + row.lesson.student.lastName}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'date') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.lessonDate}
                                                             </TableCell>
                                                         )

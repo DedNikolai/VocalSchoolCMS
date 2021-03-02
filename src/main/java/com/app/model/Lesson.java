@@ -18,6 +18,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -74,5 +75,10 @@ public class Lesson extends BaseEntiy {
 
   @Column(name = "is_active")
   private Boolean isActive = true;
+
+  @OneToMany(mappedBy = "lesson")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  private List<TransferLesson> transferLessons;
 
 }

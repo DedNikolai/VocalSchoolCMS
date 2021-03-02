@@ -28,7 +28,21 @@ export const getDeletedLessonById = id => dispatch => {
 export const rejectLesson = (lesson, date) => dispatch => {
     api.post(`/deleted-lessons`, lesson).then(res => {
         if (res.status >= 200 && res.status < 300) {
-            toastr.success('Lesson rejected');
+            if (res.data.success) {
+                toastr.success(res.data.message);
+                dispatch(getLessonsByDate(date));
+            } else toastr.error(res.data.message);
+        }
+    })
+};
+
+export const deleteLesson = (id, page, size) => dispatch => {
+    api.deleteApi(`/deleted-lessons/${id}`).then(res => {
+        if (res.status === 200) {
+            if (res.data.success) {
+                toastr.success(res.data.message);
+                dispatch(getAllLessons(page, size))
+            } else toastr.error(res.data.message)
         }
     })
 };

@@ -56,7 +56,7 @@ public class ConfirmedLesson extends BaseEntiy {
   @EqualsAndHashCode.Exclude
   private Abonement abonement;
 
-  @Column(name = "paid")
-  private Boolean isPaid;
+  @Column(name = "paid", columnDefinition = "boolean default false")
+  private Boolean isPaid = false;
 
 }

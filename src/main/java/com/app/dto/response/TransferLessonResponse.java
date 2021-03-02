@@ -26,4 +26,5 @@ public class TransferLessonResponse {
   private Date transferDate;
   private String transferTime;
   private Status status;
+  private Boolean isActive;
 }

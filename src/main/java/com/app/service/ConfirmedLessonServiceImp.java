@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,6 +57,7 @@ public class ConfirmedLessonServiceImp implements ConfirmedLessonService {
     }
 
     confirmedLesson.setAbonement(abonement);
+    confirmedLesson.setIsPaid(false);
     ConfirmedLesson savedConfirmedLesson = confirmedLessonRepository.save(confirmedLesson);
     abonement.getConfirmedLessons().add(savedConfirmedLesson);
     abonement.setUsedLessons(abonement.getUsedLessons()+1);
@@ -75,16 +77,24 @@ public class ConfirmedLessonServiceImp implements ConfirmedLessonService {
 
   @Override
   @Transactional
-  public void deleteLesson(Long id) {
+  public ApiResponse deleteLesson(Long id) {
     ConfirmedLesson lessonFromDb = confirmedLessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));
-    Abonement abonement = abonementRepository.findFirstByConfirmedLessonsContains(lessonFromDb);
-    if (abonement != null) {
-      abonement.setUsedLessons(abonement.getUsedLessons() - 1);
-      abonement.setIsActive(true);
-      abonementRepository.save(abonement);
+
+    if (lessonFromDb.getIsPaid()) {
+      return new  ApiResponse(false, "Не можна відаляты проплаченый урок");
     }
 
+    Abonement abonement = abonementRepository.findFirstByConfirmedLessonsContains(lessonFromDb);
+    Set<ConfirmedLesson> confirmedLessons = abonement.getConfirmedLessons().
+        stream().filter(confirmedLesson -> confirmedLesson.getId() != lessonFromDb.getId()).collect(Collectors.toSet());
+    abonement.setConfirmedLessons(confirmedLessons);
+    abonement.setUsedLessons(abonement.getUsedLessons() - 1);
+    abonement.setIsActive(true);
+    abonementRepository.save(abonement);
+
     confirmedLessonRepository.delete(lessonFromDb);
+
+    return new ApiResponse(true, "Урок відалено");
   }
 
   @Override

@@ -12,4 +12,6 @@ public class DeletedLessonRequest {
   @JsonFormat(pattern="yyyy-MM-dd")
   private Date lessonDate;
   private String reason;
+  private StudentRequest student;
+  private TeacherRequest teacher;
 }

@@ -1,6 +1,7 @@
 package com.app.facade;
 
 import com.app.dto.request.DeletedLessonRequest;
+import com.app.dto.response.ApiResponse;
 import com.app.dto.response.DeletedLessonResponse;
 import com.app.model.DeletedLesson;
 import com.app.service.DeletedLessonService;
@@ -21,10 +22,10 @@ public class DeletedLessonFacade {
     return modelMapper.map(deletedLesson, DeletedLessonResponse.class);
   }
 
-  public DeletedLessonResponse createLesson(DeletedLessonRequest request) {
+  public ApiResponse createLesson(DeletedLessonRequest request) {
     DeletedLesson lesson = modelMapper.map(request, DeletedLesson.class);
-    DeletedLesson deletedLesson = deletedLessonService.createLesson(lesson);
-    return modelMapper.map(deletedLesson, DeletedLessonResponse.class);
+    ApiResponse response = deletedLessonService.createLesson(lesson);
+    return response;
   }
 
   public Page<DeletedLessonResponse> findAll(Pageable pageable) {
@@ -32,8 +33,8 @@ public class DeletedLessonFacade {
     return lessons.map(deletedLesson -> modelMapper.map(deletedLesson, DeletedLessonResponse.class));
   }
 
-  public void deleteLesson(Long id) {
-    deletedLessonService.deleteLesson(id);
+  public ApiResponse deleteLesson(Long id) {
+   return deletedLessonService.deleteLesson(id);
   }
 
   public DeletedLessonResponse updateDeletedLesson(DeletedLessonRequest request, Long id) {

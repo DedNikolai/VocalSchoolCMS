@@ -1,6 +1,7 @@
 package com.app.controller;
 
 import com.app.dto.request.DeletedLessonRequest;
+import com.app.dto.response.ApiResponse;
 import com.app.dto.response.DeletedLessonResponse;
 import com.app.dto.view.View;
 import com.app.facade.DeletedLessonFacade;
@@ -43,16 +44,16 @@ public class DeletedLessonController {
 
   @PostMapping
   @JsonView(View.DeletedLesson.class)
-  public ResponseEntity<DeletedLessonResponse> createLesson(@RequestBody DeletedLessonRequest request) {
-    DeletedLessonResponse response = deletedLessonFacade.createLesson(request);
+  public ResponseEntity<ApiResponse> createLesson(@RequestBody DeletedLessonRequest request) {
+    ApiResponse response = deletedLessonFacade.createLesson(request);
     return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 
   @DeleteMapping("{id}")
   @JsonView(View.DeletedLesson.class)
-  public ResponseEntity<Void> deletLesson(@PathVariable Long id) {
-    deletedLessonFacade.deleteLesson(id);
-    return ResponseEntity.noContent().build();
+  public ResponseEntity<ApiResponse> deletLesson(@PathVariable Long id) {
+    ApiResponse response = deletedLessonFacade.deleteLesson(id);
+    return ResponseEntity.ok(response);
   }
 
   @GetMapping

@@ -46,9 +46,9 @@ public class ConfirmedLessonController {
 
   @DeleteMapping("{id}")
   @JsonView(View.ConfirmedLesson.class)
-  public ResponseEntity<Void> deletLesson(@PathVariable Long id) {
-    confirmedLessonFacade.deleteLesson(id);
-    return ResponseEntity.noContent().build();
+  public ResponseEntity<ApiResponse> deletLesson(@PathVariable Long id) {
+    ApiResponse response = confirmedLessonFacade.deleteLesson(id);
+    return ResponseEntity.ok(response);
   }
 
   @GetMapping

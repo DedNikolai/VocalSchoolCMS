@@ -28,8 +28,10 @@ export const createConfirmedLesson = (lesson, date) => dispatch => {
 export const deleteConfirmedLesson = (id, page, size) => dispatch => {
     api.deleteApi(`/confirmed-lessons/${id}`).then(res => {
         if (res.status >= 200 && res.status < 300) {
-            toastr.success('Lesson deleted');
-            dispatch(getAllLessons(page, size))
+            if (res.data.success) {
+                toastr.success(res.data.message);
+                dispatch(getAllLessons(page, size))
+            } else toastr.error(res.data.message);
         }
     })
 };

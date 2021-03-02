@@ -12,10 +12,12 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import IconButton from '@material-ui/core/IconButton';
-import {getAllLessons} from "../../../store/actions/transferLessons";
+import {getAllLessons, deleteTrasferLesson} from "../../../store/actions/transferLessons";
 import Preloader from '../../../components/Preloader/index';
 import {rowsPerPage} from '../../../constants/view';
 import './TransferLessons.scss'
+import EditIcon from '@material-ui/icons/Edit';
+import {NavLink} from 'react-router-dom';
 
 const columns = [
     { id: 'date', label: 'Дата', minWidth: 150, align: 'center' },
@@ -47,7 +49,7 @@ const useStyles = makeStyles({
 
 function TransferLessons(props) {
     const classes = useStyles();
-    const {lessons, lessonsLoading, getLessons} = props;
+    const {lessons, lessonsLoading, getLessons, deleteLesson} = props;
     const {content = [], totalElements, number} = lessons;
 
     const handleChangePage = (event, page) => {
@@ -90,12 +92,22 @@ function TransferLessons(props) {
                                                     if (column.id === 'actions') {
                                                         return (
                                                             <TableCell className={classes.cell} key={column.id}>
-                                                                <IconButton onClick={() => {}}>
+                                                                <IconButton onClick={() => deleteLesson(row.id, 0, rowsPerPage)}>
                                                                     <DeleteOutline/>
                                                                 </IconButton>
+                                                                {
+                                                                    row.status != 'CONFIRMED' ?
+                                                                        <IconButton>
+                                                                            <NavLink to={`/admin/lessons/transfer/edit/${row.id}`}>
+                                                                                <EditIcon/>
+                                                                            </NavLink>
+                                                                        </IconButton> : null
+
+                                                                }
                                                             </TableCell>
                                                         )
                                                     }
+
                                                     if (column.id === 'teacher') {
                                                         return (
                                                             <TableCell className={classes.cell} key={column.id}>
@@ -156,6 +168,7 @@ const mapStateToProps = ({transferLessons}) => {
 
 const mapDispatchToProps = dispatch => ({
     getLessons: (page, size) => dispatch(getAllLessons(page, size)),
+    deleteLesson: (id, page, size) => dispatch(deleteTrasferLesson(id, page, size))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TransferLessons);

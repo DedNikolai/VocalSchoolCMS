@@ -48,25 +48,25 @@ export const getTransferLessonById = id => dispatch => {
 }
 
 export const updateTransferLesson = (lesson, id) => dispatch => {
-    dispatch({type: TYPES.TRANSFERED_LESSON_BY_ID_LOADING, payload: true})
     api.put(`/transfered-lessons/${id}`, lesson).then(res => {
         if (res.status >= 200 && res.status < 300) {
-            dispatch({type: TYPES.SAVE_TRANSFERED_LESSON_BY_ID, payload: res.data})
-            toastr.success('Transfer Lesson updated');
+            if (res.data.success) {
+                toastr.success(res.data.message);
+            } else toastr.error(res.data.message);
         }
-    }).finally(() => {
-        dispatch({type: TYPES.TRANSFERED_LESSON_BY_ID_LOADING, payload: false})
     })
-}
+};
 
-export const deleteTrasferLesson = (id, date) => dispatch => {
+export const deleteTrasferLesson = (id, page, size) => dispatch => {
     api.deleteApi(`/transfered-lessons/${id}`).then(res => {
         if (res.status >= 200 && res.status < 300) {
-            toastr.success('trasfer lesson was deleted');
-            dispatch(getTransferedLessonsByDate(date));
+            if (res.data.success) {
+                toastr.success(res.data.message);
+                dispatch(getAllLessons(page, size));
+            } else toastr.error(res.data.message)
         }
     })
-}
+};
 
 export const confirmTransferedLesson = (lesson, date, transferLessonId) => dispatch => {
     api.post(`/transfered-lessons/${transferLessonId}/confirm`, lesson).then(res => {
@@ -74,7 +74,7 @@ export const confirmTransferedLesson = (lesson, date, transferLessonId) => dispa
             if (res.data.success) {
                 toastr.success(res.data.message);
                 dispatch(getTransferedLessonsByDate(date));
-            }
+            } else toastr.error(res.data.message);
         }
     })
 };

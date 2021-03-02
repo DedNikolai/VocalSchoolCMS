@@ -87,9 +87,9 @@ function StudentTransfers(props) {
                                     <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                                         {columns.map(column => {
                                             const value = row[column.id];
-                                            if (column.id === 'actions' && !row.status) {
+                                            if (column.id === 'actions' && row.status != 'CONFIRMED') {
                                                 return (
-                                                    <TableCell className={classes.cell}>
+                                                    <TableCell className={classes.cell} key={column.id}>
                                                         <IconButton>
                                                             <NavLink to={`/admin/lessons/transfer/edit/${row.id}`}>
                                                                 <EditIcon/>
@@ -97,9 +97,6 @@ function StudentTransfers(props) {
                                                         </IconButton>
                                                         <IconButton onClick={() => confirmTrasferedLesson(row)}>
                                                             <CheckBoxIcon/>
-                                                        </IconButton>
-                                                        <IconButton onClick={() => deleteTrasferedLesson(row.id)}>
-                                                            <CancelIcon/>
                                                         </IconButton>
                                                     </TableCell>
                                                 )

@@ -80,8 +80,8 @@ VALUES
 INSERT INTO transfer_lessons
   (id, date_created, date_modified, teacher, lesson_id, lesson_date, room, transfer_date, transfer_time, abonement, is_active)
 VALUES
-  (1, '2020-09-09 21:30:00', '2020-01-29 21:30:00', 1, 1, '2020-09-07', 'ROOM1', '2021-02-16', '10:30', 1, true ),
-  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, 1, '2020-08-25', 'ROOM3', '2020-10-05', '12:00', 2, false );
+  (1, '2020-09-09 21:30:00', '2020-01-29 21:30:00', 1, 1, '2020-09-07', 'ROOM1', '2021-03-01', '10:30', 1, true ),
+  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, 1, '2020-08-25', 'ROOM3', '2021-03-01', '12:00', 2, false );
 
 INSERT INTO deleted_lesson
   (id, date_created, date_modified, student_id, teacher_id, lesson_id, lesson_date, reason)

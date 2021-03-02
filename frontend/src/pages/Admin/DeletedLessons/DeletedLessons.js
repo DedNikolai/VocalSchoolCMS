@@ -12,7 +12,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import IconButton from '@material-ui/core/IconButton';
-import {getAllLessons} from "../../../store/actions/deletedLesson";
+import {getAllLessons, deleteLesson} from "../../../store/actions/deletedLesson";
 import Preloader from '../../../components/Preloader/index';
 import {colors, rowsPerPage} from '../../../constants/view';
 import SearchIcon from '@material-ui/icons/Search';
@@ -49,7 +49,7 @@ const useStyles = makeStyles({
 
 function DeletedLessons(props) {
     const classes = useStyles();
-    const {lessons, lessonsLoading, getLessons, deleteLesson} = props;
+    const {lessons, lessonsLoading, getLessons, deletelessonById} = props;
     const {content = [], totalElements, number} = lessons;
 
     const handleChangePage = (event, page) => {
@@ -59,7 +59,6 @@ function DeletedLessons(props) {
     useEffect(() => {
         getLessons(0, rowsPerPage);
     }, []);
-
     return (
         <div className='lessons-list'>
             {
@@ -92,7 +91,7 @@ function DeletedLessons(props) {
                                                     if (column.id === 'actions') {
                                                         return (
                                                             <TableCell className={classes.cell} key={row.id}>
-                                                                <IconButton onClick={() => {}}>
+                                                                <IconButton onClick={() => deletelessonById(row.id, 0, rowsPerPage)}>
                                                                     <DeleteOutline/>
                                                                 </IconButton>
                                                                 <NavLink to={`/admin/deleted-lessons/${row.id}`} className='main-menu__item'>
@@ -170,6 +169,7 @@ const mapStateToProps = ({deletedLessons}) => {
 
 const mapDispatchToProps = dispatch => ({
     getLessons: (page, size) => dispatch(getAllLessons(page, size)),
+    deletelessonById: (id, page, size) => dispatch(deleteLesson(id, page, size)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DeletedLessons);
