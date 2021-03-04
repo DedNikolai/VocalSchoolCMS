@@ -19,7 +19,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { withStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
-import './ConfirmedLessons.scss'
+import './ConfirmedLessons.scss';
+import {NavLink} from 'react-router-dom';
+import Edit from '@material-ui/icons/Edit';
 
 const columns = [
     { id: 'date', label: 'Дата', minWidth: 150, align: 'center' },
@@ -111,6 +113,11 @@ function ConfirmedLessons(props) {
                                                     <TableCell className={classes.cell} key={column.id}>
                                                         <IconButton onClick={() => deleteLesson(row.id, 0, rowsPerPage)}>
                                                             <DeleteOutline/>
+                                                        </IconButton>
+                                                        <IconButton>
+                                                            <NavLink to={`/admin/confirmed-lessons/edit/${row.id}`}>
+                                                                <Edit/>
+                                                            </NavLink>
                                                         </IconButton>
                                                     </TableCell>
                                                 )

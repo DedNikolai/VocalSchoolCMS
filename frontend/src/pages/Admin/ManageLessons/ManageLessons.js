@@ -1,9 +1,8 @@
 import React, {useEffect} from 'react';
-import {NavLink, Redirect} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import {createLesson, getLessonById, getLessonsByDay, updateLesson} from "../../../store/actions/lesson";
 import {getAllTeachers} from "../../../store/actions/teacher";
 import {connect} from "react-redux";
-import PropTypes from 'prop-types';
 import Preloader from '../../../components/Preloader/index';
 import Paper from '@material-ui/core/Paper';
 import {makeStyles, ThemeProvider, useTheme} from '@material-ui/core/styles';
@@ -112,8 +111,7 @@ function ManageLessons(props) {
         validate,
         enableReinitialize: true,
         onSubmit: value => {
-            console.log(value);
-            // updateLesson(id, value);
+            updateLesson(id, value);
         },
     });
 
@@ -393,19 +391,6 @@ function ManageLessons(props) {
         </Paper>
     )
 }
-
-ManageLessons.propTypes = {
-    lesson: PropTypes.object,
-    lessonLoading: PropTypes.bool.isRequired,
-    getLesson: PropTypes.func.isRequired,
-    createLesson: PropTypes.func.isRequired,
-    updateLesson: PropTypes.func.isRequired,
-    allTeachersLoading: PropTypes.bool.isRequired,
-    allTeachers: PropTypes.array,
-    getTeachers: PropTypes.func.isRequired,
-    lessonsByDayLoading: PropTypes.bool.isRequired,
-    getAllLessonsByCurrentDay: PropTypes.func.isRequired,
-};
 
 ManageLessons.defaultProps = {
     lesson: {},

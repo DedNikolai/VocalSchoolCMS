@@ -65,7 +65,8 @@ public class TransferLessonServiceImpl implements TransferLessonService{
       throw new AppException("Lesson status is checked");
     }
 
-    Abonement abonement = abonementRepository.findFirstByStudentAndIsActiveTrueOrderByCreatedDate(request.getLesson().getStudent());
+    Abonement abonement = abonementRepository.
+        findFirstByStudentAndDisciplineAndIsActiveTrueOrderByCreatedDate(request.getLesson().getStudent(), request.getLesson().getDiscipline());
 
     if (abonement == null) {
       return new ApiResponse(false, "В даного учня немає проплачених занять");

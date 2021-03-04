@@ -50,7 +50,8 @@ public class ConfirmedLessonServiceImp implements ConfirmedLessonService {
       throw new AppException("Lesson status is checked");
     }
 
-    Abonement abonement = abonementRepository.findFirstByStudentAndIsActiveTrueOrderByCreatedDate(confirmedLesson.getStudent());
+    Abonement abonement = abonementRepository.
+        findFirstByStudentAndDisciplineAndIsActiveTrueOrderByCreatedDate(confirmedLesson.getStudent(), confirmedLesson.getLesson().getDiscipline());
 
     if (abonement == null) {
       return new ApiResponse(false, "В даного учня немає проплачених занять");
@@ -69,10 +70,11 @@ public class ConfirmedLessonServiceImp implements ConfirmedLessonService {
   }
 
   @Override
-  public ConfirmedLesson updateLesson(ConfirmedLesson confirmedLesson, Long id) {
+  public ApiResponse updateLesson(ConfirmedLesson confirmedLesson, Long id) {
     ConfirmedLesson lessonFromDb = confirmedLessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));
     confirmedLesson.setId(lessonFromDb.getId());
-    return confirmedLessonRepository.save(confirmedLesson);
+    confirmedLessonRepository.save(confirmedLesson);
+    return new ApiResponse(true, "Дані про заняття змінено");
   }
 
   @Override

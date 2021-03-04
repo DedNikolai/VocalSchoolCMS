@@ -71,11 +71,11 @@ VALUES
   (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, 2, 8, 2000, 'VOCAL', 2, true, 1);
 
 INSERT INTO confirmed_lesson
-  (id, date_created, date_modified, price, student, teacher, lesson_id, lesson_date, abonement, paid)
+  (id, date_created, date_modified, price, student, teacher, lesson_id, lesson_date, abonement, paid, lesson_time)
 VALUES
-  (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 300, 1, 1, 1, '2020-08-24', 1, false ),
-  (3, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 300, 1, 1, 1, '2020-02-24', 1, false),
-  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 500, 2, 2, 1, '2020-08-25', 1, false);
+  (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 300, 1, 1, 1, '2020-08-24', 1, false, '12:00'),
+  (3, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 300, 1, 1, 1, '2020-02-24', 1, false, '12:00'),
+  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 500, 2, 2, 1, '2020-08-25', 1, false, '12:00');
 
 INSERT INTO transfer_lessons
   (id, date_created, date_modified, teacher, lesson_id, lesson_date, room, transfer_date, transfer_time, abonement, is_active)

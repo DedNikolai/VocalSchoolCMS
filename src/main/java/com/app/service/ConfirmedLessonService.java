@@ -13,7 +13,7 @@ public interface ConfirmedLessonService {
 
   ApiResponse createLesson(ConfirmedLesson confirmedLesson);
 
-  ConfirmedLesson updateLesson(ConfirmedLesson confirmedLesson, Long id);
+  ApiResponse updateLesson(ConfirmedLesson confirmedLesson, Long id);
 
   ApiResponse deleteLesson(Long id);
 

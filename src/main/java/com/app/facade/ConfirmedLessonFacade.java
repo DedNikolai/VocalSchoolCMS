@@ -51,4 +51,9 @@ public class ConfirmedLessonFacade {
   public ApiResponse payAllConfirmedLessons(Long teacherId) {
     return confirmedLessonService.payAllConfirmedLessons(teacherId);
   }
+
+  public ApiResponse updateLesson(ConfirmedLessonRequest request, Long id) {
+    ConfirmedLesson confirmedLesson = modelMapper.map(request, ConfirmedLesson.class);
+    return confirmedLessonService.updateLesson(confirmedLesson, id);
+  }
 }

@@ -35,3 +35,24 @@ export const deleteConfirmedLesson = (id, page, size) => dispatch => {
         }
     })
 };
+
+export const getLessonById = (id) => dispatch => {
+    dispatch({type: TYPES.CONFIRMED_LESSON_BY_ID_LOADING, payload: true})
+    api.get(`/confirmed-lessons/${id}`).then(res => {
+        if (res.status === 200) {
+            dispatch({type: TYPES.SAVE_CONFIRMED_LESSON_BY_ID, payload: res.data})
+        }
+    }).finally(() => {
+        dispatch({type: TYPES.CONFIRMED_LESSON_BY_ID_LOADING, payload: false})
+    })
+};
+
+export const updateConfirmedLesson = (lesson, id) => dispatch => {
+    api.put(`/confirmed-lessons/${id}`, lesson).then(res => {
+        if (res.status === 200) {
+            if (res.data.success) {
+                toastr.success(res.data.message);
+            } else toastr.error(res.data.message)
+        }
+    })
+};

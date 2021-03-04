@@ -78,4 +78,10 @@ public class ConfirmedLessonController {
     ApiResponse response = confirmedLessonFacade.payAllConfirmedLessons(id);
     return ResponseEntity.ok(response);
   }
+
+  @PutMapping("{id}")
+  public ResponseEntity<ApiResponse> updateLesson(@RequestBody ConfirmedLessonRequest request, @PathVariable Long id) {
+    ApiResponse response = confirmedLessonFacade.updateLesson(request, id);
+    return ResponseEntity.ok(response);
+  }
 }
