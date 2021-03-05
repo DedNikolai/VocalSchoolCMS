@@ -84,7 +84,7 @@ function StudentTransfers(props) {
                         <TableBody>
                             {tarnsferedLessons.map(row => {
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                         {columns.map(column => {
                                             const value = row[column.id];
                                             if (column.id === 'actions' && row.status != 'CONFIRMED') {
@@ -103,42 +103,42 @@ function StudentTransfers(props) {
                                             }
                                             if (column.id === 'discipline') {
                                                 return (
-                                                    <TableCell align={column.align}>
+                                                    <TableCell align={column.align} key={column.id}>
                                                         {row.lesson.discipline}
                                                     </TableCell>
                                                 )
                                             }
                                             if (column.id === 'time') {
                                                 return (
-                                                    <TableCell className={classes.cell}>
+                                                    <TableCell className={classes.cell} key={column.id}>
                                                         {row.transferTime}
                                                     </TableCell>
                                                 )
                                             }
                                             if (column.id === 'duration') {
                                                 return (
-                                                    <TableCell className={classes.cell}>
+                                                    <TableCell className={classes.cell} key={column.id}>
                                                         {row.lesson.duration}
                                                     </TableCell>
                                                 )
                                             }
                                             if (column.id === 'room') {
                                                 return (
-                                                    <TableCell className={classes.cell}>
+                                                    <TableCell className={classes.cell} key={column.id}>
                                                         {row.room}
                                                     </TableCell>
                                                 )
                                             }
                                             if (column.id === 'teacher') {
                                                 return (
-                                                    <TableCell align={column.align}>
+                                                    <TableCell align={column.align} key={column.id}>
                                                         {row.teacher.firstName + ' ' + row.teacher.lastName}
                                                     </TableCell>
                                                 )
                                             }
                                             if (column.id === 'date') {
                                                 return (
-                                                    <TableCell className={classes.cell}>
+                                                    <TableCell className={classes.cell} key={column.id}>
                                                         {row.lessonDate.split('-').reverse().join('-')}
                                                     </TableCell>
                                                 )

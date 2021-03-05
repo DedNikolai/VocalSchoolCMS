@@ -98,7 +98,7 @@ function TransferLessons(props) {
                                                                 {
                                                                     row.status != 'CONFIRMED' ?
                                                                         <IconButton>
-                                                                            <NavLink to={`/admin/lessons/transfer/edit/${row.id}`}>
+                                                                            <NavLink to={`/admin/transfer-lessons/edit/${row.id}`}>
                                                                                 <EditIcon/>
                                                                             </NavLink>
                                                                         </IconButton> : null

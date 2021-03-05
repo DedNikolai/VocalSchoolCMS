@@ -231,7 +231,7 @@ function ManageConfirmedLesson(props) {
                     />
                 </div>
                 <div className='buttons-container'>
-                    <NavLink to='/admin/lessons'>
+                    <NavLink to='/admin/confirmed-lessons'>
                         <Button
                             variant="contained"
                             color="secondary"
