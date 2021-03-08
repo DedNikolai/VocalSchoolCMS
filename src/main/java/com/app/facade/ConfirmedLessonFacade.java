@@ -35,8 +35,8 @@ public class ConfirmedLessonFacade {
     return lessons.map(confirmedLesson -> modelMapper.map(confirmedLesson, ConfirmedLessonResponse.class));
   }
 
-  public void deleteLesson(Long id) {
-    confirmedLessonService.deleteLesson(id);
+  public ApiResponse deleteLesson(Long id) {
+    return confirmedLessonService.deleteLesson(id);
   }
 
   public List<ConfirmedLessonResponse> findAllByTeacherNoPaid(Long teacherId) {
@@ -50,5 +50,10 @@ public class ConfirmedLessonFacade {
 
   public ApiResponse payAllConfirmedLessons(Long teacherId) {
     return confirmedLessonService.payAllConfirmedLessons(teacherId);
+  }
+
+  public ApiResponse updateLesson(ConfirmedLessonRequest request, Long id) {
+    ConfirmedLesson confirmedLesson = modelMapper.map(request, ConfirmedLesson.class);
+    return confirmedLessonService.updateLesson(confirmedLesson, id);
   }
 }

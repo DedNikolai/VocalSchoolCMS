@@ -32,4 +32,6 @@ public class LessonResponse {
   private Integer duration;
   private Status status;
   private Date createdDate;
+  private Boolean isTestLesson;
+  private Date lessonDate;
 }

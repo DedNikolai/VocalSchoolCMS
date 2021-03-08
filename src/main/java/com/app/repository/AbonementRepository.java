@@ -2,6 +2,7 @@ package com.app.repository;
 
 import com.app.model.Abonement;
 import com.app.model.ConfirmedLesson;
+import com.app.model.Discipline;
 import com.app.model.Student;
 import com.app.model.TransferLesson;
 import org.springframework.data.domain.Page;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Repository;
 public interface AbonementRepository extends JpaRepository<Abonement, Long> {
   Page<Abonement> findAllByOrderByCreatedDateDesc(Pageable pageable);
 
-  Abonement findFirstByStudentAndIsActiveTrueOrderByCreatedDate(Student student);
+  Abonement findFirstByStudentAndDisciplineAndIsActiveTrueOrderByCreatedDate(Student student, Discipline discipline);
 
   Abonement findFirstByConfirmedLessonsContains(ConfirmedLesson confirmedLesson);
 

@@ -1,5 +1,6 @@
 package com.app.service;
 
+import com.app.dto.response.ApiResponse;
 import com.app.exeption.AppException;
 import com.app.exeption.ResourceNotFoundException;
 import com.app.model.ConfirmedLesson;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,7 +30,8 @@ public class DeletedLessonServiceImp implements DeletedLessonService {
   }
 
   @Override
-  public DeletedLesson createLesson(DeletedLesson deletedLesson) {
+  @Transactional
+  public ApiResponse createLesson(DeletedLesson deletedLesson) {
     List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(deletedLesson.getLessonDate());
     List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(deletedLesson.getLessonDate());
     List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(deletedLesson.getLessonDate());
@@ -38,7 +41,8 @@ public class DeletedLessonServiceImp implements DeletedLessonService {
     if (confirmed || transfered  || deleted) {
       throw new AppException("Lesson status is checked");
     }
-    return deletedLessonRepository.save(deletedLesson);
+    deletedLessonRepository.save(deletedLesson);
+    return new ApiResponse(true, "Урок відмінено");
   }
 
   @Override
@@ -49,13 +53,14 @@ public class DeletedLessonServiceImp implements DeletedLessonService {
   }
 
   @Override
-  public void deleteLesson(Long id) {
+  public ApiResponse deleteLesson(Long id) {
     DeletedLesson lessonFromDb = deletedLessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));
     deletedLessonRepository.delete(lessonFromDb);
+    return new ApiResponse(true, "Відміну заняття скасовано");
   }
 
   @Override
   public Page<DeletedLesson> findAllOrderByDate(Pageable pageable) {
-    return deletedLessonRepository.findAllByOrderByCreatedDateAsc(pageable);
+    return deletedLessonRepository.findAllByOrderByCreatedDateDesc(pageable);
   }
 }

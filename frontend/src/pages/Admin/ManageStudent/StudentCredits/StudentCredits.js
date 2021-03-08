@@ -75,35 +75,35 @@ function StudentCredits(props) {
                                 <TableBody>
                                     {credits.map(row => {
                                         return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                                 {columns.map(column => {
                                                     const value = row[column.id];
                                                     if (column.id === 'actions') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
-                                                                <IconButton>
-                                                                    <DeleteOutline onClick={() => deleteCreditById(row.id, studentId)}/>
+                                                            <TableCell className={classes.cell} key={column.id}>
+                                                                <IconButton onClick={() => deleteCreditById(row.id, studentId)}>
+                                                                    <DeleteOutline/>
                                                                 </IconButton>
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'date') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.lessonDate.split('-').reverse().join('-')}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'teacher') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.teacher.firstName + ' ' + row.teacher.lastName}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'discipline') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.lesson.discipline}
                                                             </TableCell>
                                                         )

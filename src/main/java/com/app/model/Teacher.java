@@ -73,4 +73,9 @@ public class Teacher extends BaseEntiy {
   @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
   private Set<TeacherWorkTime> workTimes;
 
+  @OneToMany(mappedBy = "teacher")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  private List<TransferLesson> transferLessons;
+
 }

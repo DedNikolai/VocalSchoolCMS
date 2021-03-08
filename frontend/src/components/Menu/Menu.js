@@ -16,6 +16,8 @@ import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import ua from '../../languages/ua';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
+import CancelIcon from '@material-ui/icons/Cancel';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import './Menu.scss';
 
 const teacherPermissions = [Roles.TEACHER, Roles.ADMIN, Roles.SUPER_ADMIN];
@@ -80,23 +82,45 @@ function Menu(props) {
             }
             {
                 hasRoles(user, adminPermissions) &&
-                <NavLink to='/admin/lessons' className='main-menu__item'>
-                    <ListItem button>
-                        <ListItemIcon>
-                            <AttachMoneyIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={ua.menu.lessons} />
-                    </ListItem>
-                </NavLink>
-            }
-            {
-                hasRoles(user, adminPermissions) &&
                 <NavLink to='/admin/abonements' className='main-menu__item'>
                     <ListItem button>
                         <ListItemIcon>
                             <PlaylistAddCheckIcon />
                         </ListItemIcon>
                         <ListItemText primary={ua.menu.abonements} />
+                    </ListItem>
+                </NavLink>
+            }
+            {
+                hasRoles(user, adminPermissions) &&
+                <NavLink to='/admin/confirmed-lessons' className='main-menu__item'>
+                    <ListItem button>
+                        <ListItemIcon>
+                            <AttachMoneyIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={ua.menu.confirmedLessons} />
+                    </ListItem>
+                </NavLink>
+            }
+            {
+                hasRoles(user, adminPermissions) &&
+                <NavLink to='/admin/transfer-lessons' className='main-menu__item'>
+                    <ListItem button>
+                        <ListItemIcon>
+                            <ArrowForwardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={ua.menu.transferLessons} />
+                    </ListItem>
+                </NavLink>
+            }
+            {
+                hasRoles(user, adminPermissions) &&
+                <NavLink to='/admin/deleted-lessons' className='main-menu__item'>
+                    <ListItem button>
+                        <ListItemIcon>
+                            <CancelIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={ua.menu.deleted} />
                     </ListItem>
                 </NavLink>
             }

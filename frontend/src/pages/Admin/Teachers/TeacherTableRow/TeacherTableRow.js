@@ -38,7 +38,7 @@ function TeacherTableRow(props) {
                 const value = teacher[column.id];
                 if (column.id === 'actions') {
                     return (
-                        <TableCell className={classes.cell}>
+                        <TableCell className={classes.cell} key={column.id}>
                             <IconButton>
                                 <NavLink to={`/admin/teachers/edit/${teacher.id}`}>
                                     <Edit/>

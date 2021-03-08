@@ -9,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {isLesson, isFullLesson, findLessonId, isTimeClosed, isFreeTime} from "../../utils/timetable";
+import {findLessonId, isFreeTime, isFullLesson, isLesson, isTimeClosed} from "../../utils/timetable";
 import {NavLink} from 'react-router-dom';
 import './TimeTable.scss';
 
@@ -57,16 +57,16 @@ function TimeTable(props) {
     const classes = useStyles();
     const {lessons = [], freeTime = []} = props;
 
-    const daysList = days.map(day => <TableCell className={classes.headCell} colspan="4">{day}</TableCell>);
-    const roomsList = Array.apply(null, {length: 24}).map((room, index) => <TableCell className={classes.headCell} style={{top: 57}}>{index%4 + 1}</TableCell>);
+    const daysList = days.map(day => <TableCell key={day} className={classes.headCell} colSpan="4">{day}</TableCell>);
+    const roomsList = Array.apply(null, {length: 24}).map((room, index) => <TableCell key={index} className={classes.headCell} style={{top: 57}}>{index%4 + 1}</TableCell>);
     const timesList = times.map(time => {
         return (
-            <TableRow>
-                <TableCell className='lessons-timetable__cell lessons-timetable__cell--padding'><span className='lessons-timetable__cell-time' span>{time}</span></TableCell>
+            <TableRow key={time}>
+                <TableCell className='lessons-timetable__cell lessons-timetable__cell--padding'><span className='lessons-timetable__cell-time'>{time}</span></TableCell>
                 {Array.apply(null, {length: 24}).map((item, index) => {
                     return (
                         isLesson(lessons, time, index) ?
-                            <TableCell
+                            <TableCell key={index}
                                 className={`lessons-timetable__cell ${classes.lesson} ${isFullLesson(lessons, time, index) && 'lessons-timetable__cell--border-none'}`}
                                 // rowspan={isFullLesson(lessons, time, index) && 2}
                             >
@@ -79,18 +79,18 @@ function TimeTable(props) {
                             </TableCell>
                                 :
                             isTimeClosed(lessons, time, index) ?
-                                <TableCell
+                                <TableCell key={index}
                                     className='lessons-timetable__cell'
                                 >
                                 </TableCell>
                                 :
                             isFreeTime(freeTime, time, index) ?
-                                 <TableCell
+                                 <TableCell key={index}
                                      className='lessons-timetable__cell lessons-timetable__cell--grey'
                                  >
                                  </TableCell>
                                  :
-                                <TableCell
+                                <TableCell key={index}
                                      className='lessons-timetable__cell'
                                 >
                                 </TableCell>
@@ -107,7 +107,7 @@ function TimeTable(props) {
                 <Table stickyHeader aria-label="sticky table" className='lessons-timetable'>
                     <TableHead>
                         <TableRow>
-                            <TableCell className={classes.headCell} rowspan="2"></TableCell>
+                            <TableCell className={classes.headCell} rowSpan="2"></TableCell>
                             {daysList}
                         </TableRow>
                         <TableRow>

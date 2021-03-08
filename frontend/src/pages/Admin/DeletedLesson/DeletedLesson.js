@@ -114,10 +114,10 @@ function DeletedLesson(props) {
                 <div>
                     <TextField
                         id="time"
-                        type="time"
+                        type='text'
                         variant="outlined"
                         className={classes.textField}
-                        value={deletedLesson.lessonTime}
+                        value={deletedLesson.lesson.time}
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -155,16 +155,6 @@ function DeletedLesson(props) {
             </form>
         </Paper>
     )
-}
-
-DeletedLesson.propTypes = {
-    getDeletedLessonById: PropTypes.func.isRequired,
-    deletedLessonByIdLoading: PropTypes.bool.isRequired,
-    transferLesson: PropTypes.object,
-};
-
-DeletedLesson.defaultProps = {
-    deletedLesson: {}
 }
 
 const mapStateToProps = ({deletedLessons}) => {

@@ -12,7 +12,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import IconButton from '@material-ui/core/IconButton';
-import {getAllLessons} from "../../../store/actions/deletedLesson";
+import {getAllLessons, deleteLesson} from "../../../store/actions/deletedLesson";
 import Preloader from '../../../components/Preloader/index';
 import {colors, rowsPerPage} from '../../../constants/view';
 import SearchIcon from '@material-ui/icons/Search';
@@ -49,7 +49,7 @@ const useStyles = makeStyles({
 
 function DeletedLessons(props) {
     const classes = useStyles();
-    const {lessons, lessonsLoading, getLessons, deleteLesson} = props;
+    const {lessons, lessonsLoading, getLessons, deletelessonById} = props;
     const {content = [], totalElements, number} = lessons;
 
     const handleChangePage = (event, page) => {
@@ -59,7 +59,6 @@ function DeletedLessons(props) {
     useEffect(() => {
         getLessons(0, rowsPerPage);
     }, []);
-
     return (
         <div className='lessons-list'>
             {
@@ -86,14 +85,14 @@ function DeletedLessons(props) {
                                 <TableBody>
                                     {content.map(row => {
                                         return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                                 {columns.map(column => {
                                                     const value = row[column.id];
                                                     if (column.id === 'actions') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
-                                                                <IconButton>
-                                                                    <DeleteOutline onClick={() => {}}/>
+                                                            <TableCell className={classes.cell} key={row.id}>
+                                                                <IconButton onClick={() => deletelessonById(row.id, 0, rowsPerPage)}>
+                                                                    <DeleteOutline/>
                                                                 </IconButton>
                                                                 <NavLink to={`/admin/deleted-lessons/${row.id}`} className='main-menu__item'>
                                                                     <IconButton>
@@ -105,28 +104,28 @@ function DeletedLessons(props) {
                                                     }
                                                     if (column.id === 'teacher') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.teacher.firstName + ' ' + row.teacher.lastName}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'student') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.student.firstName + ' ' + row.student.lastName}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'date') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.lessonDate}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'time') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.lessonTime}
                                                             </TableCell>
                                                         )
@@ -157,16 +156,9 @@ function DeletedLessons(props) {
     )
 }
 
-DeletedLessons.propTypes = {
-    lessons: PropTypes.object,
-    lessonsLoading: PropTypes.bool.isRequired,
-    getAllLessons: PropTypes.func.isRequired,
-    deleteLesson: PropTypes.func.isRequired,
-};
-
 DeletedLessons.defaultProps = {
     lessons: {},
-}
+};
 
 const mapStateToProps = ({deletedLessons}) => {
     return {
@@ -177,6 +169,7 @@ const mapStateToProps = ({deletedLessons}) => {
 
 const mapDispatchToProps = dispatch => ({
     getLessons: (page, size) => dispatch(getAllLessons(page, size)),
+    deletelessonById: (id, page, size) => dispatch(deleteLesson(id, page, size)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DeletedLessons);

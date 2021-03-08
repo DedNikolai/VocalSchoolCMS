@@ -24,6 +24,28 @@ import {colors} from '../../../constants/view';
 import Disciplines from '../../../constants/disciplines';
 import {freeClasseForCurrentTime, freeTeacherTimes} from "../../../utils/timetable";
 import ua from "../../../languages/ua";
+import {green} from '@material-ui/core/colors';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { withStyles } from '@material-ui/core/styles';
+import 'date-fns';
+import Grid from '@material-ui/core/Grid';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardDatePicker,
+} from '@material-ui/pickers';
+import moment from 'moment';
+
+
+const GreenCheckbox = withStyles({
+    root: {
+        color: green[400],
+        '&$checked': {
+            color: green[600],
+        },
+    },
+    checked: {},
+})((props) => <Checkbox color="default" {...props} />);
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -63,6 +85,10 @@ const useStyles = makeStyles(theme => ({
         marginRight: theme.spacing(1),
         width: 200,
     },
+
+    paddingLeft: {
+        paddingLeft: '10px'
+    }
 }));
 
 const validate = values => {
@@ -165,6 +191,16 @@ function CreateLesson(props) {
     const handleChangeTime = event => {
         formik.setFieldValue('time', event.target.value);
         formik.setFieldValue('room', '');
+    };
+
+    const handleChangeistTest = (event) => {
+        formik.setFieldValue('isTestLesson', event.target.checked);
+        formik.setFieldValue('lessonDate', null);
+    };
+
+    const handleDateChange = (date) => {
+        const value = moment(date).format().slice(0, 10);
+        formik.setFieldValue('lessonDate', value);
     };
 
     if (changed && !student) {
@@ -371,6 +407,30 @@ function CreateLesson(props) {
                     }
 
                 </div>
+                <div className={classes.paddingLeft}>
+                    <FormControlLabel
+                        control={<GreenCheckbox checked={formik.values.isTestLesson} onChange={handleChangeistTest} name="isTestLesson" />}
+                        label="Пробний Урок"
+                    />
+                </div>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <Grid container>
+                        <KeyboardDatePicker
+                            disableToolbar
+                            variant="inline"
+                            format="dd/MM/yyyy"
+                            margin="normal"
+                            id="date-picker-inline"
+                            label="Дата пробного уроку"
+                            value={formik.values.lessonDate || null}
+                            onChange={handleDateChange}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                            disabled={!formik.values.isTestLesson}
+                        />
+                    </Grid>
+                </MuiPickersUtilsProvider>
                 <div className='buttons-container'>
                     <Button
                         variant="contained"

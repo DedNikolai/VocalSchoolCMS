@@ -49,6 +49,7 @@ const columns = [
     { id: 'room', label: 'Класс', minWidth: 50, align: 'center' },
     { id: 'duration', label: 'Трывалість', minWidth: 50, align: 'center' },
     { id: 'status', label: 'Статус', minWidth: 50, align: 'center' },
+    { id: 'isTest', label: 'Тестове заняття', minWidth: 50, align: 'center' },
     { id: 'actions', label: 'Дії', minWidth: 50, align: 'center' },
 ];
 
@@ -117,12 +118,12 @@ function MainPage(props) {
                                     <TableBody>
                                         {lessons.map(row => {
                                             return (
-                                                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                                <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                                     {columns.map(column => {
                                                         const value = row[column.id];
                                                         if (column.id === 'actions' && !row.status) {
                                                             return (
-                                                                <TableCell className={classes.cell}>
+                                                                <TableCell key={column.id} className={classes.cell}>
                                                                     <IconButton>
                                                                         <NavLink to={`/admin/lessons/transfer/${row.id}/date/${date}`}>
                                                                             <EditIcon/>
@@ -136,27 +137,33 @@ function MainPage(props) {
                                                                             <CancelIcon/>
                                                                         </NavLink>
                                                                     </IconButton>
-                                                                    <IconButton>
-                                                                        <CreditCardIcon onClick={() => createStudentCredit(row)} />
+                                                                    <IconButton onClick={() => createStudentCredit(row)}>
+                                                                        <CreditCardIcon/>
                                                                     </IconButton>
                                                                 </TableCell>
                                                             )
                                                         }
                                                         if (column.id === 'teacher') {
                                                             return (
-                                                                <TableCell className={classes.cell}>
+                                                                <TableCell key={column.id} className={classes.cell}>
                                                                     {row.teacher.firstName + ' ' + row.teacher.lastName}
                                                                 </TableCell>
                                                             )
                                                         }
                                                         if (column.id === 'student') {
                                                             return (
-                                                                <TableCell className={classes.cell}>
+                                                                <TableCell key={column.id} className={classes.cell}>
                                                                     {row.student.firstName + ' ' + row.student.lastName}
                                                                 </TableCell>
                                                             )
                                                         }
-
+                                                        if (column.id === 'isTest') {
+                                                            return (
+                                                                <TableCell key={column.id} className={classes.cell}>
+                                                                    {row.isTestLesson ? 'Тестове' : ''}
+                                                                </TableCell>
+                                                            )
+                                                        }
                                                         return (
                                                             <TableCell key={column.id} align={column.align}>
                                                                 {column.format && typeof value === 'number' ? column.format(value) : value}

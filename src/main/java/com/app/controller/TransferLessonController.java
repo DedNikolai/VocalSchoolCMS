@@ -55,8 +55,8 @@ public class TransferLessonController {
 
   @PutMapping("{id}")
   @JsonView(View.TransferLesson.class)
-  public ResponseEntity<TransferLessonResponse> updateLesson(@RequestBody TransferLessonRequest request, @PathVariable Long id) {
-    TransferLessonResponse response = transferLessonFacade.updateLesson(request, id);
+  public ResponseEntity<ApiResponse> updateLesson(@RequestBody TransferLessonRequest request, @PathVariable Long id) {
+    ApiResponse response = transferLessonFacade.updateLesson(request, id);
     return ResponseEntity.ok(response);
   }
 
@@ -69,9 +69,9 @@ public class TransferLessonController {
 
   @DeleteMapping("{id}")
   @JsonView(View.TransferLesson.class)
-  public ResponseEntity<Void> deleteLesson(@PathVariable Long id) {
-    transferLessonFacade.deleteLesson(id);
-    return ResponseEntity.noContent().build();
+  public ResponseEntity<ApiResponse> deleteLesson(@PathVariable Long id) {
+    ApiResponse response = transferLessonFacade.deleteLesson(id);
+    return ResponseEntity.ok(response);
   }
 
   @GetMapping("day/{date}")

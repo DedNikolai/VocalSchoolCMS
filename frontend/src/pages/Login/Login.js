@@ -102,7 +102,7 @@ function Login(props) {
                         autoComplete="email"
                         autoFocus
                         onChange={formik.handleChange}
-                        color={colors.primeryColor}
+                        color={'primary'}
                     />
                     <CssTextField
                         variant="outlined"
@@ -131,7 +131,7 @@ function Login(props) {
                     </Button>
                     <Grid container>
                         <Grid item xs>
-                            <Link href="/admin/forgot-password" variant="body2" color={colors.primeryColor}>
+                            <Link href="/admin/forgot-password" variant="body2" color={"primary"}>
                                 Forgot password?
                             </Link>
                         </Grid>

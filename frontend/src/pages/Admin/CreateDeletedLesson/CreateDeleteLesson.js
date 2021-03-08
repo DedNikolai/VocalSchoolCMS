@@ -1,7 +1,6 @@
-import React, {useEffect} from 'react';
-import {Redirect} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {NavLink, Redirect} from 'react-router-dom';
 import {connect} from "react-redux";
-import PropTypes from 'prop-types';
 import Preloader from '../../../components/Preloader/index';
 import Paper from '@material-ui/core/Paper';
 import {makeStyles, ThemeProvider, useTheme} from '@material-ui/core/styles';
@@ -14,7 +13,6 @@ import './CreateDeleteLesson.scss';
 import {colors} from '../../../constants/view';
 import {getLessonById} from '../../../store/actions/lesson';
 import {rejectLesson} from '../../../store/actions/deletedLesson';
-import {NavLink} from 'react-router-dom';
 
 
 const useStyles = makeStyles(theme => ({
@@ -66,19 +64,24 @@ function CreateDeleteLesson(props) {
     const classes = useStyles();
     const {currentLesson, currentLessonLoading, getLessonById, rejecrLesson} = props;
     const id = props.match.params.id;
+    const date = props.match.params.current;
     const lessonDate = new Date(props.match.params.current).toLocaleDateString().split('.').reverse().join('-');
     const theme = useTheme();
+    const [created, setCreated] = useState(false);
 
     const formik = useFormik({
         initialValues: {
             lesson: currentLesson,
             lessonDate: lessonDate,
             lessonTime: currentLesson.time,
+            teacher: currentLesson.teacher,
+            student: currentLesson.student,
             reason: '',
         },
 
         onSubmit: value => {
-            rejecrLesson(value);
+            rejecrLesson(value, date);
+            setCreated(true);
         },
         enableReinitialize: true,
     });
@@ -90,11 +93,13 @@ function CreateDeleteLesson(props) {
 
     const handleChangeReason = event => {
         formik.setFieldValue('reason', event.target.value);
-    }
+    };
 
     if (currentLessonLoading) {
         return <Preloader/>
     }
+
+    if (created) return <Redirect to={'/admin'}/>;
 
     return (
         <Paper>
@@ -104,7 +109,7 @@ function CreateDeleteLesson(props) {
                         label="Учень"
                         name='student'
                         id="outlined-size-small"
-                        value={formik.values.lesson.student.firstName + ' ' + formik.values.lesson.student.lastName}
+                        value={formik.values.student.firstName + ' ' + formik.values.student.lastName}
                         variant="outlined"
                         size="small"
                         disabled
@@ -115,7 +120,7 @@ function CreateDeleteLesson(props) {
                         label="Вчитель"
                         name='teacher'
                         id="outlined-size-small"
-                        value={formik.values.lesson.teacher.firstName + ' ' + formik.values.lesson.teacher.lastName}
+                        value={formik.values.teacher.firstName + ' ' + formik.values.teacher.lastName}
                         variant="outlined"
                         size="small"
                         disabled
@@ -193,13 +198,6 @@ function CreateDeleteLesson(props) {
     )
 }
 
-CreateDeleteLesson.propTypes = {
-    getLessonById: PropTypes.func.isRequired,
-    currentLessonLoading: PropTypes.bool.isRequired,
-    currentLesson: PropTypes.object,
-    transferLesson: PropTypes.func.isRequired,
-};
-
 CreateDeleteLesson.defaultProps = {
     allTeachers: [],
     currentLesson: {}
@@ -214,7 +212,7 @@ const mapStateToProps = ({lesson, teacher}) => {
 
 const mapDispatchToProps = dispatch => ({
     getLessonById: (id) => dispatch(getLessonById(id)),
-    rejecrLesson: (lesson) => dispatch(rejectLesson(lesson)),
+    rejecrLesson: (lesson, date) => dispatch(rejectLesson(lesson, date)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateDeleteLesson);

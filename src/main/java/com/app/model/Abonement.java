@@ -62,7 +62,7 @@ public class Abonement extends BaseEntiy {
   @OneToMany(mappedBy="abonement", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
-  private Set<TransferLesson> transferLessons = new HashSet<>();
+  private Set<TransferLesson> transferLessons;
 
   @Column(name = "transfered_quantity")
   private Integer transferedQuantity;

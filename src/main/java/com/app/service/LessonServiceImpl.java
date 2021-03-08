@@ -74,7 +74,23 @@ public class LessonServiceImpl implements LessonService {
 
   @Override
   public List<Lesson> getAllLessons() {
-    return lessonRepository.findAll().stream().filter(lesson -> !lesson.getDeleted()).collect(Collectors.toList());
+    List<Lesson> lessons = lessonRepository.findAll().stream().filter(lesson -> !lesson.getDeleted()).collect(Collectors.toList());
+    return lessons.stream().filter(lesson -> !lesson.getIsTestLesson()).collect(Collectors.toList());
+  }
+
+  public Date parseDate(Date date) {
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(date);
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    String dateString = format.format(date);
+    Date parseDate = null;
+    try {
+      parseDate = format.parse(dateString);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+
+    return parseDate;
   }
 
   @Override
@@ -116,12 +132,18 @@ public class LessonServiceImpl implements LessonService {
       }
 
       return lesson;
-    }).filter(lesson -> !lesson.getDeleted()).collect(Collectors.toList());
+    }).filter(lesson -> !lesson.getDeleted()).filter(lesson -> {
+      if (!lesson.getIsTestLesson() || lesson.getIsTestLesson() && lesson.getLessonDate().equals(parseDate(date))) {
+        return true;
+      } else {
+        return false;
+      }
+    }).collect(Collectors.toList());
     return lessonList;
   }
 
   @Override
   public List<Lesson> findAllbyLessonDay(String day) {
-    return lessonRepository.findAllByDay(LessonDay.valueOf(day)).stream().filter(lesson -> !lesson.getDeleted()).collect(Collectors.toList());
+    return lessonRepository.findAllByDay(LessonDay.valueOf(day)).stream().filter(lesson -> !lesson.getDeleted() && !lesson.getIsTestLesson()).collect(Collectors.toList());
   }
 }

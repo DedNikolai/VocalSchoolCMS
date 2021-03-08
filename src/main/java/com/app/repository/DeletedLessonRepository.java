@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface DeletedLessonRepository extends JpaRepository<DeletedLesson, Long> {
-  Page<DeletedLesson> findAllByOrderByCreatedDateAsc(Pageable pageable);
+  Page<DeletedLesson> findAllByOrderByCreatedDateDesc(Pageable pageable);
 
   List<DeletedLesson> findAllByLessonDate(@Temporal(TemporalType.DATE) Date date);
 }

@@ -13,9 +13,9 @@ public interface ConfirmedLessonService {
 
   ApiResponse createLesson(ConfirmedLesson confirmedLesson);
 
-  ConfirmedLesson updateLesson(ConfirmedLesson confirmedLesson, Long id);
+  ApiResponse updateLesson(ConfirmedLesson confirmedLesson, Long id);
 
-  void deleteLesson(Long id);
+  ApiResponse deleteLesson(Long id);
 
   Page<ConfirmedLesson> findAllOrderByDate(Pageable pageable);
 

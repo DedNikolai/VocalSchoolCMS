@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -85,26 +84,26 @@ function Users(props) {
                                 <TableBody>
                                     {allUsers.map(row => {
                                         return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                                 {columns.map(column => {
                                                     const value = row[column.id];
                                                     if (column.id === 'actions') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 <IconButton>
                                                                     <NavLink to={`/admin/users/edit/${row.id}`}>
                                                                         <Edit/>
                                                                     </NavLink>
                                                                 </IconButton>
-                                                                <IconButton>
-                                                                    <DeleteOutline onClick={() => deleteUser(row.id)}/>
+                                                                <IconButton onClick={() => deleteUser(row.id)}>
+                                                                    <DeleteOutline/>
                                                                 </IconButton>
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'roles') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={row.id}>
                                                                 {row.roles ? row.roles.join(', ') : ''}
                                                             </TableCell>
                                                         )
@@ -126,13 +125,6 @@ function Users(props) {
         </div>
     );
 }
-
-Users.propTypes = {
-    allUsers: PropTypes.object,
-    usersLoading: PropTypes.bool.isRequired,
-    getUsers: PropTypes.func.isRequired,
-    deleteUser: PropTypes.func.isRequired,
-};
 
 Users.defaultProps = {
     allUsers: [],

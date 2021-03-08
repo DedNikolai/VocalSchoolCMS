@@ -132,8 +132,8 @@ function Admin(props) {
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                         {ua.dashboard}
                     </Typography>
-                    <IconButton color="inherit">
-                        <ExitToAppOutlinedIcon onClick={userSignOut}/>
+                    <IconButton color="inherit" onClick={userSignOut}>
+                        <ExitToAppOutlinedIcon/>
                     </IconButton>
                 </Toolbar>
             </AppBar>
@@ -160,10 +160,6 @@ function Admin(props) {
             </main>
         </div>
     );
-}
-
-Admin.propTypes = {
-    userSignOut: PropTypes.func
 }
 
 const mapStateToProps = ({user}) => ({

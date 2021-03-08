@@ -108,12 +108,12 @@ function TeachersConfirmedLessons(props) {
                                 <TableBody>
                                     {lessons.map(row => {
                                         return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                                                 {columns.map(column => {
                                                     const value = row[column.id];
                                                     if (column.id === 'actions') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 <IconButton onClick={() => payTeacherLesson(row.id, teacherId)}>
                                                                     <CheckBoxIcon/>
                                                                 </IconButton>
@@ -122,28 +122,28 @@ function TeachersConfirmedLessons(props) {
                                                     }
                                                     if (column.id === 'teacher') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.teacher.firstName + ' ' + row.teacher.lastName}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'student') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.student.firstName + ' ' + row.student.lastName}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'date') {
                                                         return (
-                                                            <TableCell className={classes.cell}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.lessonDate}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'paid') {
                                                         return (
-                                                            <TableCell className={classes.cellRight}>
+                                                            <TableCell className={classes.cellRight} key={column.id}>
                                                                 <FormControlLabel
                                                                     control={<GreenCheckbox checked={row.isPaid} name="checkedG" />}
                                                                 />

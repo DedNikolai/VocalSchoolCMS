@@ -5,7 +5,7 @@ const ua = {
         timetable: 'Розклад',
         students: 'Учні',
         teachers: 'Вчителі',
-        lessons: 'Уроки',
+        confirmedLessons: 'Підтверджені уроки',
         transferLessons: 'Перенесені Уроки',
         deleted: 'Скасовані Уроки',
         abonements: 'Абонементи',

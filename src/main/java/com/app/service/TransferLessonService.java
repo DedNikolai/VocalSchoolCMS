@@ -17,13 +17,15 @@ public interface TransferLessonService {
 
   ApiResponse createTransferLesson(TransferLesson request);
 
-  TransferLesson updateLesson(TransferLesson request, Long id);
+  ApiResponse updateLesson(TransferLesson request, Long id);
 
   ApiResponse confirmTransferLesson(ConfirmedLesson confirmedLesson, Long trasferLessonId);
 
   List<TransferLesson> findAllbyTransferDate(Date date);
 
-  void deleteLesson(Long id);
+  ApiResponse deleteLesson(Long id);
 
   List<TransferLesson> findAllStudentActiveLessons(Long studentId);
+
+  ApiResponse rejectTransferLesson(Long id);
 }

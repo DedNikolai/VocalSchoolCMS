@@ -27,6 +27,5 @@ public class DeletedLessonResponse {
   @JsonView(View.DeletedLesson.class)
   private TeacherResponse teacher;
   private Date lessonDate;
-  private String lessonTime;
   private String reason;
 }

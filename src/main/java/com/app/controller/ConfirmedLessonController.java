@@ -46,9 +46,9 @@ public class ConfirmedLessonController {
 
   @DeleteMapping("{id}")
   @JsonView(View.ConfirmedLesson.class)
-  public ResponseEntity<Void> deletLesson(@PathVariable Long id) {
-    confirmedLessonFacade.deleteLesson(id);
-    return ResponseEntity.noContent().build();
+  public ResponseEntity<ApiResponse> deletLesson(@PathVariable Long id) {
+    ApiResponse response = confirmedLessonFacade.deleteLesson(id);
+    return ResponseEntity.ok(response);
   }
 
   @GetMapping
@@ -76,6 +76,12 @@ public class ConfirmedLessonController {
   @JsonView(View.ConfirmedLesson.class)
   public ResponseEntity<ApiResponse> payAllConfirmedLesson(@PathVariable Long id) {
     ApiResponse response = confirmedLessonFacade.payAllConfirmedLessons(id);
+    return ResponseEntity.ok(response);
+  }
+
+  @PutMapping("{id}")
+  public ResponseEntity<ApiResponse> updateLesson(@RequestBody ConfirmedLessonRequest request, @PathVariable Long id) {
+    ApiResponse response = confirmedLessonFacade.updateLesson(request, id);
     return ResponseEntity.ok(response);
   }
 }

@@ -14,7 +14,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -61,4 +65,20 @@ public class Lesson extends BaseEntiy {
   private Boolean deleted = false;
 
   private Status status;
+
+  @Column(name = "is_test", columnDefinition = "boolean default false")
+  private Boolean isTestLesson = false;
+
+  @Column(name = "lesson_date")
+  @Temporal(TemporalType.DATE)
+  private Date lessonDate;
+
+  @Column(name = "is_active")
+  private Boolean isActive = true;
+
+  @OneToMany(mappedBy = "lesson")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  private List<TransferLesson> transferLessons;
+
 }

@@ -40,14 +40,13 @@ public class TransferLessonFacade {
     return transferLessonService.createTransferLesson(transferLesson);
   }
 
-  public TransferLessonResponse updateLesson(TransferLessonRequest request, Long id) {
+  public ApiResponse updateLesson(TransferLessonRequest request, Long id) {
     TransferLesson transferLesson = modelMapper.map(request, TransferLesson.class);
-    TransferLesson lesson = transferLessonService.updateLesson(transferLesson, id);
-    return modelMapper.map(lesson, TransferLessonResponse.class);
+    return transferLessonService.updateLesson(transferLesson, id);
   }
 
-  public void deleteLesson(Long id) {
-    transferLessonService.deleteLesson(id);
+  public ApiResponse deleteLesson(Long id) {
+    return transferLessonService.deleteLesson(id);
   }
 
   public List<TransferLessonResponse> findAllByTransferDate(Date date) {
@@ -64,5 +63,9 @@ public class TransferLessonFacade {
   public List<TransferLessonResponse> findAllActiveByStudent(Long studentId) {
     List<TransferLesson> transferLesson = transferLessonService.findAllStudentActiveLessons(studentId);
     return transferLesson.stream().map(lesson -> modelMapper.map(lesson, TransferLessonResponse.class)).collect(Collectors.toList());
+  }
+
+  public ApiResponse rejectTransferLesson(Long id) {
+    return transferLessonService.rejectTransferLesson(id);
   }
 }

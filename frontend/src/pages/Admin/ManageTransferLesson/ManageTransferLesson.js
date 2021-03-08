@@ -24,6 +24,7 @@ import ua from "../../../languages/ua";
 import {getAllTeachers} from '../../../store/actions/teacher';
 import {getTransferLessonById, updateTransferLesson} from '../../../store/actions/transferLessons';
 import {NavLink} from 'react-router-dom';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 
 const useStyles = makeStyles(theme => ({
@@ -57,6 +58,10 @@ const useStyles = makeStyles(theme => ({
         marginRight: theme.spacing(1),
         width: 200,
     },
+
+    paddingLeft: {
+        paddingLeft: '10px'
+    }
 }));
 
 const validate = values => {
@@ -97,7 +102,6 @@ function ManageTransferLesson(props) {
         initialValues: {...transferLesson},
         validate,
         onSubmit: value => {
-            // console.log(value)
             changeTransferLesson(value, id);
         },
         enableReinitialize: true,
@@ -127,9 +131,15 @@ function ManageTransferLesson(props) {
     if (allTeachersLoading || transferedLessonByIdLoading) {
         return <Preloader/>
     }
-    console.log(formik.values.lessonDate.slice(0, 10));
+
+    const handleChangeStatus = (event) => {
+        formik.setFieldValue('status', event.target.checked ? 'DELETED' : null);
+        formik.setFieldValue('isActive', !event.target.checked);
+    };
+
     const selectedTeacher = allTeachers.filter(teacher => formik.values.teacher.id === teacher.id)[0];
     const selectedClass = Classes.filter(room => formik.values.room === room)[0];
+    const isDeleted = formik.values.status === 'DELETED';
 
     return (
         <Paper>
@@ -236,6 +246,18 @@ function ManageTransferLesson(props) {
                             ))}
                         </Select>
                     </FormControl>
+                </div>
+                <div className={classes.paddingLeft}>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={isDeleted}
+                                onChange={handleChangeStatus}
+                                name="status"
+                            />
+                        }
+                        label="Відмінений"
+                    />
                 </div>
                 <div className='buttons-container'>
                     <NavLink to='/admin' className='main-menu__item'>
