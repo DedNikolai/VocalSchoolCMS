@@ -1,6 +1,7 @@
 package com.app.dto.response;
 
 import com.app.dto.view.View;
+import com.app.model.LessonDay;
 import com.app.model.Room;
 import com.app.model.Status;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -27,4 +28,5 @@ public class TransferLessonResponse {
   private String transferTime;
   private Status status;
   private Boolean isActive;
+  private LessonDay day;
 }

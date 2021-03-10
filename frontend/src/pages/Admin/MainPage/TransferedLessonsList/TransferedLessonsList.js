@@ -93,7 +93,7 @@ function TransferedLessonsList(props) {
                                                         return (
                                                             <TableCell className={classes.cell} key={column.id}>
                                                                 <IconButton>
-                                                                    <NavLink to={`/admin/lessons/transfer/edit/${row.id}`}>
+                                                                    <NavLink to={`/admin/transfer-lessons/edit/${row.id}`}>
                                                                         <EditIcon/>
                                                                     </NavLink>
                                                                 </IconButton>

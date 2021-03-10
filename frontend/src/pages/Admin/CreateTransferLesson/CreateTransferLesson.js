@@ -26,6 +26,13 @@ import {getAllTeachers} from '../../../store/actions/teacher';
 import {createTransferLesson} from '../../../store/actions/transferLessons';
 import {NavLink} from 'react-router-dom'
 
+const days = [
+    'MONDAY',
+    'TUESDAY',
+    'WEDNESDAY',
+    'THURSDAY',
+    'FRIDAY',
+    'SUTURDAY'];
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -74,7 +81,7 @@ const validate = values => {
     }
 
     return errors;
-}
+};
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -92,6 +99,7 @@ function CreateTransferLesson(props) {
     const {allTeachers, allTeachersLoading, currentLesson, currentLessonLoading, getLessonById, getTeachers, transferLesson} = props;
     const id = props.match.params.id;
     const lessonDate = new Date(props.match.params.current).toLocaleDateString().split('.').reverse().join('-');
+    const defaultDay = days[new Date(lessonDate).getDay() - 1];
     const theme = useTheme();
 
     const formik = useFormik({
@@ -101,7 +109,8 @@ function CreateTransferLesson(props) {
             lessonDate: lessonDate,
             transferTime: currentLesson.time,
             room: currentLesson.room,
-            transferDate: lessonDate
+            transferDate: lessonDate,
+            day: defaultDay
         },
         validate,
         onSubmit: value => {
@@ -129,7 +138,9 @@ function CreateTransferLesson(props) {
 
     const handleChangeDate = event => {
         formik.setFieldValue('transferDate', event.target.value);
-    }
+        const day = new Date(event.target.value);
+        formik.setFieldValue('day', days[day.getDay() - 1]);
+    };
 
     if (allTeachersLoading || currentLessonLoading) {
         return <Preloader/>
@@ -218,6 +229,19 @@ function CreateTransferLesson(props) {
                         onChange={handleChangeTime}
                         onBlur={formik.handleBlur}
                         error={formik.touched.transferTime && formik.errors.transferTime}
+                    />
+                </div>
+                <div>
+                    <TextField
+                        id="day"
+                        label="День переносу"
+                        type="text"
+                        value={formik.values.day}
+                        className={classes.textField}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        disabled
                     />
                 </div>
                 <div>

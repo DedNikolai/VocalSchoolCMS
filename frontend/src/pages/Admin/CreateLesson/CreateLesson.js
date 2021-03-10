@@ -143,6 +143,7 @@ function CreateLesson(props) {
     const formik = useFormik({
         initialValues: {
             student: {...student},
+            isTestLesson: false
         },
         validate,
         onSubmit: value => {
@@ -165,8 +166,8 @@ function CreateLesson(props) {
 
     const handleChangeTeacher = event => {
         formik.setFieldValue('teacher', event.target.value);
-        formik.setFieldValue('type', '');
-        formik.setFieldValue('day', '');
+        formik.setFieldValue('type', null);
+        formik.setFieldValue('day', null);
     };
 
     const handleChangeRoom = event => {
@@ -222,7 +223,7 @@ function CreateLesson(props) {
         )
     })[0].priceValue : '';
     const worktimes = checkedTeacher.id ? checkedTeacher.workTimes.filter(worktime => worktime.day === formik.values.day) : [];
-    const timesForSelect = checkedTeacher.id && checkedType ? freeTeacherTimes(lessonsByDay, formik.values.duration, worktimes) : [];
+    const timesForSelect = checkedTeacher.id && checkedType ? freeTeacherTimes(checkedTeacher.lessons, formik.values.duration, worktimes, formik.values.day) : [];
     const roomsForSelect = formik.values.day && formik.values.time ? freeClasseForCurrentTime(formik.values.time, formik.values.duration, lessonsByDay) : [];
     const isValid = !Object.keys(formik.errors).length && Object.keys(formik.touched).length !== 0;
 

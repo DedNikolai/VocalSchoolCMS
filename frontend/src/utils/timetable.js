@@ -66,7 +66,7 @@ export const isFreeTime = (freeTimes, time, index) => {
     })
 };
 
-export const freeTeacherTimes = (lessons, duration, worktimes) => {
+export const freeTeacherTimes = (lessons, duration, worktimes, day) => {
     const teacherWorktimes = times.filter(time => {
         const currentTime = convertTimeToMinutes(time) + duration;
         return worktimes.some(worktime => {
@@ -74,11 +74,11 @@ export const freeTeacherTimes = (lessons, duration, worktimes) => {
                 return true;
             }
         })
-    })
+    });
 
     return teacherWorktimes.filter(time => {
         const currentTime = convertTimeToMinutes(time) + duration;
-        return !lessons.some(lesson => {
+        return !lessons.filter(lesson => !lesson.isTestLesson && lesson.day === day).some(lesson => {
             if (convertTimeToMinutes(lesson.time) < currentTime &&  currentTime < convertTimeToMinutes(lesson.time) + lesson.duration) {
                 return true;
             }

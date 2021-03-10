@@ -57,4 +57,8 @@ public class TransferLesson extends BaseEntiy{
 
   @Column(name = "is_active")
   private Boolean isActive;
+
+  @Column(name = "lesson_day")
+  @Enumerated(EnumType.STRING)
+  private LessonDay day;
 }

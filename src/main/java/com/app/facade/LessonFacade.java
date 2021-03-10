@@ -1,6 +1,7 @@
 package com.app.facade;
 
 import com.app.dto.request.LessonRequest;
+import com.app.dto.response.ApiResponse;
 import com.app.dto.response.LessonResponse;
 import com.app.dto.response.StudentResponse;
 import com.app.model.Lesson;
@@ -26,10 +27,9 @@ public class LessonFacade {
     return response;
   }
 
-  public LessonResponse createLesson(LessonRequest lessonRequest) {
+  public ApiResponse createLesson(LessonRequest lessonRequest) {
     Lesson lesson = modelMapper.map(lessonRequest, Lesson.class);
-    Lesson createdLesson = lessonService.createLesson(lesson);
-    return modelMapper.map(createdLesson, LessonResponse.class);
+    return lessonService.createLesson(lesson);
   }
 
   public LessonResponse deleteLesson(Long id) {
@@ -42,10 +42,9 @@ public class LessonFacade {
     return modelMapper.map(lesson, LessonResponse.class);
   }
 
-  public LessonResponse updateLesson(LessonRequest request, Long id) {
+  public ApiResponse updateLesson(LessonRequest request, Long id) {
     Lesson lesson = modelMapper.map(request, Lesson.class);
-    Lesson updatedLesson = lessonService.updateLesson(lesson, id);
-    return modelMapper.map(updatedLesson, LessonResponse.class);
+    return lessonService.updateLesson(lesson, id);
   }
 
   public List<LessonResponse> getAllLessons() {
