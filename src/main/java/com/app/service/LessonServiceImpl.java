@@ -1,5 +1,6 @@
 package com.app.service;
 
+import com.app.dto.response.ApiResponse;
 import com.app.exeption.ResourceNotFoundException;
 import com.app.model.ConfirmedLesson;
 import com.app.model.DeletedLesson;
@@ -39,12 +40,70 @@ public class LessonServiceImpl implements LessonService {
   @Override
   public List<Lesson> getLessonsByStudent(Long id) {
     Student student = studentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Student", "id", id));
-    return lessonRepository.findAllByStudent(student).stream().filter(lesson -> !lesson.getDeleted()).collect(Collectors.toList());
+    return lessonRepository.findAllByStudentAndDeletedIsFalse(student).stream().filter(lesson -> !lesson.getDeleted()).collect(Collectors.toList());
   }
 
   @Override
-  public Lesson createLesson(Lesson lesson) {
-    return lessonRepository.save(lesson);
+  @Transactional
+  public ApiResponse createLesson(Lesson lesson) {
+    List<Lesson> lessonsByDay = lessonRepository.findAllByDayAndDeletedIsFalse(lesson.getDay());
+    boolean isTimetableLessonForThisTime = lessonsByDay.stream().filter(item -> !item.getIsTestLesson() && item.getRoom().equals(lesson.getRoom()))
+        .anyMatch(currentLesson -> !isAllowTime(lesson, currentLesson));
+    List<Lesson> testLessonsForThisTime = lessonsByDay.stream().filter(item -> item.getIsTestLesson() && !isAllowTime(lesson, item))
+        .collect(Collectors.toList());
+
+    List<Lesson> testLessonForThisTimeInthisRoom = testLessonsForThisTime.stream().filter(currentLesson -> lesson.getRoom().equals(currentLesson.getRoom())).collect(Collectors.toList());
+    List<Lesson> testLessonForThisTimeWithCurrentTeacher= testLessonsForThisTime.stream().filter(currentLesson -> lesson.getTeacher().getId() == currentLesson.getTeacher().getId()).collect(Collectors.toList());
+
+    if (isTimetableLessonForThisTime) {
+      return new ApiResponse(false, "На цей час в цьому кабінеті вже є урок");
+    }
+
+    if (testLessonForThisTimeWithCurrentTeacher.size() != 0) {
+      return new ApiResponse(false,
+          testLessonForThisTimeWithCurrentTeacher.get(0).getLessonDate()+" заплановано тестовый урок з " + testLessonForThisTimeWithCurrentTeacher.get(0).getTeacher().getFirstName()+
+      " " + testLessonForThisTimeWithCurrentTeacher.get(0).getTeacher().getLastName() + " о "+testLessonForThisTimeWithCurrentTeacher.get(0).getTime());
+    }
+
+    if (testLessonForThisTimeInthisRoom.size() != 0) {
+      return new ApiResponse(false,
+          testLessonForThisTimeInthisRoom.get(0).getLessonDate()+ " в " + testLessonForThisTimeInthisRoom.get(0).getTime() + " Заплановано тестовый урок в класі " + testLessonForThisTimeInthisRoom.get(0).getRoom());
+    }
+    Teacher teacher = teacherRepository.findById(lesson.getTeacher().getId()).orElseThrow(() -> new ResourceNotFoundException("Teacher", "id", lesson.getTeacher().getId()));
+
+    if (!isTeacherWorkTimes(teacher, lesson)) {
+      return new ApiResponse(false, "Цей час не робочий для цього вяителя");
+    }
+
+    boolean isLessonForTeacherForThisTime = teacher.getLessons().stream().filter(currentLesson -> {
+      return !currentLesson.getIsTestLesson() && currentLesson.getDay().equals(lesson.getDay());
+    }).anyMatch(teacherLesson -> !isAllowTime(lesson, teacherLesson));
+
+    if (isLessonForTeacherForThisTime) {
+      return new ApiResponse(false, "В данного вчителя вже є урок на цей час");
+    }
+
+    List<TransferLesson> transferLessons = transferLessonRepository.findAllByDayAndIsActiveTrue(lesson.getDay());
+    List<TransferLesson> transferLessonsWithCurrentTeacherForThisTime = transferLessons.stream()
+        .filter(transferLesson -> !isAllowTimeForTransfer(lesson, transferLesson) && transferLesson.getTeacher().getId() == lesson.getTeacher().getId())
+        .collect(Collectors.toList());
+    List<TransferLesson> transferLessonInThisRoomForThisTime = transferLessons.stream()
+        .filter(transferLesson -> !isAllowTimeForTransfer(lesson, transferLesson) && transferLesson.getRoom().equals(lesson.getRoom()))
+        .collect(Collectors.toList());
+
+    if (transferLessonsWithCurrentTeacherForThisTime.size() != 0) {
+      return new ApiResponse(false,
+          transferLessonsWithCurrentTeacherForThisTime.get(0).getLessonDate()+" заплановано перенесеный урок з " + transferLessonsWithCurrentTeacherForThisTime.get(0).getTeacher().getFirstName()+
+              " " + transferLessonsWithCurrentTeacherForThisTime.get(0).getTeacher().getLastName() + " о "+transferLessonsWithCurrentTeacherForThisTime.get(0).getTransferTime());
+    }
+
+    if (transferLessonInThisRoomForThisTime.size() != 0) {
+      return new ApiResponse(false,
+          transferLessonInThisRoomForThisTime.get(0).getLessonDate()+ " в " + transferLessonInThisRoomForThisTime.get(0).getTransferTime() + " Заплановано перенесеный урок в класі " + transferLessonInThisRoomForThisTime.get(0).getRoom());
+    }
+
+    lessonRepository.save(lesson);
+    return new ApiResponse(true, "Урок створено");
   }
 
   @Override
@@ -66,15 +125,15 @@ public class LessonServiceImpl implements LessonService {
   }
 
   @Override
-  public Lesson updateLesson(Lesson lesson, Long id) {
+  public ApiResponse updateLesson(Lesson lesson, Long id) {
     Lesson lessonFromDb = lessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));
     lesson.setId(lessonFromDb.getId());
-    return lessonRepository.save(lesson);
+    return createLesson(lesson);
   }
 
   @Override
   public List<Lesson> getAllLessons() {
-    List<Lesson> lessons = lessonRepository.findAll().stream().filter(lesson -> !lesson.getDeleted()).collect(Collectors.toList());
+    List<Lesson> lessons = lessonRepository.findAllByDeletedIsFalse().stream().filter(lesson -> !lesson.getDeleted()).collect(Collectors.toList());
     return lessons.stream().filter(lesson -> !lesson.getIsTestLesson()).collect(Collectors.toList());
   }
 
@@ -106,7 +165,7 @@ public class LessonServiceImpl implements LessonService {
     } catch (ParseException e) {
       e.printStackTrace();
     }
-    List<Lesson> lessons = lessonRepository.findAllByDayOrderByTime(LessonDay.values()[cal.get(Calendar.DAY_OF_WEEK)-1]);
+    List<Lesson> lessons = lessonRepository.findAllByDayAndDeletedIsFalseOrderByTime(LessonDay.values()[cal.get(Calendar.DAY_OF_WEEK)-1]);
     List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(parseDate);
     List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(parseDate);
     List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(parseDate);
@@ -144,6 +203,46 @@ public class LessonServiceImpl implements LessonService {
 
   @Override
   public List<Lesson> findAllbyLessonDay(String day) {
-    return lessonRepository.findAllByDay(LessonDay.valueOf(day)).stream().filter(lesson -> !lesson.getDeleted() && !lesson.getIsTestLesson()).collect(Collectors.toList());
+    return lessonRepository.findAllByDayAndDeletedIsFalse(LessonDay.valueOf(day)).stream().filter(lesson -> !lesson.getDeleted() && !lesson.getIsTestLesson()).collect(Collectors.toList());
+  }
+
+  public boolean isAllowTime(Lesson createdLesson, Lesson currentLesson) {
+    int createdStart = Integer.parseInt(createdLesson.getTime().substring(0, 2))*60 + Integer.parseInt(createdLesson.getTime().substring(3));
+    int createdEnd = createdStart + createdLesson.getDuration();
+    int currentStart = Integer.parseInt(currentLesson.getTime().substring(0, 2))*60 + Integer.parseInt(currentLesson.getTime().substring(3));
+    int currentEnd = currentStart + currentLesson.getDuration();
+
+    if (createdEnd <= currentStart || createdStart >= currentEnd) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public boolean isAllowTimeForTransfer(Lesson createdLesson, TransferLesson currentLesson) {
+    int createdStart = Integer.parseInt(createdLesson.getTime().substring(0, 2))*60 + Integer.parseInt(createdLesson.getTime().substring(3));
+    int createdEnd = createdStart + createdLesson.getDuration();
+    int currentStart = Integer.parseInt(currentLesson.getTransferTime().substring(0, 2))*60 + Integer.parseInt(currentLesson.getTransferTime().substring(3));
+    int currentEnd = currentStart + currentLesson.getLesson().getDuration();
+
+    if (createdEnd <= currentStart || createdStart >= currentEnd) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public boolean isTeacherWorkTimes(Teacher teacher, Lesson lesson) {
+    int lessonStart = Integer.parseInt(lesson.getTime().substring(0, 2))*60 + Integer.parseInt(lesson.getTime().substring(3));
+    int lessonEnd = lessonStart + lesson.getDuration();
+    return teacher.getWorkTimes().stream().filter(workTime -> workTime.getDay().equals(lesson.getDay())).anyMatch(worktime -> {
+      int teacherStartTime = Integer.parseInt(worktime.getStartTime().substring(0, 2))*60 + Integer.parseInt(worktime.getStartTime().substring(3));
+      int teacherEndTime = Integer.parseInt(worktime.getEndTime().substring(0, 2))*60 + Integer.parseInt(worktime.getEndTime().substring(3));
+      if (lessonStart >= teacherStartTime && lessonEnd <= teacherEndTime) {
+        return true;
+      } else {
+        return false;
+      }
+    });
   }
 }

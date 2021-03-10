@@ -1,6 +1,7 @@
 package com.app.controller;
 
 import com.app.dto.request.LessonRequest;
+import com.app.dto.response.ApiResponse;
 import com.app.dto.response.LessonResponse;
 import com.app.dto.view.View;
 import com.app.facade.LessonFacade;
@@ -38,9 +39,9 @@ public class LessonController {
 
   @PostMapping
   @JsonView(View.Lesson.class)
-  public ResponseEntity<LessonResponse> createNewLesson(@RequestBody LessonRequest request) {
-    LessonResponse response = lessonFacade.createLesson(request);
-    return new ResponseEntity<>(response, HttpStatus.CREATED);
+  public ResponseEntity<ApiResponse> createNewLesson(@RequestBody LessonRequest request) {
+    ApiResponse response = lessonFacade.createLesson(request);
+    return ResponseEntity.ok(response);
   }
 
   @DeleteMapping("{id}")
@@ -59,8 +60,8 @@ public class LessonController {
 
   @PutMapping("{id}")
   @JsonView(View.Lesson.class)
-  public ResponseEntity<LessonResponse> updateLesson(@RequestBody LessonRequest request, @PathVariable Long id) {
-    LessonResponse response = lessonFacade.updateLesson(request, id);
+  public ResponseEntity<ApiResponse> updateLesson(@RequestBody LessonRequest request, @PathVariable Long id) {
+    ApiResponse response = lessonFacade.updateLesson(request, id);
     return ResponseEntity.ok(response);
   }
 

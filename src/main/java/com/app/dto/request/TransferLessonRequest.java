@@ -1,5 +1,6 @@
 package com.app.dto.request;
 
+import com.app.model.LessonDay;
 import com.app.model.Room;
 import com.app.model.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -20,4 +21,5 @@ public class TransferLessonRequest {
   private String transferTime;
   private Status status;
   private Boolean isActive;
+  private LessonDay day;
 }

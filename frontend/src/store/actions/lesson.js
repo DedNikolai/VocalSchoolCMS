@@ -25,14 +25,13 @@ export const getLessonById = id => dispatch => {
 };
 
 export const updateLesson = (id, data) => dispatch => {
-    dispatch({type: TYPES.LESSON_LOADING, payload: true})
     api.put(`/lessons/${id}`, data).then(res => {
-        if (res.status === 200) {
-            dispatch({type: TYPES.SAVE_LESSON, payload: res.data})
-            toastr.success('Lesson was updated');
+        if (res.data.success) {
+            dispatch(getLessonsByStudent(data.student.id));
+            toastr.success(res.data.message);
+        } else {
+            toastr.error(res.data.message);
         }
-    }).finally(() => {
-        dispatch({type: TYPES.LESSON_LOADING, payload: false})
     })
 };
 
@@ -49,8 +48,12 @@ export const createLesson = (data) => dispatch => {
     dispatch({type: TYPES.LESSON_LOADING, payload: true})
     api.post('/lessons', data).then(res => {
         if (res.status >= 200 && res.status < 300) {
-            dispatch(getLessonsByStudent(res.data.student.id));
-            toastr.success('Lesson was created');
+            if (res.data.success) {
+                dispatch(getLessonsByStudent(data.student.id));
+                toastr.success(res.data.message);
+            } else {
+                toastr.error(res.data.message);
+            }
         }
     }).finally(() => dispatch({type: TYPES.LESSON_LOADING, payload: true}))
 }

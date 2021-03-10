@@ -26,6 +26,13 @@ import {getTransferLessonById, updateTransferLesson} from '../../../store/action
 import {NavLink} from 'react-router-dom';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
+const days = [
+    'MONDAY',
+    'TUESDAY',
+    'WEDNESDAY',
+    'THURSDAY',
+    'FRIDAY',
+    'SUTURDAY'];
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -126,7 +133,9 @@ function ManageTransferLesson(props) {
 
     const handleChangeDate = event => {
         formik.setFieldValue('transferDate', event.target.value);
-    }
+        const day = new Date(event.target.value);
+        formik.setFieldValue('day', days[day.getDay() - 1]);
+    };
 
     if (allTeachersLoading || transferedLessonByIdLoading) {
         return <Preloader/>
@@ -221,6 +230,19 @@ function ManageTransferLesson(props) {
                         onChange={handleChangeTime}
                         onBlur={formik.handleBlur}
                         error={formik.touched.transferTime && formik.errors.transferTime}
+                    />
+                </div>
+                <div>
+                    <TextField
+                        id="day"
+                        label="День переносу"
+                        type="text"
+                        value={formik.values.day}
+                        className={classes.textField}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        disabled
                     />
                 </div>
                 <div>
