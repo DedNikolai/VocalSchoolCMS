@@ -81,4 +81,6 @@ public class Lesson extends BaseEntiy {
   @EqualsAndHashCode.Exclude
   private List<TransferLesson> transferLessons;
 
+  Integer currentStudenBalance;
+
 }

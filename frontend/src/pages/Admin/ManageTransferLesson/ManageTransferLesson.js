@@ -25,6 +25,9 @@ import {getAllTeachers} from '../../../store/actions/teacher';
 import {getTransferLessonById, updateTransferLesson} from '../../../store/actions/transferLessons';
 import {NavLink} from 'react-router-dom';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import disciplineValue from "../../../constants/disciplineValue";
+import rooms from '../../../constants/rooms';
+import daysValues from '../../../constants/daysValues';
 
 const days = [
     'MONDAY',
@@ -165,6 +168,17 @@ function ManageTransferLesson(props) {
                     />
                 </div>
                 <div>
+                    <TextField
+                        label="Дисципліна"
+                        name='student'
+                        id="outlined-size-small"
+                        value={disciplineValue[formik.values.lesson.discipline]}
+                        variant="outlined"
+                        size="small"
+                        disabled
+                    />
+                </div>
+                <div>
                     <FormControl className={classes.formControl}>
                         <InputLabel id="demo-mutiple-checkbox-label">{formik.touched.teacher && formik.errors.teacher || 'Вчитель'}</InputLabel>
                         <Select
@@ -237,7 +251,7 @@ function ManageTransferLesson(props) {
                         id="day"
                         label="День переносу"
                         type="text"
-                        value={formik.values.day}
+                        value={daysValues[formik.values.day]}
                         className={classes.textField}
                         InputLabelProps={{
                             shrink: true,
@@ -254,7 +268,7 @@ function ManageTransferLesson(props) {
                             name='room'
                             onChange={handleChangeRoom}
                             input={<Input />}
-                            renderValue={selected => selected}
+                            renderValue={selected => rooms[selected]}
                             value={formik.values.room || selectedClass}
                             onBlur={formik.handleBlur}
                             error={formik.touched.roоm && formik.errors.room}
@@ -263,7 +277,7 @@ function ManageTransferLesson(props) {
                             {Classes.map(item => (
                                 <MenuItem key={item} value={item}>
                                     <Checkbox checked={formik.values.room === item} />
-                                    <ListItemText primary={item} />
+                                    <ListItemText primary={rooms[item] } />
                                 </MenuItem>
                             ))}
                         </Select>

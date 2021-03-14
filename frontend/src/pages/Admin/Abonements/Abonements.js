@@ -17,6 +17,7 @@ import IconButton from '@material-ui/core/IconButton';
 import {getAllAbonements, deleteAbonement} from "../../../store/actions/abonements";
 import Preloader from '../../../components/Preloader/index';
 import {rowsPerPage} from '../../../constants/view';
+import disciplineValue from '../../../constants/disciplineValue';
 import moment from 'moment';
 
 const columns = [
@@ -132,6 +133,13 @@ function Abonements(props) {
                                                         return (
                                                             <TableCell className={classes.cell} key={column.id}>
                                                                 {row.isActive ? ' ' : 'Використаний'}
+                                                            </TableCell>
+                                                        )
+                                                    }
+                                                    if (column.id === 'discipline') {
+                                                        return (
+                                                            <TableCell className={classes.cell} key={column.id}>
+                                                                {disciplineValue[row.discipline]}
                                                             </TableCell>
                                                         )
                                                     }

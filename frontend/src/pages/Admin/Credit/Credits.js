@@ -14,6 +14,7 @@ import IconButton from '@material-ui/core/IconButton';
 import {deleteCredit, getAllCredits} from "../../../store/actions/credits";
 import Preloader from '../../../components/Preloader/index';
 import {rowsPerPage} from '../../../constants/view';
+import disciplineValue from '../../../constants/disciplineValue';
 
 const columns = [
     { id: 'student', label: 'Студент', minWidth: 150, align: 'center' },
@@ -119,7 +120,7 @@ function Credits(props) {
                                                     if (column.id === 'discipline') {
                                                         return (
                                                             <TableCell className={classes.cell} key={column.id}>
-                                                                {row.lesson.discipline}
+                                                                {disciplineValue[row.lesson.discipline]}
                                                             </TableCell>
                                                         )
                                                     }

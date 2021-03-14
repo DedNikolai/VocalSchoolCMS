@@ -14,14 +14,19 @@ import Edit from '@material-ui/icons/Edit';
 import {NavLink} from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
 import {deleteLesson} from "../../../../store/actions/lesson";
+import disciplineValue from '../../../../constants/disciplineValue';
+import typesValue from '../../../../constants/typesValue';
+import rooms from '../../../../constants/rooms';
+import daysValues from "../../../../constants/daysValues";
 
 const columns = [
+
+    { id: 'day', label: 'День', minWidth: 50, align: 'center' },
+    { id: 'time', label: 'Час', minWidth: 50, align: 'center' },
     { id: 'teacher', label: 'Вчитель', minWidth: 150, align: 'center' },
     { id: 'room', label: 'Клас', minWidth: 150, align: 'center' },
     { id: 'discipline', label: 'Дисципліна', minWidth: 50, align: 'center' },
     { id: 'type', label: 'Тип', minWidth: 50, align: 'center' },
-    { id: 'day', label: 'День', minWidth: 50, align: 'center' },
-    { id: 'time', label: 'Час', minWidth: 50, align: 'center' },
     { id: 'actions', label: 'Дії', minWidth: 50, align: 'center' },
 ];
 
@@ -92,6 +97,38 @@ function StudentLessons(props) {
                                                         return (
                                                             <TableCell className={classes.cell} key={row.id}>
                                                                 {row.teacher ? row.teacher.firstName + ' ' + row.teacher.lastName : ''}
+                                                            </TableCell>
+                                                        )
+                                                    }
+
+                                                    if (column.id === 'room') {
+                                                        return (
+                                                            <TableCell className={classes.cell} key={row.id}>
+                                                                {rooms[row.room]}
+                                                            </TableCell>
+                                                        )
+                                                    }
+
+                                                    if (column.id === 'discipline') {
+                                                        return (
+                                                            <TableCell className={classes.cell} key={row.id}>
+                                                                {disciplineValue[row.discipline]}
+                                                            </TableCell>
+                                                        )
+                                                    }
+
+                                                    if (column.id === 'type') {
+                                                        return (
+                                                            <TableCell className={classes.cell} key={row.id}>
+                                                                {typesValue[row.type]}
+                                                            </TableCell>
+                                                        )
+                                                    }
+
+                                                    if (column.id === 'day') {
+                                                        return (
+                                                            <TableCell className={classes.cell} key={row.id}>
+                                                                {daysValues[row.day]}
                                                             </TableCell>
                                                         )
                                                     }

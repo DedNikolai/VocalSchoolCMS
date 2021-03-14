@@ -22,9 +22,11 @@ import { green } from '@material-ui/core/colors';
 import './ConfirmedLessons.scss';
 import {NavLink} from 'react-router-dom';
 import Edit from '@material-ui/icons/Edit';
+import disciplineValue from '../../../constants/disciplineValue';
 
 const columns = [
     { id: 'date', label: 'Дата', minWidth: 150, align: 'center' },
+    { id: 'discipline', label: 'Дисципліна', minWidth: 50, align: 'center' },
     { id: 'student', label: 'Учень', minWidth: 150, align: 'center' },
     { id: 'teacher', label: 'Вчитель', minWidth: 150, align: 'center' },
     { id: 'price', label: 'Вартість', minWidth: 50, align: 'center' },
@@ -140,6 +142,13 @@ function ConfirmedLessons(props) {
                                                 return (
                                                     <TableCell className={classes.cell} key={column.id}>
                                                         {row.lessonDate}
+                                                    </TableCell>
+                                                )
+                                            }
+                                            if (column.id === 'discipline') {
+                                                return (
+                                                    <TableCell className={classes.cell} key={column.id}>
+                                                        {disciplineValue[row.lesson.discipline]}
                                                     </TableCell>
                                                 )
                                             }

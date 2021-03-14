@@ -12,12 +12,13 @@ import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import IconButton from '@material-ui/core/IconButton';
 import {deleteStudentCredit, getStudentCredits} from "../../../../store/actions/credits";
 import Preloader from '../../../../components/Preloader/index';
+import disciplineValue from '../../../../constants/disciplineValue';
 
 const columns = [
-    { id: 'teacher', label: 'Вчитель', minWidth: 150, align: 'center' },
-    { id: 'discipline', label: 'Дисципліна', minWidth: 50, align: 'center' },
     { id: 'date', label: 'Дата заняття', minWidth: 50, align: 'center' },
     { id: 'time', label: 'Час заняття', minWidth: 50, align: 'center' },
+    { id: 'teacher', label: 'Вчитель', minWidth: 150, align: 'center' },
+    { id: 'discipline', label: 'Дисципліна', minWidth: 50, align: 'center' },
     { id: 'actions', label: 'Дії', minWidth: 50, align: 'center' },
 ];
 
@@ -104,7 +105,7 @@ function StudentCredits(props) {
                                                     if (column.id === 'discipline') {
                                                         return (
                                                             <TableCell className={classes.cell} key={column.id}>
-                                                                {row.lesson.discipline}
+                                                                {disciplineValue[row.lesson.discipline]}
                                                             </TableCell>
                                                         )
                                                     }

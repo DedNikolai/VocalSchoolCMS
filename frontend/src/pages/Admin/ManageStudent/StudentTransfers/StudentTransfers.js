@@ -9,18 +9,24 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import CancelIcon from '@material-ui/icons/Cancel';
 import IconButton from '@material-ui/core/IconButton';
-import {getLessonsByDate, deleteTrasferLesson, confirmTransferedLesson} from "../../../../store/actions/transferLessons";
+import {
+    confirmTransferedLesson,
+    deleteTrasferLesson,
+    getLessonsByDate
+} from "../../../../store/actions/transferLessons";
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import EditIcon from '@material-ui/icons/Edit';
 import {NavLink} from 'react-router-dom';
+import disciplineValue from '../../../../constants/disciplineValue';
+import rooms from '../../../../constants/rooms';
+
 
 const columns = [
-    { id: 'discipline', label: 'Дисципліна', minWidth: 150, align: 'left' },
-    { id: 'teacher', label: 'Вчитель', minWidth: 150, align: 'left' },
     { id: 'date', label: 'Дата', minWidth: 50, align: 'center' },
     { id: 'time', label: 'Час', minWidth: 50, align: 'center' },
+    { id: 'discipline', label: 'Дисципліна', minWidth: 150, align: 'center' },
+    { id: 'teacher', label: 'Вчитель', minWidth: 150, align: 'center' },
     { id: 'room', label: 'Класс', minWidth: 50, align: 'center' },
     { id: 'duration', label: 'Трывалість', minWidth: 50, align: 'center' },
     { id: 'actions', label: 'Дії', minWidth: 50, align: 'center' },
@@ -91,7 +97,7 @@ function StudentTransfers(props) {
                                                 return (
                                                     <TableCell className={classes.cell} key={column.id}>
                                                         <IconButton>
-                                                            <NavLink to={`/admin/lessons/transfer/edit/${row.id}`}>
+                                                            <NavLink to={`/admin/transfer-lessons/edit/${row.id}`}>
                                                                 <EditIcon/>
                                                             </NavLink>
                                                         </IconButton>
@@ -104,7 +110,7 @@ function StudentTransfers(props) {
                                             if (column.id === 'discipline') {
                                                 return (
                                                     <TableCell align={column.align} key={column.id}>
-                                                        {row.lesson.discipline}
+                                                        {disciplineValue[row.lesson.discipline]}
                                                     </TableCell>
                                                 )
                                             }
@@ -125,7 +131,7 @@ function StudentTransfers(props) {
                                             if (column.id === 'room') {
                                                 return (
                                                     <TableCell className={classes.cell} key={column.id}>
-                                                        {row.room}
+                                                        {rooms[row.room]}
                                                     </TableCell>
                                                 )
                                             }

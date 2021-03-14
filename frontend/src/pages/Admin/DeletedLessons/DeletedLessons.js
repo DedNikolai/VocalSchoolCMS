@@ -16,11 +16,13 @@ import {getAllLessons, deleteLesson} from "../../../store/actions/deletedLesson"
 import Preloader from '../../../components/Preloader/index';
 import {colors, rowsPerPage} from '../../../constants/view';
 import SearchIcon from '@material-ui/icons/Search';
+import disciplineValue from '../../../constants/disciplineValue';
 import {NavLink} from 'react-router-dom'
 import './DeletedLessons.scss'
 
 const columns = [
     { id: 'date', label: 'Дата', minWidth: 150, align: 'center' },
+    { id: 'discipline', label: 'Дисципліна', minWidth: 50, align: 'center' },
     { id: 'time', label: 'Час', minWidth: 150, align: 'center' },
     { id: 'student', label: 'Учень', minWidth: 150, align: 'center' },
     { id: 'teacher', label: 'Вчитель', minWidth: 150, align: 'center' },
@@ -55,7 +57,7 @@ function DeletedLessons(props) {
     const handleChangePage = (event, page) => {
         getLessons(page, rowsPerPage);
     };
-
+    console.log(content)
     useEffect(() => {
         getLessons(0, rowsPerPage);
     }, []);
@@ -126,7 +128,14 @@ function DeletedLessons(props) {
                                                     if (column.id === 'time') {
                                                         return (
                                                             <TableCell className={classes.cell} key={column.id}>
-                                                                {row.lessonTime}
+                                                                {row.lesson.time}
+                                                            </TableCell>
+                                                        )
+                                                    }
+                                                    if (column.id === 'discipline') {
+                                                        return (
+                                                            <TableCell className={classes.cell} key={column.id}>
+                                                                {disciplineValue[row.lesson.discipline]}
                                                             </TableCell>
                                                         )
                                                     }

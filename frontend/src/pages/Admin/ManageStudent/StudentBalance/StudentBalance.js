@@ -10,10 +10,11 @@ import Paper from '@material-ui/core/Paper';
 import Edit from '@material-ui/icons/Edit';
 import {NavLink} from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
+import disciplineValue from '../../../../constants/disciplineValue';
 
 const useStyles = makeStyles({
     table: {
-        width: 300,
+
     },
 });
 
@@ -26,22 +27,22 @@ export default function StudentBalance(props) {
                 <TableHead>
                     <TableRow>
                         <TableCell align="center">Дисципліна</TableCell>
-                        <TableCell align="center">Загальна</TableCell>
-                        <TableCell align="center">Використані</TableCell>
-                        <TableCell align="center">Перенесених</TableCell>
+                        <TableCell align="center">Загальна к-ть занять</TableCell>
+                        <TableCell align="center">Використані заняття</TableCell>
+                        <TableCell align="center">Перенесені заняття</TableCell>
                         <TableCell align="center">Дії</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {rows.map((row) => (
                         <TableRow key={row.id}>
-                            <TableCell component="th" scope="row">
-                                {row.discipline}
+                            <TableCell component="th" scope="row" align="center">
+                                {disciplineValue[row.discipline]}
                             </TableCell>
-                            <TableCell align="right">{row.quantity}</TableCell>
-                            <TableCell align="right">{row.usedLessons}</TableCell>
-                            <TableCell align="right">{row.transferLessons.length}</TableCell>
-                            <TableCell align="right">
+                            <TableCell align="center">{row.quantity}</TableCell>
+                            <TableCell align="center">{row.usedLessons}</TableCell>
+                            <TableCell align="center">{row.transferLessons.length}</TableCell>
+                            <TableCell align="center">
                                 <IconButton>
                                     <NavLink to={`/admin/abonements/edit/${row.id}`}>
                                         <Edit/>

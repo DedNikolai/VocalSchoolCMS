@@ -5,6 +5,6 @@ const Days = [
     'THURSDAY',
     'FRIDAY',
     'SUTURDAY',
-]
+];
 
 export default Days;

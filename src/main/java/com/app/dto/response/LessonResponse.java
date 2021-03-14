@@ -34,4 +34,5 @@ public class LessonResponse {
   private Date createdDate;
   private Boolean isTestLesson;
   private Date lessonDate;
+  Integer currentStudenBalance;
 }

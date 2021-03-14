@@ -17,6 +17,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { green } from '@material-ui/core/colors';
 import { withStyles } from '@material-ui/core/styles';
 import Checkbox from '@material-ui/core/Checkbox';
+import disciplineValue from '../../../constants/disciplineValue';
+import typesValue from '../../../constants/typesValue';
+import daysValues from "../../../constants/daysValues";
 
 const GreenCheckbox = withStyles({
     root: {
@@ -143,7 +146,7 @@ function ManageConfirmedLesson(props) {
                         label="Дисципліна"
                         name='discipline'
                         id="outlined-size-small"
-                        value={formik.values.lesson.discipline}
+                        value={disciplineValue[formik.values.lesson.discipline]}
                         variant="outlined"
                         size="small"
                         disabled
@@ -165,7 +168,7 @@ function ManageConfirmedLesson(props) {
                         label="Тип"
                         name='type'
                         id="outlined-size-small"
-                        value={formik.values.lesson.type}
+                        value={typesValue[formik.values.lesson.type]}
                         variant="outlined"
                         size="small"
                         disabled
@@ -187,7 +190,7 @@ function ManageConfirmedLesson(props) {
                         label="День"
                         name='day'
                         id="outlined-size-small"
-                        value={formik.values.lesson.day}
+                        value={daysValues[formik.values.lesson.day]}
                         variant="outlined"
                         size="small"
                         disabled
