@@ -4,5 +4,9 @@ public enum Discipline {
   VOCAL,
   DRUM,
   GUITAR,
-  SOLFEGGIO
+  SOLFEGGIO,
+  PIANO,
+  PSYCHOLOGIST,
+  THERAPY,
+  ACCOMPANIST,
 }

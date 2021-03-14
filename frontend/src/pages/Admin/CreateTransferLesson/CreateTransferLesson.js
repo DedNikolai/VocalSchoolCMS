@@ -24,7 +24,10 @@ import ua from "../../../languages/ua";
 import {getLessonById} from '../../../store/actions/lesson';
 import {getAllTeachers} from '../../../store/actions/teacher';
 import {createTransferLesson} from '../../../store/actions/transferLessons';
-import {NavLink} from 'react-router-dom'
+import {NavLink} from 'react-router-dom';
+import disciplineValue from '../../../constants/disciplineValue';
+import rooms from '../../../constants/rooms';
+import daysValues from '../../../constants/daysValues';
 
 const days = [
     'MONDAY',
@@ -110,7 +113,8 @@ function CreateTransferLesson(props) {
             transferTime: currentLesson.time,
             room: currentLesson.room,
             transferDate: lessonDate,
-            day: defaultDay
+            day: defaultDay,
+            discipline: currentLesson.discipline
         },
         validate,
         onSubmit: value => {
@@ -158,6 +162,17 @@ function CreateTransferLesson(props) {
                         name='student'
                         id="outlined-size-small"
                         value={formik.values.lesson.student.firstName + ' ' + formik.values.lesson.student.lastName}
+                        variant="outlined"
+                        size="small"
+                        disabled
+                    />
+                </div>
+                <div>
+                    <TextField
+                        label="Дисципліна"
+                        name='student'
+                        id="outlined-size-small"
+                        value={disciplineValue[formik.values.discipline]}
                         variant="outlined"
                         size="small"
                         disabled
@@ -236,7 +251,7 @@ function CreateTransferLesson(props) {
                         id="day"
                         label="День переносу"
                         type="text"
-                        value={formik.values.day}
+                        value={daysValues[formik.values.day]}
                         className={classes.textField}
                         InputLabelProps={{
                             shrink: true,
@@ -253,7 +268,7 @@ function CreateTransferLesson(props) {
                             name='room'
                             onChange={handleChangeRoom}
                             input={<Input />}
-                            renderValue={selected => selected}
+                            renderValue={selected => rooms[selected]}
                             value={formik.values.room || selectedClass}
                             onBlur={formik.handleBlur}
                             error={formik.touched.roоm && formik.errors.room}
@@ -262,7 +277,7 @@ function CreateTransferLesson(props) {
                             {Classes.map(item => (
                                 <MenuItem key={item} value={item}>
                                     <Checkbox checked={formik.values.room === item} />
-                                    <ListItemText primary={item} />
+                                    <ListItemText primary={rooms[item]} />
                                 </MenuItem>
                             ))}
                         </Select>

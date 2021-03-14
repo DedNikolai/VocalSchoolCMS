@@ -18,7 +18,6 @@ public class StudentResponse {
   private String firstName;
   private String lastName;
   private Integer age;
-  private Integer payBalance;
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
   @JsonView(View.Student.class)

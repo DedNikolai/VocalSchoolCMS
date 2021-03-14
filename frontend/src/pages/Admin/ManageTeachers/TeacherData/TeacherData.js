@@ -17,6 +17,7 @@ import {useFormik} from 'formik';
 import {colors} from '../../../../constants/view';
 import Disciplines from '../../../../constants/disciplines';
 import ua from "../../../../languages/ua";
+import disciplineValue from '../../../../constants/disciplineValue';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -188,7 +189,7 @@ function TeacherData(props) {
                                 value={formik.values.disciplines || teacherDesciplines}
                                 onChange={handleChange}
                                 input={<Input />}
-                                renderValue={selected => selected.map(descipline => descipline + ', ')}
+                                renderValue={selected => selected.map(descipline => disciplineValue[descipline] + ', ')}
                                 MenuProps={MenuProps}
                                 onBlur={formik.handleBlur}
                                 error={formik.touched.disciplines && formik.errors.disciplines}
@@ -196,7 +197,7 @@ function TeacherData(props) {
                                 {Disciplines.map(item => (
                                     <MenuItem key={item} value={item}>
                                         <Checkbox checked={checked.indexOf(item) > -1} />
-                                        <ListItemText primary={item} />
+                                        <ListItemText primary={disciplineValue[item]} />
                                     </MenuItem>
                                 ))}
                             </Select>

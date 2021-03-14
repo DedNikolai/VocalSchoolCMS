@@ -15,15 +15,19 @@ import {getLessonsByDate, deleteTrasferLesson, confirmTransferedLesson} from "..
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import EditIcon from '@material-ui/icons/Edit';
 import {NavLink} from 'react-router-dom';
+import disciplineValue from '../../../../constants/disciplineValue';
+import status from '../../../../constants/lessonStatus';
+import rooms from '../../../../constants/rooms';
 import './TransferedLessonsList.scss';
 
 const columns = [
-    { id: 'discipline', label: 'Дисципліна', minWidth: 150, align: 'left' },
-    { id: 'teacher', label: 'Вчитель', minWidth: 150, align: 'left' },
-    { id: 'student', label: 'Учень', minWidth: 150, align: 'left' },
+    { id: 'discipline', label: 'Дисципліна', minWidth: 150, align: 'center' },
+    { id: 'teacher', label: 'Вчитель', minWidth: 150, align: 'center' },
+    { id: 'student', label: 'Учень', minWidth: 150, align: 'center' },
     { id: 'time', label: 'Час', minWidth: 50, align: 'center' },
     { id: 'room', label: 'Класс', minWidth: 50, align: 'center' },
-    { id: 'duration', label: 'Трывалість', minWidth: 50, align: 'center' },
+    { id: 'duration', label: 'Трывалість, хв', minWidth: 50, align: 'center' },
+    { id: 'date', label: 'Дата Уроку', minWidth: 50, align: 'center' },
     { id: 'status', label: 'Статус', minWidth: 50, align: 'center' },
     { id: 'actions', label: 'Дії', minWidth: 50, align: 'center' },
 ];
@@ -41,6 +45,24 @@ const useStyles = makeStyles({
         padding: '2px',
         textAlign: 'center'
     },
+
+    colorGreen: {
+        color: '#4caf50',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
+
+    colorYellow: {
+        color: '#ff9100',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
+
+    colorRed: {
+        color: '#ff3d00',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    }
 
 });
 
@@ -63,7 +85,11 @@ function TransferedLessonsList(props) {
             price: price
         };
         confirmTransfer(confirmedLesson, date, lesson.id);
-    }
+    };
+
+    const statusColor = status => {
+        return status === 'DELETED' ? classes.colorRed : status === 'TRANSFERED' ? classes.colorYellow : classes.colorGreen
+    };
 
     return (
         <div className='lessons-list'>
@@ -106,7 +132,7 @@ function TransferedLessonsList(props) {
                                                     if (column.id === 'discipline') {
                                                         return (
                                                             <TableCell align={column.align} key={column.id}>
-                                                                {row.lesson.discipline}
+                                                                {disciplineValue[row.lesson.discipline]}
                                                             </TableCell>
                                                         )
                                                     }
@@ -127,7 +153,7 @@ function TransferedLessonsList(props) {
                                                     if (column.id === 'room') {
                                                         return (
                                                             <TableCell className={classes.cell} key={column.id}>
-                                                                {row.room}
+                                                                {rooms[row.room]}
                                                             </TableCell>
                                                         )
                                                     }
@@ -148,7 +174,14 @@ function TransferedLessonsList(props) {
                                                     if (column.id === 'date') {
                                                         return (
                                                             <TableCell className={classes.cell} key={column.id}>
-                                                                {row.lessonDate}
+                                                                {row.lessonDate.split('-').reverse().join('-')}
+                                                            </TableCell>
+                                                        )
+                                                    }
+                                                    if (column.id === 'status') {
+                                                        return (
+                                                            <TableCell className={statusColor(row.status)} key={column.id}>
+                                                                {status[row.status]}
                                                             </TableCell>
                                                         )
                                                     }

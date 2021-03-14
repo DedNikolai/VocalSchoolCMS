@@ -26,6 +26,10 @@ import TransferedLessonsList from './TransferedLessonsList/TransferedLessonsList
 import EditIcon from '@material-ui/icons/Edit';
 import {NavLink} from 'react-router-dom';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
+import uaLocale from "date-fns/locale/ru";
+import disciplineValue from '../../../constants/disciplineValue';
+import status from '../../../constants/lessonStatus';
+import rooms from '../../../constants/rooms';
 import './MainPage.scss'
 
 const useStyles = makeStyles(theme => ({
@@ -38,19 +42,42 @@ const useStyles = makeStyles(theme => ({
 
     container: {
         marginTop: '30px'
+    },
+
+    cell: {
+        textAlign: 'center'
+    },
+
+    colorGreen: {
+        color: '#4caf50',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
+
+    colorYellow: {
+        color: '#ff9100',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    },
+
+    colorRed: {
+        color: '#ff3d00',
+        textAlign: 'center',
+        fontWeight: 'bold'
     }
 }));
 
 const columns = [
-    { id: 'discipline', label: 'Дисципліна', minWidth: 150, align: 'left' },
-    { id: 'teacher', label: 'Вчитель', minWidth: 150, align: 'left' },
-    { id: 'student', label: 'Учень', minWidth: 150, align: 'left' },
+    { id: 'discipline', label: 'Дисципліна', minWidth: 50, align: 'center' },
+    { id: 'teacher', label: 'Вчитель', minWidth: 150, align: 'center' },
+    { id: 'student', label: 'Учень', minWidth: 150, align: 'center' },
+    { id: 'balance', label: 'Баланс', minWidth: 50, align: 'center' },
     { id: 'time', label: 'Час', minWidth: 50, align: 'center' },
     { id: 'room', label: 'Класс', minWidth: 50, align: 'center' },
-    { id: 'duration', label: 'Трывалість', minWidth: 50, align: 'center' },
+    { id: 'duration', label: 'Трывалість, хв', minWidth: 50, align: 'center' },
     { id: 'status', label: 'Статус', minWidth: 50, align: 'center' },
-    { id: 'isTest', label: 'Тестове заняття', minWidth: 50, align: 'center' },
-    { id: 'actions', label: 'Дії', minWidth: 50, align: 'center' },
+    { id: 'isTest', label: 'Тестове', minWidth: 50, align: 'center' },
+    { id: 'actions', label: 'Дії', minWidth: 150, align: 'center' },
 ];
 
 
@@ -74,12 +101,20 @@ function MainPage(props) {
         createCreditForStudent(createNewConfirmedLesson(lesson, date), date);
     };
 
+    const balanceColor = (num) => {
+        return num === 0 ? classes.colorRed : num === 1 ? classes.colorYellow : classes.colorGreen
+    };
+
+    const statusColor = status => {
+      return status === 'DELETED' ? classes.colorRed : status === 'TRANSFERED' ? classes.colorYellow : classes.colorGreen
+    };
+
     return (
         <Fragment>
             <Grid container spacing={3}>
-                <Grid item xs={6} md={6} lg={6}>
+                <Grid item xs={12} md={12} lg={12}>
                     <Paper className={fixedHeightPaper}>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils} locale={uaLocale}>
                             <DatePicker
                                 autoOk
                                 orientation="landscape"
@@ -150,6 +185,13 @@ function MainPage(props) {
                                                                 </TableCell>
                                                             )
                                                         }
+                                                        if (column.id === 'discipline') {
+                                                            return (
+                                                                <TableCell key={column.id} className={classes.cell}>
+                                                                    {disciplineValue[row.discipline]}
+                                                                </TableCell>
+                                                            )
+                                                        }
                                                         if (column.id === 'student') {
                                                             return (
                                                                 <TableCell key={column.id} className={classes.cell}>
@@ -161,6 +203,28 @@ function MainPage(props) {
                                                             return (
                                                                 <TableCell key={column.id} className={classes.cell}>
                                                                     {row.isTestLesson ? 'Тестове' : ''}
+                                                                </TableCell>
+                                                            )
+                                                        }
+
+                                                        if (column.id === 'balance') {
+                                                            return (
+                                                                <TableCell key={column.id} className={balanceColor(row.currentStudenBalance)}>
+                                                                    {row.currentStudenBalance}
+                                                                </TableCell>
+                                                            )
+                                                        }
+                                                        if (column.id === 'status') {
+                                                            return (
+                                                                <TableCell key={column.id} className={statusColor(row.status)}>
+                                                                    {status[row.status]}
+                                                                </TableCell>
+                                                            )
+                                                        }
+                                                        if (column.id === 'room') {
+                                                            return (
+                                                                <TableCell key={column.id} className={classes.cell}>
+                                                                    {rooms[row.room]}
                                                                 </TableCell>
                                                             )
                                                         }

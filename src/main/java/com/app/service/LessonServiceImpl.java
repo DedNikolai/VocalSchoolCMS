@@ -2,6 +2,7 @@ package com.app.service;
 
 import com.app.dto.response.ApiResponse;
 import com.app.exeption.ResourceNotFoundException;
+import com.app.model.Abonement;
 import com.app.model.ConfirmedLesson;
 import com.app.model.DeletedLesson;
 import com.app.model.Lesson;
@@ -197,7 +198,15 @@ public class LessonServiceImpl implements LessonService {
       } else {
         return false;
       }
-    }).collect(Collectors.toList());
+    }).map(lesson -> {
+          Student student = lesson.getStudent();
+          Integer balance = student.getAbonements()
+              .stream().filter(abonement -> abonement.getIsActive() && abonement.getDiscipline().equals(lesson.getDiscipline()))
+              .reduce(0, (partialAgeResult, abonement) -> partialAgeResult + abonement.getQuantity() - abonement.getUsedLessons(), Integer::sum);
+          lesson.setCurrentStudenBalance(balance);
+          return lesson;
+        })
+        .collect(Collectors.toList());
     return lessonList;
   }
 

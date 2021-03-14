@@ -17,10 +17,10 @@ import Preloader from '../../../components/Preloader/index';
 import TeacherTableRow from './TeacherTableRow/TeacherTableRow';
 
 const columns = [
-    { id: 'firstName', label: 'Ім\'я', minWidth: 150, align: 'left' },
-    { id: 'lastName', label: 'Прізвище', minWidth: 150, align: 'left' },
-    { id: 'email', label: 'Email', minWidth: 150, align: 'left' },
-    { id: 'disciplines', label: 'Дисципліни', minWidth: 150, align: 'left' },
+    { id: 'firstName', label: 'Ім\'я', minWidth: 150, align: 'center' },
+    { id: 'lastName', label: 'Прізвище', minWidth: 150, align: 'center' },
+    { id: 'email', label: 'Email', minWidth: 150, align: 'center' },
+    { id: 'disciplines', label: 'Дисципліни', minWidth: 150, align: 'center' },
     { id: 'lessons', label: 'Кількість Уроків', minWidth: 50, align: 'center' },
     // { id: 'nonPaid', label: 'Не оплачені уроки', minWidth: 50, align: 'center' },
     { id: 'actions', label: 'Редагувати', minWidth: 50, align: 'center' },

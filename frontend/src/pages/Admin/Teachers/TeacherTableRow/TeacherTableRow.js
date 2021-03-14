@@ -1,11 +1,11 @@
 import React from 'react';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import Edit from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import {makeStyles} from "@material-ui/core/styles/index";
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import {NavLink} from 'react-router-dom';
+import disciplineValue from '../../../../constants/disciplineValue';
 
 const useStyles = makeStyles({
     root: {
@@ -30,7 +30,7 @@ const useStyles = makeStyles({
 function TeacherTableRow(props) {
     const {teacher, columns, deleteTeacher} = props;
     const classes = useStyles();
-    const disciplines = teacher.disciplines.join(', ');
+    const disciplines = teacher.disciplines.map(item => disciplineValue[item]).join(', ');
     const students = teacher.lessons.length;
     return (
         <TableRow hover role="checkbox" tabIndex={-1} >

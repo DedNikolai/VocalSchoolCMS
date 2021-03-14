@@ -13,6 +13,7 @@ import './CreateDeleteLesson.scss';
 import {colors} from '../../../constants/view';
 import {getLessonById} from '../../../store/actions/lesson';
 import {rejectLesson} from '../../../store/actions/deletedLesson';
+import disciplineValue from '../../../constants/disciplineValue';
 
 
 const useStyles = makeStyles(theme => ({
@@ -77,6 +78,7 @@ function CreateDeleteLesson(props) {
             teacher: currentLesson.teacher,
             student: currentLesson.student,
             reason: '',
+            discipline: currentLesson.discipline
         },
 
         onSubmit: value => {
@@ -110,6 +112,17 @@ function CreateDeleteLesson(props) {
                         name='student'
                         id="outlined-size-small"
                         value={formik.values.student.firstName + ' ' + formik.values.student.lastName}
+                        variant="outlined"
+                        size="small"
+                        disabled
+                    />
+                </div>
+                <div>
+                    <TextField
+                        label="Дисципліна"
+                        name='discipline'
+                        id="outlined-size-small"
+                        value={disciplineValue[formik.values.discipline]}
                         variant="outlined"
                         size="small"
                         disabled

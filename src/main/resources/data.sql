@@ -50,7 +50,7 @@ VALUES
   (4, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 2, 'ROOM1', 'VOCAL', 'MAN', 'MONDAY', '13:00', 60, false, null, true),
   (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 2, 'ROOM2', 'SOLFEGGIO', 'MAN', 'MONDAY', '14:00', 60, false, null, true),
   (3, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 1, 'ROOM3', 'VOCAL', 'CHILD', 'FRIDAY', '10:30', 30, false, null, true),
-  (5, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 3, 'ROOM4', 'VOCAL', 'MAN', 'THURSDAY', '12:00', 60, true, '2021-03-15', true);
+  (5, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 3, 'ROOM4', 'VOCAL', 'MAN', 'MONDAY', '16:00', 60, true, '2021-03-15', true);
 
 INSERT INTO teacher_worktime
   (id, date_created, date_modified, lesson_day, start_time, end_time, teacher)
@@ -86,8 +86,8 @@ VALUES
 INSERT INTO transfer_lessons
   (id, date_created, date_modified, teacher, lesson_id, lesson_date, room, transfer_date, transfer_time, abonement, is_active, lesson_day)
 VALUES
-  (1, '2020-09-09 21:30:00', '2020-01-29 21:30:00', 1, 1, '2020-09-07', 'ROOM1', '2021-03-11', '10:30', 1, true, 'THURSDAY'),
-  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, 1, '2020-08-25', 'ROOM3', '2021-03-11', '12:00', 2, true, 'THURSDAY');
+  (1, '2020-09-09 21:30:00', '2020-01-29 21:30:00', 1, 1, '2020-09-07', 'ROOM1', '2021-03-15', '10:30', 1, true, 'THURSDAY'),
+  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, 1, '2020-08-25', 'ROOM3', '2021-03-15', '12:00', 2, true, 'THURSDAY');
 
 INSERT INTO deleted_lesson
   (id, date_created, date_modified, student_id, teacher_id, lesson_id, lesson_date, reason)

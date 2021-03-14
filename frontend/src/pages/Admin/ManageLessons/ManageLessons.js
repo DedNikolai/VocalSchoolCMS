@@ -168,11 +168,12 @@ function ManageLessons(props) {
     const days = checkedTeacher.id ? checkedTeacher.workTimes.map(workTime => workTime.day) : [];
     const worktimes = checkedTeacher.id ? checkedTeacher.workTimes.filter(worktime => worktime.day === formik.values.day) : [];
     const timesForSelect = checkedTeacher.id && checkedType ? freeTeacherTimes(lessonsByDay, formik.values.duration, worktimes) : [];
-    const price = formik.values.teacher && formik.values.discipline && formik.values.type ? formik.values.teacher.prices.filter(price => {
+    const currentPrice = formik.values.teacher && formik.values.discipline && formik.values.type ? formik.values.teacher.prices.filter(price => {
         return (
             price.discipline === formik.values.discipline && price.type === formik.values.type
         )
-    })[0].priceValue : '';
+    }) : '';
+    const price = currentPrice.length ? currentPrice[0].priceValue : '';
     const roomsForSelect = formik.values.day && formik.values.time ? freeClasseForCurrentTime(formik.values.time, formik.values.duration, lessonsByDay) : [];
 
     return (
