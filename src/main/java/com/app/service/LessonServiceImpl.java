@@ -127,8 +127,8 @@ public class LessonServiceImpl implements LessonService {
       return new ApiResponse(false, str);
     }
 
-    lesson.setId(lessonFromDb.getId());
-    return createLesson(lesson);
+    lessonRepository.save(lesson);
+    return new ApiResponse(true, "Урок змінено");
   }
 
   @Override

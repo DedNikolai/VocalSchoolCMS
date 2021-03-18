@@ -124,17 +124,17 @@ function Menu(props) {
                     </ListItem>
                 </NavLink>
             }
-            {
-                hasRoles(user, adminPermissions) &&
-                <NavLink to='/admin/credits' className='main-menu__item'>
-                    <ListItem button>
-                        <ListItemIcon>
-                            <CreditCardIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={ua.menu.credits} />
-                    </ListItem>
-                </NavLink>
-            }
+            {/*{*/}
+                {/*hasRoles(user, adminPermissions) &&*/}
+                {/*<NavLink to='/admin/credits' className='main-menu__item'>*/}
+                    {/*<ListItem button>*/}
+                        {/*<ListItemIcon>*/}
+                            {/*<CreditCardIcon />*/}
+                        {/*</ListItemIcon>*/}
+                        {/*<ListItemText primary={ua.menu.credits} />*/}
+                    {/*</ListItem>*/}
+                {/*</NavLink>*/}
+            {/*}*/}
         </div>
     )
 };

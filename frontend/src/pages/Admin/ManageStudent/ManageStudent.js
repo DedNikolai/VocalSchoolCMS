@@ -15,8 +15,8 @@ import CreateAbonement from '../CreateAbonement/CreateAbonement';
 import StudentLessons from './StudentLessons/StudentLessons';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import StudentBalance from './StudentBalance/StudentBalance';
-import StudentTransfers from './StudentTransfers/StudentTransfers';
-import StudentCredits from './StudentCredits/StudentCredits';
+// import StudentTransfers from './StudentTransfers/StudentTransfers';
+// import StudentCredits from './StudentCredits/StudentCredits';
 import StudentData from './StudentData/StudentData';
 import {makeStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -95,7 +95,7 @@ function ManageStudent(props) {
                         <Tab label="Особисті дані" {...a11yProps(0)} />
                         <Tab label="Абонементи" {...a11yProps(1)} />
                         <Tab label="Особистий розклад" {...a11yProps(2)} />
-                        <Tab label="Борги" {...a11yProps(4)} />
+                        {/*<Tab label="Борги" {...a11yProps(4)} />*/}
                     </Tabs>
                 </AppBar>
                 <TabPanel value={value} index={0}>
@@ -152,10 +152,10 @@ function ManageStudent(props) {
                         </div>
                     }
                 </TabPanel>
-                <TabPanel value={value} index={4}>
-                    <h2>Заборгованості</h2>
-                    <StudentCredits studentId={student.id}/>
-                </TabPanel>
+                {/*<TabPanel value={value} index={4}>*/}
+                    {/*<h2>Заборгованості</h2>*/}
+                    {/*<StudentCredits studentId={student.id}/>*/}
+                {/*</TabPanel>*/}
             </div>
             <div className='buttons-container'>
                 <NavLink to='/admin/students'>

@@ -158,9 +158,7 @@ function CreateLesson(props) {
     });
 
     useEffect(() => {
-        const ac = new AbortController();
         getTeachers();
-        return () => ac.abort();
     }, []);
 
     const handleChangeistTest = (event) => {
@@ -266,7 +264,7 @@ function CreateLesson(props) {
                         name='day'
                         label="День"
                         type="text"
-                        value={formik.values.day}
+                        value={daysValues[formik.values.day]}
                         className={classes.textField}
                         InputLabelProps={{
                             shrink: true,
