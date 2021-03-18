@@ -8,6 +8,7 @@ import com.app.facade.LessonFacade;
 import com.app.model.LessonDay;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
 import java.util.List;
@@ -83,6 +85,15 @@ public class LessonController {
   @JsonView(View.Lesson.class)
   public ResponseEntity<List<LessonResponse>> getLessonsByLessonsDay(@PathVariable String day) {
     List<LessonResponse> response = lessonFacade.findAllLessonsByLessonDay(day);
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("dates")
+  @JsonView(View.Lesson.class)
+  public ResponseEntity<List<LessonResponse>> getLessonsByStudent(
+      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date finishDate) {
+    List<LessonResponse> response = lessonFacade.findAllByDates(startDate, finishDate);
     return ResponseEntity.ok(response);
   }
 }

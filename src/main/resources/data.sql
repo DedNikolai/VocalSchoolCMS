@@ -44,19 +44,19 @@ VALUES
   (2, 'VOCAL');
 
 INSERT INTO lessons
-  (id, date_created, date_modified, teacher_id, student_id, room, discipline, lesson_type, lesson_day, lesson_time, duration, is_test, lesson_date, is_active)
+  (id, date_created, date_modified, teacher_id, student_id, room, discipline, lesson_type, lesson_day, lesson_time, duration, is_single, is_active, lesson_start_date, lesson_finish_date)
 VALUES
-  (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 1, 'ROOM1', 'VOCAL', 'MAN', 'MONDAY', '12:00', 60, false, null, true),
-  (4, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 2, 'ROOM1', 'VOCAL', 'MAN', 'MONDAY', '13:00', 60, false, null, true),
-  (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 2, 'ROOM2', 'SOLFEGGIO', 'MAN', 'MONDAY', '14:00', 60, false, null, true),
-  (3, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 1, 'ROOM3', 'VOCAL', 'CHILD', 'FRIDAY', '10:30', 30, false, null, true),
-  (5, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 3, 'ROOM4', 'VOCAL', 'MAN', 'MONDAY', '16:00', 60, true, '2021-03-15', true);
+  (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 1, 'ROOM1', 'VOCAL', 'MAN', 'MONDAY', '12:00', 60, false, true, '2021-02-15', null),
+  (4, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 2, 'ROOM1', 'VOCAL', 'MAN', 'MONDAY', '13:00', 60, false, true, '2021-02-15', null),
+  (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 2, 'ROOM2', 'SOLFEGGIO', 'MAN', 'MONDAY', '14:00', 60, false, true, '2021-02-15', '2021-03-17'),
+  (3, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 1, 'ROOM3', 'VOCAL', 'CHILD', 'FRIDAY', '10:30', 30, false, true, '2021-02-15', null),
+  (5, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 3, 'ROOM4', 'VOCAL', 'MAN', 'MONDAY', '16:00', 60, true, true, '2021-03-15', '2021-03-15');
 
 INSERT INTO teacher_worktime
   (id, date_created, date_modified, lesson_day, start_time, end_time, teacher)
 VALUES
   (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 'MONDAY', '09:00', '15:00', 1),
-  (4, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 'THURSDAY', '09:00', '16:00', 2),
+  (4, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 'MONDAY', '09:00', '18:00', 2),
   (5, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 'THURSDAY', '09:00', '16:00', 1),
   (3, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 'MONDAY', '09:00', '18:00', 3),
   (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 'TUESDAY', '09:00', '19:00', 1);

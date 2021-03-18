@@ -26,7 +26,7 @@ import TransferedLessonsList from './TransferedLessonsList/TransferedLessonsList
 import EditIcon from '@material-ui/icons/Edit';
 import {NavLink} from 'react-router-dom';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
-import uaLocale from "date-fns/locale/ru";
+import uaLocale from "date-fns/locale/uk";
 import disciplineValue from '../../../constants/disciplineValue';
 import status from '../../../constants/lessonStatus';
 import rooms from '../../../constants/rooms';

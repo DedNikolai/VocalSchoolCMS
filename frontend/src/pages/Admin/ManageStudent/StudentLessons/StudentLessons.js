@@ -27,6 +27,8 @@ const columns = [
     { id: 'room', label: 'Клас', minWidth: 150, align: 'center' },
     { id: 'discipline', label: 'Дисципліна', minWidth: 50, align: 'center' },
     { id: 'type', label: 'Тип', minWidth: 50, align: 'center' },
+    { id: 'lessonStartDate', label: 'Початкова Дата', minWidth: 50, align: 'center' },
+    { id: 'lessonFinishDate', label: 'Кінцева Дата ', minWidth: 50, align: 'center' },
     { id: 'actions', label: 'Дії', minWidth: 50, align: 'center' },
 ];
 
@@ -53,7 +55,6 @@ const useStyles = makeStyles({
 function StudentLessons(props) {
     const classes = useStyles();
     const {lessons, deleteLessonById, studentId} = props;
-
     return (
         <div className='students-list'>
                     <Paper className={classes.root}>
@@ -95,7 +96,7 @@ function StudentLessons(props) {
                                                     }
                                                     if (column.id === 'teacher') {
                                                         return (
-                                                            <TableCell className={classes.cell} key={row.id}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {row.teacher ? row.teacher.firstName + ' ' + row.teacher.lastName : ''}
                                                             </TableCell>
                                                         )
@@ -103,7 +104,7 @@ function StudentLessons(props) {
 
                                                     if (column.id === 'room') {
                                                         return (
-                                                            <TableCell className={classes.cell} key={row.id}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {rooms[row.room]}
                                                             </TableCell>
                                                         )
@@ -111,7 +112,7 @@ function StudentLessons(props) {
 
                                                     if (column.id === 'discipline') {
                                                         return (
-                                                            <TableCell className={classes.cell} key={row.id}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {disciplineValue[row.discipline]}
                                                             </TableCell>
                                                         )
@@ -119,7 +120,7 @@ function StudentLessons(props) {
 
                                                     if (column.id === 'type') {
                                                         return (
-                                                            <TableCell className={classes.cell} key={row.id}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {typesValue[row.type]}
                                                             </TableCell>
                                                         )
@@ -127,8 +128,16 @@ function StudentLessons(props) {
 
                                                     if (column.id === 'day') {
                                                         return (
-                                                            <TableCell className={classes.cell} key={row.id}>
+                                                            <TableCell className={classes.cell} key={column.id}>
                                                                 {daysValues[row.day]}
+                                                            </TableCell>
+                                                        )
+                                                    }
+
+                                                    if (column.id === 'lessonStartDate' || column.id === 'lessonFinishDate') {
+                                                        return (
+                                                            <TableCell className={classes.cell} key={column.id}>
+                                                                {value && value.split('-').reverse().join('-')}
                                                             </TableCell>
                                                         )
                                                     }

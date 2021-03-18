@@ -78,7 +78,6 @@ function ManageStudent(props) {
     };
 
     const tableLessons = studentLessons.filter(lesson => !lesson.isTestLesson);
-    const testLessons = studentLessons.filter(lesson => lesson.isTestLesson);
 
     return (
         <div className='manage-student'>
@@ -96,7 +95,6 @@ function ManageStudent(props) {
                         <Tab label="Особисті дані" {...a11yProps(0)} />
                         <Tab label="Абонементи" {...a11yProps(1)} />
                         <Tab label="Особистий розклад" {...a11yProps(2)} />
-                        <Tab label="Перенесені уроки" {...a11yProps(3)} />
                         <Tab label="Борги" {...a11yProps(4)} />
                     </Tabs>
                 </AppBar>
@@ -135,8 +133,6 @@ function ManageStudent(props) {
                 <TabPanel value={value} index={2}>
                     <h2>Планові заняття</h2>
                     <StudentLessons lessons={tableLessons} studentId={student.id}/>
-                    <h2>Тестові заняття</h2>
-                    <StudentLessons lessons={testLessons} studentId={student.id}/>
                     <div className='buttons-container'>
                         <Button
                             variant="contained"
@@ -154,13 +150,6 @@ function ManageStudent(props) {
                         <div className='manage-student__add-lesson'>
                             <CreateLesson student={student} closeForm={() => setAddLesson(false)}/>
                         </div>
-                    }
-                </TabPanel>
-                <TabPanel value={value} index={3}>
-                    <h2>Перенесені уроки</h2>
-                    {
-                        studentTransfersLoading ? <Preloader/> :
-                            <StudentTransfers tarnsferedLessons={studentTransfers} />
                     }
                 </TabPanel>
                 <TabPanel value={value} index={4}>

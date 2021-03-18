@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 import PropTypes from 'prop-types';
 import Preloader from '../../../components/Preloader/index';
 import Paper from '@material-ui/core/Paper';
-import {makeStyles, ThemeProvider, useTheme} from '@material-ui/core/styles';
+import {makeStyles, ThemeProvider, useTheme, withStyles} from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -22,19 +22,17 @@ import {useFormik} from 'formik';
 import './CreateLesson.scss';
 import {colors} from '../../../constants/view';
 import Disciplines from '../../../constants/disciplines';
-import {freeClasseForCurrentTime, freeTeacherTimes} from "../../../utils/timetable";
 import ua from "../../../languages/ua";
 import {green} from '@material-ui/core/colors';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { withStyles } from '@material-ui/core/styles';
 import 'date-fns';
-import Grid from '@material-ui/core/Grid';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-    MuiPickersUtilsProvider,
-    KeyboardDatePicker,
-} from '@material-ui/pickers';
-import moment from 'moment';
+import disciplineValue from '../../../constants/disciplineValue';
+import rooms from '../../../constants/rooms';
+import daysValues from '../../../constants/daysValues';
+import typesValue from '../../../constants/typesValue';
+import times from '../../../constants/times';
+import days from '../../../constants/days';
+import roomsValues from '../../../constants/roomsValues';
 
 
 const GreenCheckbox = withStyles({
@@ -92,7 +90,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const validate = values => {
-    const {noDay, noTime, noDisciplines, noRoom, noType, noTeacher} = ua.pages.manageUsers.errors;
+    const {noDay, noTime, noDisciplines, noRoom, noType, noTeacher, noDate} = ua.pages.manageUsers.errors;
     const errors = {};
 
     if (!values.day) {
@@ -119,6 +117,10 @@ const validate = values => {
         errors.time = noTime;
     }
 
+    if (!values.lessonStartDate) {
+        errors.lessonStartDate = noDate;
+    }
+
     return errors;
 };
 
@@ -135,39 +137,60 @@ const MenuProps = {
 
 function CreateLesson(props) {
     const classes = useStyles();
-    const {createLesson, student, allTeachersLoading, getTeachers, allTeachers, closeForm,
-        getAllLessonsByCurrentDay, lessonsByDayLoading, lessonsByDay} = props;
+    const {createLesson, student, allTeachersLoading, getTeachers, allTeachers, closeForm} = props;
     const theme = useTheme();
-    const [changed, setChanged] = useState(false);
 
     const formik = useFormik({
         initialValues: {
             student: {...student},
-            isTestLesson: false
+            isSingleLesson: false,
+            lessonStartDate: '',
+            day: '',
+            lessonFinishDate: null,
+            time: '',
+            room: ''
         },
         validate,
         onSubmit: value => {
             createLesson(value);
             closeForm();
-            setChanged(true);
         },
     });
 
     useEffect(() => {
+        const ac = new AbortController();
         getTeachers();
+        return () => ac.abort();
     }, []);
+
+    const handleChangeistTest = (event) => {
+        formik.setFieldValue('isSingleLesson', event.target.checked);
+        if(!event.target.checked) {
+            formik.setFieldValue('lessonFinishDate', null);
+        } else {
+            formik.setFieldValue('lessonFinishDate', formik.values.lessonStartDate);
+        }
+    };
+
+    const handleDateChange = (event) => {
+        if (formik.values.isSingleLesson) {
+            formik.setFieldValue('lessonFinishDate', event.target.value);
+        }
+
+        formik.setFieldValue('lessonStartDate', event.target.value);
+        const day = new Date(event.target.value);
+        formik.setFieldValue('day', days[day.getDay() - 1]);
+    };
 
     const handleChangeDiscipline = event => {
         formik.setFieldValue('discipline', event.target.value);
         formik.setFieldValue('teacher', {});
         formik.setFieldValue('type', '');
-        formik.setFieldValue('day', '');
     };
 
     const handleChangeTeacher = event => {
         formik.setFieldValue('teacher', event.target.value);
         formik.setFieldValue('type', null);
-        formik.setFieldValue('day', null);
     };
 
     const handleChangeRoom = event => {
@@ -183,30 +206,9 @@ function CreateLesson(props) {
         }
     };
 
-    const handleChangeDay = event => {
-        formik.setFieldValue('day', event.target.value);
-        getAllLessonsByCurrentDay(event.target.value);
-        formik.setFieldValue('time', '');
-    };
-
     const handleChangeTime = event => {
         formik.setFieldValue('time', event.target.value);
-        formik.setFieldValue('room', '');
     };
-
-    const handleChangeistTest = (event) => {
-        formik.setFieldValue('isTestLesson', event.target.checked);
-        formik.setFieldValue('lessonDate', null);
-    };
-
-    const handleDateChange = (date) => {
-        const value = moment(date).format().slice(0, 10);
-        formik.setFieldValue('lessonDate', value);
-    };
-
-    if (changed && !student) {
-        return <Redirect to='/admin/lessons' />
-    }
 
     if (allTeachersLoading) {
         return <div className="wrapper"><Preloader/></div>
@@ -216,15 +218,12 @@ function CreateLesson(props) {
     const checkedDiscipline = formik.values.discipline || '';
     const checkedType = formik.values.type || '';
     const lessonTypes = checkedTeacher.id ? checkedTeacher.prices.filter(price => price.discipline === checkedDiscipline).map(price => price.type) : [];
-    const days = checkedTeacher.id ? checkedTeacher.workTimes.map(workTime => workTime.day) : [];
     const price = formik.values.teacher && formik.values.discipline && formik.values.type ? formik.values.teacher.prices.filter(price => {
         return (
             price.discipline === formik.values.discipline && price.type === formik.values.type
         )
     })[0].priceValue : '';
-    const worktimes = checkedTeacher.id ? checkedTeacher.workTimes.filter(worktime => worktime.day === formik.values.day) : [];
-    const timesForSelect = checkedTeacher.id && checkedType ? freeTeacherTimes(checkedTeacher.lessons, formik.values.duration, worktimes, formik.values.day) : [];
-    const roomsForSelect = formik.values.day && formik.values.time ? freeClasseForCurrentTime(formik.values.time, formik.values.duration, lessonsByDay) : [];
+
     const isValid = !Object.keys(formik.errors).length && Object.keys(formik.touched).length !== 0;
 
     return (
@@ -241,6 +240,40 @@ function CreateLesson(props) {
                         disabled
                     />
                 </div>
+                <div className={classes.paddingLeft}>
+                    <FormControlLabel
+                        control={<GreenCheckbox checked={formik.values.isSingleLesson} onChange={handleChangeistTest} name="isTestLesson" />}
+                        label="Разовий Урок"
+                    />
+                </div>
+                <div>
+                    <TextField
+                        label={formik.touched.lessonStartDate && formik.errors.lessonStartDate || 'Дата старту заняття'}
+                        id="date"
+                        type="date"
+                        value={formik.values.lessonStartDate}
+                        className={classes.textField}
+                        onBlur={formik.handleBlur}
+                        onChange={handleDateChange}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                </div>
+                <div>
+                    <TextField
+                        id="day"
+                        name='day'
+                        label="День"
+                        type="text"
+                        value={formik.values.day}
+                        className={classes.textField}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        disabled
+                    />
+                </div>
                 <div>
                     <FormControl className={classes.formControl}>
                         <InputLabel id="demo-mutiple-checkbox-label">{formik.touched.discipline && formik.errors.discipline || 'Дисципліна'}</InputLabel>
@@ -250,7 +283,8 @@ function CreateLesson(props) {
                             name='discipline'
                             onChange={handleChangeDiscipline}
                             input={<Input />}
-                            renderValue={() => checkedDiscipline}
+                            renderValue={() => disciplineValue[checkedDiscipline]}
+                            value={checkedDiscipline}
                             onBlur={formik.handleBlur}
                             error={formik.touched.disciplines && formik.errors.disciplines}
                             MenuProps={MenuProps}
@@ -258,7 +292,7 @@ function CreateLesson(props) {
                             {Disciplines.map(item => (
                                 <MenuItem key={item} value={item}>
                                     <Checkbox checked={formik.values.discipline === item}/>
-                                    <ListItemText primary={item} />
+                                    <ListItemText primary={disciplineValue[item]} />
                                 </MenuItem>
                             ))}
                         </Select>
@@ -274,6 +308,7 @@ function CreateLesson(props) {
                             onChange={handleChangeTeacher}
                             input={<Input />}
                             renderValue={() => checkedTeacher.id ? checkedTeacher.firstName + ' ' + checkedTeacher.lastName : ''}
+                            value={checkedTeacher}
                             onBlur={formik.handleBlur}
                             error={formik.touched.teacher && formik.errors.teacher}
                             MenuProps={MenuProps}
@@ -297,7 +332,8 @@ function CreateLesson(props) {
                             name='type'
                             onChange={handleChangeType}
                             input={<Input />}
-                            renderValue={() => checkedType}
+                            renderValue={() => typesValue[checkedType]}
+                            value={checkedType}
                             onBlur={formik.handleBlur}
                             error={formik.touched.type && formik.errors.type}
                             MenuProps={MenuProps}
@@ -306,31 +342,7 @@ function CreateLesson(props) {
                             {lessonTypes.map(item => (
                                 <MenuItem key={item} value={item}>
                                     <Checkbox checked={formik.values.type === item}/>
-                                    <ListItemText primary={item} />
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </div>
-                <div>
-                    <FormControl className={classes.formControl}>
-                        <InputLabel id="demo-mutiple-checkbox-label">{formik.touched.day && formik.errors.day || 'День'}</InputLabel>
-                        <Select
-                            labelId="demo-mutiple-checkbox-label"
-                            id="demo-mutiple-checkbox"
-                            name='day'
-                            onChange={handleChangeDay}
-                            input={<Input />}
-                            renderValue={() => formik.values.day || ''}
-                            MenuProps={MenuProps}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.day && formik.errors.day}
-                            disabled={!checkedTeacher.id}
-                        >
-                            {days.map(item => (
-                                <MenuItem key={item} value={item}>
-                                    <Checkbox checked={formik.values.day === item}/>
-                                    <ListItemText primary={item} />
+                                    <ListItemText primary={typesValue[item]} />
                                 </MenuItem>
                             ))}
                         </Select>
@@ -346,12 +358,12 @@ function CreateLesson(props) {
                             onChange={handleChangeTime}
                             input={<Input />}
                             renderValue={() => formik.values.time || ''}
+                            value={formik.values.time}
                             MenuProps={MenuProps}
                             onBlur={formik.handleBlur}
                             error={formik.touched.time && formik.errors.time}
-                            disabled={!checkedTeacher.id || !checkedType}
                         >
-                            {timesForSelect.map(item => (
+                            {times.map(item => (
                                 <MenuItem key={item} value={item}>
                                     <Checkbox checked={formik.values.time === item}/>
                                     <ListItemText primary={item} />
@@ -381,57 +393,29 @@ function CreateLesson(props) {
                     />
                 </div>
                 <div>
-                    {
-                        lessonsByDayLoading ? <Preloader/> :
-                            <FormControl className={classes.formControl}>
-                                <InputLabel id="demo-mutiple-checkbox-label">{formik.touched.room && formik.errors.room || 'Клас'}</InputLabel>
-                                <Select
-                                    labelId="demo-mutiple-checkbox-label"
-                                    id="demo-mutiple-checkbox"
-                                    name='room'
-                                    onChange={handleChangeRoom}
-                                    input={<Input />}
-                                    renderValue={selected => selected}
-                                    onBlur={formik.handleBlur}
-                                    error={formik.touched.roоm && formik.errors.room}
-                                    MenuProps={MenuProps}
-                                    disabled={!formik.values.day || !formik.values.time}
-                                >
-                                    {roomsForSelect.map(item => (
-                                        <MenuItem key={item} value={item}>
-                                            <Checkbox checked={formik.values.room === item} />
-                                            <ListItemText primary={item} />
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                    }
-
+                    <FormControl className={classes.formControl}>
+                        <InputLabel id="demo-mutiple-checkbox-label">{formik.touched.room && formik.errors.room || 'Клас'}</InputLabel>
+                        <Select
+                            labelId="demo-mutiple-checkbox-label"
+                            id="demo-mutiple-checkbox"
+                            name='room'
+                            onChange={handleChangeRoom}
+                            input={<Input/>}
+                            renderValue={selected => rooms[selected]}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.roоm && formik.errors.room}
+                            value={formik.values.room}
+                            MenuProps={MenuProps}
+                        >
+                            {roomsValues.map(item => (
+                                <MenuItem key={item} value={item}>
+                                    <Checkbox checked={formik.values.room === item} />
+                                    <ListItemText primary={rooms[item]} />
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 </div>
-                <div className={classes.paddingLeft}>
-                    <FormControlLabel
-                        control={<GreenCheckbox checked={formik.values.isTestLesson} onChange={handleChangeistTest} name="isTestLesson" />}
-                        label="Пробний Урок"
-                    />
-                </div>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <Grid container>
-                        <KeyboardDatePicker
-                            disableToolbar
-                            variant="inline"
-                            format="dd/MM/yyyy"
-                            margin="normal"
-                            id="date-picker-inline"
-                            label="Дата пробного уроку"
-                            value={formik.values.lessonDate || null}
-                            onChange={handleDateChange}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
-                            }}
-                            disabled={!formik.values.isTestLesson}
-                        />
-                    </Grid>
-                </MuiPickersUtilsProvider>
                 <div className='buttons-container'>
                     <Button
                         variant="contained"

@@ -6,11 +6,15 @@ import com.app.model.LessonDay;
 import com.app.model.LessonType;
 import com.app.model.Room;
 import com.app.model.Status;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.sql.Time;
 import java.util.Date;
 
 @Data
@@ -32,7 +36,9 @@ public class LessonResponse {
   private Integer duration;
   private Status status;
   private Date createdDate;
-  private Boolean isTestLesson;
+  private Boolean isSingleLesson;
   private Date lessonDate;
-  Integer currentStudenBalance;
+  private Integer currentStudenBalance;
+  private Date lessonStartDate;
+  private Date lessonFinishDate;
 }

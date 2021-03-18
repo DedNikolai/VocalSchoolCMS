@@ -89,4 +89,15 @@ export const getLessonsByDay = day => dispatch => {
     }).finally(() => {
         dispatch({type: TYPES.LESSONS_BY_DAY_LOADING, payload: false})
     })
-}
+};
+
+export const getAllLessonsByDates = (startDate, finishDate) => dispatch => {
+    dispatch({type: TYPES.LESSONS_LOADING, payload: true})
+    api.get(`/lessons/dates?startDate=${startDate}&finishDate=${finishDate}`).then(res => {
+        if (res.status === 200) {
+            dispatch({type: TYPES.SAVE_LESSONS, payload: res.data})
+        }
+    }).finally(() => {
+        dispatch({type: TYPES.LESSONS_LOADING, payload: false})
+    })
+};

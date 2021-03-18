@@ -49,7 +49,7 @@ public class SudentServiceImpl implements StudentService {
   public void deleteStudent(Long id) {
     Student student = studentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Student", "id", id));
     List<Teacher> teachers = teacherRepository.findAllByStudentsContains(student);
-    List<Lesson> lessons = lessonRepository.findAllByStudentAndDeletedIsFalse(student);
+    List<Lesson> lessons = lessonRepository.findAllByStudentOrderByLessonStartDateDesc(student);
     lessons.stream().forEach(lesson -> {
       lesson.setStudent(null);
     });
