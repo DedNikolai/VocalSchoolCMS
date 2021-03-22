@@ -84,7 +84,7 @@ function ConfirmedLessons(props) {
     }, []);
 
     if (lessonsLoading) return <Preloader/>
-
+    console.log(content)
     return (
         <div className='lessons-list'>
             <Paper className={classes.root}>
@@ -134,14 +134,14 @@ function ConfirmedLessons(props) {
                                             if (column.id === 'student') {
                                                 return (
                                                     <TableCell className={classes.cell} key={column.id}>
-                                                        {row.student.firstName + ' ' + row.student.lastName}
+                                                        {row.lesson.student.firstName + ' ' + row.lesson.student.lastName}
                                                     </TableCell>
                                                 )
                                             }
                                             if (column.id === 'date') {
                                                 return (
                                                     <TableCell className={classes.cell} key={column.id}>
-                                                        {row.lessonDate}
+                                                        {row.lessonDate.split('-').reverse().join('-')}
                                                     </TableCell>
                                                 )
                                             }

@@ -48,8 +48,8 @@ public class LessonController {
 
   @DeleteMapping("{id}")
   @JsonView(View.Lesson.class)
-  public ResponseEntity<LessonResponse> deleteLesson(@PathVariable Long id) {
-    LessonResponse response = lessonFacade.deleteLesson(id);
+  public ResponseEntity<ApiResponse> deleteLesson(@PathVariable Long id) {
+    ApiResponse response = lessonFacade.deleteLesson(id);
     return ResponseEntity.ok(response);
   }
 

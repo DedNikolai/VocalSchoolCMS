@@ -32,9 +32,8 @@ public class LessonFacade {
     return lessonService.createLesson(lesson);
   }
 
-  public LessonResponse deleteLesson(Long id) {
-    Lesson lesson = lessonService.deleteLesson(id);
-    return modelMapper.map(lesson, LessonResponse.class);
+  public ApiResponse deleteLesson(Long id) {
+    return lessonService.deleteLesson(id);
   }
 
   public LessonResponse getLessonById(Long id) {

@@ -44,4 +44,13 @@ public class DeletedLesson extends BaseEntiy {
 
   @Column(name = "reason")
   private String reason;
+
+  @ManyToOne
+  @JoinColumn(name = "abonement")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  private Abonement abonement;
+
+  @Column(name = "is_used", columnDefinition = "boolean default false")
+  private Boolean isUsed = false;
 }

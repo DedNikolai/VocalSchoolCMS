@@ -10,11 +10,8 @@ public class AbonementRequest {
   private Long id;
   private Date createdDate;
   private StudentRequest student;
-  private TeacherRequest teacher;
   private Integer quantity;
   private Integer price;
   private Discipline discipline;
-//  private Date startedDate;
-//  private Date endDate;
   private Integer transferedQuantity;
 }

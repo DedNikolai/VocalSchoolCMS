@@ -28,7 +28,7 @@ public class SudentServiceImpl implements StudentService {
   @Override
   public Student getStudntById(Long id) {
     Student student = studentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Student", "id", id));
-    Set<Abonement> abonements = student.getAbonements().stream().filter(abonement -> abonement.getIsActive()).collect(Collectors.toSet());
+    Set<Abonement> abonements = student.getAbonements();
     student.setAbonements(abonements);
     return student;
   }

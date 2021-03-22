@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react';
 import {NavLink} from 'react-router-dom';
-import {getLessonById, updateConfirmedLesson} from "../../../store/actions/confirmedLesson";
+import {getLessonById} from "../../../store/actions/lesson";
+import {getAllTeachers} from "../../../store/actions/teacher";
+import {createConfirmedLesson} from "../../../store/actions/confirmedLesson";
 import {connect} from "react-redux";
 import Preloader from '../../../components/Preloader/index';
 import Paper from '@material-ui/core/Paper';
@@ -10,7 +12,7 @@ import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import {useFormik} from 'formik';
-import './ManageConfirmedLesson.scss';
+import './CreateConfirmedLesson.scss';
 import {colors} from '../../../constants/view';
 import ua from "../../../languages/ua";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -20,6 +22,12 @@ import Checkbox from '@material-ui/core/Checkbox';
 import disciplineValue from '../../../constants/disciplineValue';
 import typesValue from '../../../constants/typesValue';
 import daysValues from "../../../constants/daysValues";
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import ListItemText from '@material-ui/core/ListItemText';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
 
 const GreenCheckbox = withStyles({
     root: {
@@ -68,6 +76,14 @@ const useStyles = makeStyles(theme => ({
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
 
 const validate = values => {
     const {noTeacher} = ua.pages.manageUsers.errors;
@@ -80,32 +96,55 @@ const validate = values => {
     return errors;
 };
 
-function ManageConfirmedLesson(props) {
+function CreateConfirmedLesson(props) {
     const classes = useStyles();
-    const {lesson, lessonLoading, getLesson, updateLesson} = props;
-    const id = props.match.params.id;
+    const {lesson, lessonLoading, getLesson, allTeachersLoading, getTeachers, allTeachers, createLesson} = props;
+    const id = props.match.params.lessonId;
+    const date = props.match.params.date;
     const theme = useTheme();
 
+    const setLessonPrice = (lesson, teacher) => {
+      return teacher ? teacher.prices.filter(price => {
+          return (
+              price.discipline === lesson.discipline && price.type === lesson.type
+          )
+      })[0].priceValue : '';
+    };
+
     const formik = useFormik({
-        initialValues: {...lesson},
+        initialValues: {
+            lesson: lesson,
+            teacher: lesson.teacher,
+            lessonDate: date,
+            isPaid: false,
+            price: setLessonPrice(lesson, lesson.teacher)
+        },
         // validate,
         enableReinitialize: true,
         onSubmit: value => {
-            updateLesson(value, id);
+            createLesson(value, date);
         },
     });
 
     useEffect(() => {
         getLesson(id);
+        getTeachers();
+
     }, []);
 
-    const handleChangeIsPaid = event => {
-        formik.setFieldValue('isPaid', event.target.checked);
+    const handleChangeTeacher = event => {
+        formik.setFieldValue('teacher', event.target.value);
+        const lessonPrice = setLessonPrice(formik.values.lesson,  event.target.value);
+        formik.setFieldValue('price', lessonPrice);
+
     };
 
-    if (lessonLoading) {
+    if (lessonLoading || allTeachersLoading) {
         return <div className="wrapper"><Preloader/></div>
     };
+
+    const checkedTeacher = formik.values.teacher;
+    const checkedDiscipline = formik.values.lesson.discipline;
 
     return (
         <Paper>
@@ -133,15 +172,28 @@ function ManageConfirmedLesson(props) {
                     />
                 </div>
                 <div>
-                    <TextField
-                        label="Вчитель"
-                        name='teacher'
-                        id="outlined-size-small"
-                        value={formik.values.teacher.firstName + ' ' + formik.values.teacher.lastName}
-                        variant="outlined"
-                        size="small"
-                        disabled
-                    />
+                    <FormControl className={classes.formControl}>
+                        <InputLabel id="demo-mutiple-checkbox-label">{formik.touched.teacher && formik.errors.teacher || 'Вчитель'}</InputLabel>
+                        <Select
+                            labelId="demo-mutiple-checkbox-label"
+                            id="demo-mutiple-checkbox"
+                            name='teacher'
+                            onChange={handleChangeTeacher}
+                            input={<Input />}
+                            renderValue={() => checkedTeacher.id ? checkedTeacher.firstName + ' ' + checkedTeacher.lastName : ''}
+                            value={checkedTeacher}
+                            onBlur={formik.handleBlur}
+                            error={formik.touched.teacher && formik.errors.teacher}
+                            MenuProps={MenuProps}
+                        >
+                            {allTeachers.filter(teacher => teacher.disciplines.indexOf(checkedDiscipline) !== -1).map(teacher => (
+                                <MenuItem key={teacher.id} value={teacher}>
+                                    <Checkbox checked={checkedTeacher.id === teacher.id}/>
+                                    <ListItemText primary={teacher.firstName + ' ' + teacher.lastName} />
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 </div>
                 <div>
                     <TextField
@@ -207,12 +259,6 @@ function ManageConfirmedLesson(props) {
                         disabled
                     />
                 </div>
-                <div className={classes.paddingLeft}>
-                    <FormControlLabel
-                        control={<GreenCheckbox checked={formik.values.isPaid} onChange={handleChangeIsPaid} name="checkedG" />}
-                        label="Відмітка про виплату"
-                    />
-                </div>
                 <div className='buttons-container'>
                     <NavLink to='/admin/confirmed-lessons'>
                         <Button
@@ -243,22 +289,25 @@ function ManageConfirmedLesson(props) {
     )
 }
 
-ManageConfirmedLesson.defaultProps = {
+CreateConfirmedLesson.defaultProps = {
     lesson: {},
     allTeachers: [],
     lessonsByDay: [],
 }
 
-const mapStateToProps = ({confirmedLessons}) => {
+const mapStateToProps = ({lesson, teacher}) => {
     return {
-        lesson: confirmedLessons.confirmedLesson,
-        lessonLoading: confirmedLessons.confirmedLessonLoading,
+        lesson: lesson.lessonById,
+        lessonLoading: lesson.lessonByIdLoading,
+        allTeachers: teacher.teachers,
+        allTeachersLoading: teacher.teachersLoading,
     }
 };
 
 const mapDispatchToProps = dispatch => ({
     getLesson: (id) => dispatch(getLessonById(id)),
-    updateLesson: (data, id) => dispatch(updateConfirmedLesson(data, id)),
+    createLesson: (lesson, date) => dispatch(createConfirmedLesson(lesson, date)),
+    getTeachers: () => dispatch(getAllTeachers()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ManageConfirmedLesson);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateConfirmedLesson);

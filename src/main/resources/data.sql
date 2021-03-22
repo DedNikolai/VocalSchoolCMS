@@ -64,24 +64,24 @@ VALUES
 INSERT INTO prices
   (id, date_created, date_modified, teacher_id, discipline, price_value, lesson_type)
 VALUES
-  (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 'VOCAL', 150, 'MAN'),
+  (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 'VOCAL', 300, 'MAN'),
   (3, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 'VOCAL', 250, 'MAN'),
   (5, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 3, 'VOCAL', 150, 'MAN'),
   (4, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 'VOCAL', 150, 'CHILD'),
   (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 'VOCAL', 250, 'CHILD');
 
 INSERT INTO abonements
-  (id, date_created, date_modified, student_id, teacher_id, quantity, price, discipline, transfered_quantity, is_active, used_quantity)
+  (id, date_created, date_modified, student_id, quantity, price, discipline, transfered_quantity)
 VALUES
-  (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 1, 1, 4, 1300, 'VOCAL', 1, true, 3),
-  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, 2, 8, 2000, 'VOCAL', 2, true, 1);
+  (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 1, 4, 1300, 'VOCAL', 1),
+  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, 8, 2000, 'VOCAL', 2);
 
 INSERT INTO confirmed_lesson
-  (id, date_created, date_modified, price, student, teacher, lesson_id, lesson_date, abonement, paid, lesson_time)
+  (id, date_created, date_modified, price, teacher, lesson_id, lesson_date, abonement, paid)
 VALUES
-  (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 300, 1, 1, 1, '2020-08-24', 1, false, '12:00'),
-  (3, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 300, 1, 1, 1, '2020-02-24', 1, false, '12:00'),
-  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 500, 2, 2, 1, '2020-08-25', 1, false, '12:00');
+  (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 300, 1, 1, '2020-08-24', 1, false),
+  (3, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 300, 1, 1, '2020-02-24', 1, false),
+  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 500, 2, 1, '2020-08-25', 1, false);
 
 INSERT INTO transfer_lessons
   (id, date_created, date_modified, teacher, lesson_id, lesson_date, room, transfer_date, transfer_time, abonement, is_active, lesson_day)

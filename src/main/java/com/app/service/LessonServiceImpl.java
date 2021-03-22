@@ -133,13 +133,8 @@ public class LessonServiceImpl implements LessonService {
 
   @Override
   @Transactional
-  public Lesson deleteLesson(Long id) {
-    Lesson lesson = lessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));
-    Teacher teacher = teacherRepository.findByLessonsContains(lesson);
-    teacher.getLessons().remove(lesson);
-    teacherRepository.save(teacher);
-    lesson.setTeacher(null);
-    return lessonRepository.save(lesson);
+  public ApiResponse deleteLesson(Long id) {
+    return new ApiResponse(false, "не реализовано");
   }
 
   @Override
@@ -169,41 +164,41 @@ public class LessonServiceImpl implements LessonService {
       e.printStackTrace();
     }
     List<Lesson> lessons = lessonRepository.findAllByDayOrderByTime(LessonDay.values()[cal.get(Calendar.DAY_OF_WEEK)-1]);
-    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(parseDate);
-    List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(parseDate);
-    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(parseDate);
-
-    List<Lesson> lessonList = lessons.stream().map(lesson -> {
-      boolean confirmed = confirmedLessons.stream().anyMatch(confirmedLesson -> confirmedLesson.getLesson().getId() == lesson.getId() && confirmedLesson.getTime().equals(lesson.getTime()));
-      boolean transfered = transferLessons.stream().anyMatch(transferLesson -> transferLesson.getLesson().getId() == lesson.getId() && transferLesson.getTransferTime().equals(lesson.getTime()));
-      boolean deleted = deletedLessons.stream().anyMatch(deletedLesson -> deletedLesson.getLesson().getId() == lesson.getId() && deletedLesson.getLesson().getTime().equals(lesson.getTime()));
-      if (confirmed) {
-        lesson.setStatus(Status.CONFIRMED);
-      }
-
-      if (transfered) {
-        lesson.setStatus(Status.TRANSFERED);
-      }
-
-      if (deleted) {
-        lesson.setStatus(Status.DELETED);
-      }
-
-      if (!transfered && !confirmed && !deleted) {
-        lesson.setStatus(null);
-      }
-
-      return lesson;
-    }).map(lesson -> {
-          Student student = lesson.getStudent();
-          Integer balance = student.getAbonements()
-              .stream().filter(abonement -> abonement.getIsActive() && abonement.getDiscipline().equals(lesson.getDiscipline()))
-              .reduce(0, (partialAgeResult, abonement) -> partialAgeResult + abonement.getQuantity() - abonement.getUsedLessons(), Integer::sum);
-          lesson.setCurrentStudenBalance(balance);
-          return lesson;
-        })
-        .collect(Collectors.toList());
-    return lessonList;
+//    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(parseDate);
+//    List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(parseDate);
+//    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(parseDate);
+//
+//    List<Lesson> lessonList = lessons.stream().map(lesson -> {
+//      boolean confirmed = confirmedLessons.stream().anyMatch(confirmedLesson -> confirmedLesson.getLesson().getId() == lesson.getId() && confirmedLesson.getTime().equals(lesson.getTime()));
+//      boolean transfered = transferLessons.stream().anyMatch(transferLesson -> transferLesson.getLesson().getId() == lesson.getId() && transferLesson.getTransferTime().equals(lesson.getTime()));
+//      boolean deleted = deletedLessons.stream().anyMatch(deletedLesson -> deletedLesson.getLesson().getId() == lesson.getId() && deletedLesson.getLesson().getTime().equals(lesson.getTime()));
+//      if (confirmed) {
+//        lesson.setStatus(Status.CONFIRMED);
+//      }
+//
+//      if (transfered) {
+//        lesson.setStatus(Status.TRANSFERED);
+//      }
+//
+//      if (deleted) {
+//        lesson.setStatus(Status.DELETED);
+//      }
+//
+//      if (!transfered && !confirmed && !deleted) {
+//        lesson.setStatus(null);
+//      }
+//
+//      return lesson;
+//    }).map(lesson -> {
+//          Student student = lesson.getStudent();
+//          Integer balance = student.getAbonements()
+//              .stream().filter(abonement -> abonement.getIsActive() && abonement.getDiscipline().equals(lesson.getDiscipline()))
+//              .reduce(0, (partialAgeResult, abonement) -> partialAgeResult + abonement.getQuantity() - abonement.getConfirmedLessons().size(), Integer::sum);
+//          lesson.setCurrentStudenBalance(balance);
+//          return lesson;
+//        })
+//        .collect(Collectors.toList());
+    return lessons;
   }
 
   @Override

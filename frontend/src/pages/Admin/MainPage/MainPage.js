@@ -30,7 +30,8 @@ import uaLocale from "date-fns/locale/uk";
 import disciplineValue from '../../../constants/disciplineValue';
 import status from '../../../constants/lessonStatus';
 import rooms from '../../../constants/rooms';
-import './MainPage.scss'
+import './MainPage.scss';
+import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -76,7 +77,7 @@ const columns = [
     { id: 'room', label: 'Класс', minWidth: 50, align: 'center' },
     { id: 'duration', label: 'Трывалість, хв', minWidth: 50, align: 'center' },
     { id: 'status', label: 'Статус', minWidth: 50, align: 'center' },
-    { id: 'isTest', label: 'Тестове', minWidth: 50, align: 'center' },
+    { id: 'isTest', label: 'Разове', minWidth: 50, align: 'center' },
     { id: 'actions', label: 'Дії', minWidth: 150, align: 'center' },
 ];
 
@@ -108,6 +109,7 @@ function MainPage(props) {
     const statusColor = status => {
       return status === 'DELETED' ? classes.colorRed : status === 'TRANSFERED' ? classes.colorYellow : classes.colorGreen
     };
+    const confirmedDate = moment(date).format().slice(0, 10);
 
     return (
         <Fragment>
@@ -164,17 +166,19 @@ function MainPage(props) {
                                                                             <EditIcon/>
                                                                         </NavLink>
                                                                     </IconButton>
-                                                                    <IconButton onClick={() => confirmLesson(row)}>
-                                                                        <CheckBoxIcon/>
+                                                                    <IconButton>
+                                                                        <NavLink to={`/admin/lessons/confirm/${row.id}/${confirmedDate}`}>
+                                                                            <CheckBoxIcon/>
+                                                                        </NavLink>
                                                                     </IconButton>
                                                                     <IconButton>
                                                                         <NavLink to={`/admin/lessons/reject/${row.id}/date/${date}`}>
                                                                             <CancelIcon/>
                                                                         </NavLink>
                                                                     </IconButton>
-                                                                    <IconButton onClick={() => createStudentCredit(row)}>
-                                                                        <CreditCardIcon/>
-                                                                    </IconButton>
+                                                                    {/*<IconButton onClick={() => createStudentCredit(row)}>*/}
+                                                                        {/*<CreditCardIcon/>*/}
+                                                                    {/*</IconButton>*/}
                                                                 </TableCell>
                                                             )
                                                         }
@@ -243,8 +247,6 @@ function MainPage(props) {
                         </Paper>
                     </div>
             }
-            <h2>Перенесені уроки</h2>
-            <TransferedLessonsList tarnsferedLessons={transferedLessons} date={date}/>
         </Fragment>
     )
 }

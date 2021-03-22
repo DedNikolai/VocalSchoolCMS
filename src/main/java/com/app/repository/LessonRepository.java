@@ -33,4 +33,6 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
   List<Lesson> findAllByLessonFinishDateIsNotExpire(
       @Param("startDate") Date startDate, @Param("day") LessonDay day);
 
+
+
 }

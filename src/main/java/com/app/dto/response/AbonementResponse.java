@@ -19,16 +19,10 @@ public class AbonementResponse {
   @EqualsAndHashCode.Exclude
   @JsonView(View.Abonement.class)
   private StudentResponse student;
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  @JsonView(View.Abonement.class)
-  private TeacherResponse teacher;
   private Integer quantity;
   private Integer price;
   private Discipline discipline;
   private Integer transferedQuantity;
   private Set<ConfirmedLessonResponse> confirmedLessons;
   private Set<TransferLessonResponse> transferLessons;
-  private Boolean isActive;
-  private Integer usedLessons;
 }

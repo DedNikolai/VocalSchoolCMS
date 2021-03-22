@@ -1,5 +1,6 @@
 package com.app.repository;
 
+import com.app.model.Lesson;
 import com.app.model.LessonDay;
 import com.app.model.TransferLesson;
 import org.springframework.data.domain.Page;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Repository
 public interface TransferLessonRepository extends JpaRepository<TransferLesson, Long> {
-  List<TransferLesson> findAllByLessonDate(@Temporal(TemporalType.DATE)Date date);
+  List<TransferLesson> findAllByLessonDateAndLesson(@Temporal(TemporalType.DATE)Date date, Lesson lesson);
 
   Page<TransferLesson> findAllByOrderByCreatedDateAsc(Pageable pageable);
 

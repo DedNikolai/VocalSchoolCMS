@@ -26,6 +26,7 @@ import ManageAbonement from '../ManageAbonement/ManageAbonement';
 import ManageConfirmedLesson from '../ManageConfirmedLesson/ManageConfirmedLesson';
 import DeletedLessons from '../DeletedLessons/DeletedLessons';
 import ConfirmedLessons from '../ConfirmedLessons/ConfirmedLessons';
+import CreateConfirmedLesson from '../CreateConfirmedLesson/CreateConfirmedLesson';
 import TransferLessons from '../TransferLessons/TransferLessons';
 import Credit from '../Credit/Credits';
 
@@ -48,6 +49,7 @@ function AdminRouter (props) {
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/teachers/add-new' component={CreateTeacher} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/teachers' component={Teachers} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/add-new' component={ManageLessons} />
+            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/confirm/:lessonId/:date' component={CreateConfirmedLesson} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/edit/:id' component={ManageLessons} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/transfer/:id/date/:current' component={CreateTransferLesson} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/reject/:id/date/:current' component={CreateDeleteLesson} />

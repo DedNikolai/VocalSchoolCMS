@@ -85,6 +85,16 @@ public class Lesson extends BaseEntiy {
   @EqualsAndHashCode.Exclude
   private List<TransferLesson> transferLessons;
 
+  @OneToMany(mappedBy = "lesson")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  private List<ConfirmedLesson> confirmedLessons;
+
+  @OneToMany(mappedBy = "lesson")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  private List<DeletedLesson> deletedLessons;
+
   Integer currentStudenBalance;
 
 }

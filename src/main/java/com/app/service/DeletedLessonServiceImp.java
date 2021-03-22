@@ -32,15 +32,15 @@ public class DeletedLessonServiceImp implements DeletedLessonService {
   @Override
   @Transactional
   public ApiResponse createLesson(DeletedLesson deletedLesson) {
-    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(deletedLesson.getLessonDate());
-    List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(deletedLesson.getLessonDate());
-    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(deletedLesson.getLessonDate());
-    boolean confirmed = confirmedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == deletedLesson.getLesson().getId());
-    boolean transfered = transferLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == deletedLesson.getLesson().getId());
-    boolean deleted = deletedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == deletedLesson.getLesson().getId());
-    if (confirmed || transfered  || deleted) {
-      throw new AppException("Lesson status is checked");
-    }
+//    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(deletedLesson.getLessonDate());
+//    List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(deletedLesson.getLessonDate());
+//    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(deletedLesson.getLessonDate());
+//    boolean confirmed = confirmedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == deletedLesson.getLesson().getId());
+//    boolean transfered = transferLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == deletedLesson.getLesson().getId());
+//    boolean deleted = deletedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == deletedLesson.getLesson().getId());
+//    if (confirmed || transfered  || deleted) {
+//      throw new AppException("Lesson status is checked");
+//    }
     deletedLessonRepository.save(deletedLesson);
     return new ApiResponse(true, "Урок відмінено");
   }

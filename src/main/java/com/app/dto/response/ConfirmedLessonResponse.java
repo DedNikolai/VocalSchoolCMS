@@ -21,12 +21,7 @@ public class ConfirmedLessonResponse {
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
   @JsonView(View.ConfirmedLesson.class)
-  private StudentResponse student;
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  @JsonView(View.ConfirmedLesson.class)
   private TeacherResponse teacher;
   private Date lessonDate;
-  private String time;
   private Boolean isPaid;
 }

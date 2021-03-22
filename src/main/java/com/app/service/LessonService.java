@@ -12,7 +12,7 @@ public interface LessonService {
 
   ApiResponse createLesson(Lesson lesson);
 
-  Lesson deleteLesson(Long id);
+  ApiResponse deleteLesson(Long id);
 
   Lesson getLessonById(Long id);
 

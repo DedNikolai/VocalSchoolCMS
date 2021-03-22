@@ -8,13 +8,20 @@ import com.app.model.TransferLesson;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface AbonementRepository extends JpaRepository<Abonement, Long> {
   Page<Abonement> findAllByOrderByCreatedDateDesc(Pageable pageable);
 
-  Abonement findFirstByStudentAndDisciplineAndIsActiveTrueOrderByCreatedDate(Student student, Discipline discipline);
+  @Query("select a from Abonement a where a.student = :student and a.discipline = :discipline " +
+      "and (size(a.confirmedLessons) + size(a.deletedLessons) < a.quantity) order by a.createdDate")
+  Abonement findFirstByStudentAndDisciplineOrderByCreatedDate(
+      @Param("student") Student student, @Param("discipline") Discipline discipline);
 
   Abonement findFirstByConfirmedLessonsContains(ConfirmedLesson confirmedLesson);
 

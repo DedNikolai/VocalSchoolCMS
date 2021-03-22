@@ -55,91 +55,91 @@ public class TransferLessonServiceImpl implements TransferLessonService{
   @Override
   @Transactional
   public ApiResponse createTransferLesson(TransferLesson request) {
-    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(request.getLessonDate());
-    List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(request.getLessonDate());
-    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(request.getLessonDate());
-    boolean confirmed = confirmedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == request.getLesson().getId());
-    boolean transfered = transferLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == request.getLesson().getId());
-    boolean deleted = deletedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == request.getLesson().getId());
-    if (confirmed || transfered  || deleted) {
-      throw new AppException("Lesson status is checked");
-    }
-
-    Abonement abonement = abonementRepository.
-        findFirstByStudentAndDisciplineAndIsActiveTrueOrderByCreatedDate(request.getLesson().getStudent(), request.getLesson().getDiscipline());
-
-    if (abonement == null) {
-      return new ApiResponse(false, "В даного учня немає проплачених занять");
-    }
-
-    if (abonement.getTransferedQuantity() == abonement.getTransferLessons().size()) {
-      return new ApiResponse(false, "По діючому абонементу вже не можна переносити заняття");
-    }
-
-    List<Lesson> lessonsByDay = lessonRepository.findAllByDay(request.getDay());
-    boolean isTimetableLessonForThisTime = lessonsByDay.stream().filter(item -> !item.getIsSingleLesson() && item.getRoom().equals(request.getRoom()))
-        .anyMatch(currentLesson -> !isAllowTime(request, currentLesson));
-    List<Lesson> testLessonsForThisTime = lessonsByDay.stream().filter(item -> item.getIsSingleLesson() && !isAllowTime(request, item))
-        .collect(Collectors.toList());
-
-    List<Lesson> testLessonForThisTimeInthisRoom = testLessonsForThisTime.stream().filter(currentLesson -> request.getRoom().equals(currentLesson.getRoom())).collect(Collectors.toList());
-    List<Lesson> testLessonForThisTimeWithCurrentTeacher= testLessonsForThisTime.stream().filter(currentLesson -> request.getTeacher().getId() == currentLesson.getTeacher().getId()).collect(Collectors.toList());
-
-    if (isTimetableLessonForThisTime) {
-      return new ApiResponse(false, "На цей час в цьому кабінеті вже є урок");
-    }
-
-    if (testLessonForThisTimeWithCurrentTeacher.size() != 0) {
-      return new ApiResponse(false,
-          testLessonForThisTimeWithCurrentTeacher.get(0).getLessonStartDate()+" заплановано тестовый урок з " + testLessonForThisTimeWithCurrentTeacher.get(0).getTeacher().getFirstName()+
-              " " + testLessonForThisTimeWithCurrentTeacher.get(0).getTeacher().getLastName() + " о "+testLessonForThisTimeWithCurrentTeacher.get(0).getTime());
-    }
-
-    if (testLessonForThisTimeInthisRoom.size() != 0) {
-      return new ApiResponse(false,
-          testLessonForThisTimeInthisRoom.get(0).getLessonStartDate()+ " в " + testLessonForThisTimeInthisRoom.get(0).getTime() + " Заплановано тестовый урок в класі " + testLessonForThisTimeInthisRoom.get(0).getRoom());
-    }
-    Teacher teacher = teacherRepository.findById(request.getTeacher().getId()).orElseThrow(() -> new ResourceNotFoundException("Teacher", "id", request.getTeacher().getId()));
-
-    if (!isTeacherWorkTimes(teacher, request)) {
-      return new ApiResponse(false, "Цей час не робочий для цього вяителя");
-    }
-
-    boolean isLessonForTeacherForThisTime = teacher.getLessons().stream().filter(currentLesson -> {
-      return !currentLesson.getIsSingleLesson() && currentLesson.getDay().equals(request.getDay());
-    }).anyMatch(teacherLesson -> !isAllowTime(request, teacherLesson));
-
-    if (isLessonForTeacherForThisTime) {
-      return new ApiResponse(false, "В данного вчеителя вже є урок на цей час");
-    }
-
-    List<TransferLesson> transferLessonsByDay = transferLessonRepository.findAllByDayAndIsActiveTrue(request.getDay());
-    List<TransferLesson> transferLessonsWithCurrentTeacherForThisTime = transferLessonsByDay.stream()
-        .filter(transferLesson -> !isAllowTimeForTransfer(request, transferLesson) && transferLesson.getTeacher().getId() == request.getTeacher().getId())
-        .collect(Collectors.toList());
-    List<TransferLesson> transferLessonInThisRoomForThisTime = transferLessonsByDay.stream()
-        .filter(transferLesson -> !isAllowTimeForTransfer(request, transferLesson) && transferLesson.getRoom().equals(request.getRoom()))
-        .collect(Collectors.toList());
-
-    if (transferLessonsWithCurrentTeacherForThisTime.size() != 0) {
-      return new ApiResponse(false,
-          transferLessonsWithCurrentTeacherForThisTime.get(0).getLessonDate()+" заплановано перенесеный урок з " + transferLessonsWithCurrentTeacherForThisTime.get(0).getTeacher().getFirstName()+
-              " " + transferLessonsWithCurrentTeacherForThisTime.get(0).getTeacher().getLastName() + " о "+transferLessonsWithCurrentTeacherForThisTime.get(0).getTransferTime());
-    }
-
-    if (transferLessonInThisRoomForThisTime.size() != 0) {
-      return new ApiResponse(false,
-          transferLessonInThisRoomForThisTime.get(0).getLessonDate()+ " в " + transferLessonInThisRoomForThisTime.get(0).getTransferTime() + " Заплановано перенесеный урок в класі " + transferLessonInThisRoomForThisTime.get(0).getRoom());
-    }
-
-    request.setAbonement(abonement);
-    TransferLesson savedTransferLesson = transferLessonRepository.save(request);
-    abonement.getTransferLessons().add(savedTransferLesson);
-    abonement.setUsedLessons(abonement.getUsedLessons()+1);
-    if (abonement.getQuantity() == abonement.getUsedLessons()) {
-      abonement.setIsActive(false);
-    }
-    abonementRepository.save(abonement);
+//    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(request.getLessonDate());
+//    List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(request.getLessonDate());
+//    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(request.getLessonDate());
+//    boolean confirmed = confirmedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == request.getLesson().getId());
+//    boolean transfered = transferLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == request.getLesson().getId());
+//    boolean deleted = deletedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == request.getLesson().getId());
+//    if (confirmed || transfered  || deleted) {
+//      throw new AppException("Lesson status is checked");
+//    }
+//
+//    Abonement abonement = abonementRepository.
+//        findFirstByStudentAndDisciplineAndIsActiveTrueOrderByCreatedDate(request.getLesson().getStudent(), request.getLesson().getDiscipline());
+//
+//    if (abonement == null) {
+//      return new ApiResponse(false, "В даного учня немає проплачених занять");
+//    }
+//
+//    if (abonement.getTransferedQuantity() == abonement.getTransferLessons().size()) {
+//      return new ApiResponse(false, "По діючому абонементу вже не можна переносити заняття");
+//    }
+//
+//    List<Lesson> lessonsByDay = lessonRepository.findAllByDay(request.getDay());
+//    boolean isTimetableLessonForThisTime = lessonsByDay.stream().filter(item -> !item.getIsSingleLesson() && item.getRoom().equals(request.getRoom()))
+//        .anyMatch(currentLesson -> !isAllowTime(request, currentLesson));
+//    List<Lesson> testLessonsForThisTime = lessonsByDay.stream().filter(item -> item.getIsSingleLesson() && !isAllowTime(request, item))
+//        .collect(Collectors.toList());
+//
+//    List<Lesson> testLessonForThisTimeInthisRoom = testLessonsForThisTime.stream().filter(currentLesson -> request.getRoom().equals(currentLesson.getRoom())).collect(Collectors.toList());
+//    List<Lesson> testLessonForThisTimeWithCurrentTeacher= testLessonsForThisTime.stream().filter(currentLesson -> request.getTeacher().getId() == currentLesson.getTeacher().getId()).collect(Collectors.toList());
+//
+//    if (isTimetableLessonForThisTime) {
+//      return new ApiResponse(false, "На цей час в цьому кабінеті вже є урок");
+//    }
+//
+//    if (testLessonForThisTimeWithCurrentTeacher.size() != 0) {
+//      return new ApiResponse(false,
+//          testLessonForThisTimeWithCurrentTeacher.get(0).getLessonStartDate()+" заплановано тестовый урок з " + testLessonForThisTimeWithCurrentTeacher.get(0).getTeacher().getFirstName()+
+//              " " + testLessonForThisTimeWithCurrentTeacher.get(0).getTeacher().getLastName() + " о "+testLessonForThisTimeWithCurrentTeacher.get(0).getTime());
+//    }
+//
+//    if (testLessonForThisTimeInthisRoom.size() != 0) {
+//      return new ApiResponse(false,
+//          testLessonForThisTimeInthisRoom.get(0).getLessonStartDate()+ " в " + testLessonForThisTimeInthisRoom.get(0).getTime() + " Заплановано тестовый урок в класі " + testLessonForThisTimeInthisRoom.get(0).getRoom());
+//    }
+//    Teacher teacher = teacherRepository.findById(request.getTeacher().getId()).orElseThrow(() -> new ResourceNotFoundException("Teacher", "id", request.getTeacher().getId()));
+//
+//    if (!isTeacherWorkTimes(teacher, request)) {
+//      return new ApiResponse(false, "Цей час не робочий для цього вяителя");
+//    }
+//
+//    boolean isLessonForTeacherForThisTime = teacher.getLessons().stream().filter(currentLesson -> {
+//      return !currentLesson.getIsSingleLesson() && currentLesson.getDay().equals(request.getDay());
+//    }).anyMatch(teacherLesson -> !isAllowTime(request, teacherLesson));
+//
+//    if (isLessonForTeacherForThisTime) {
+//      return new ApiResponse(false, "В данного вчеителя вже є урок на цей час");
+//    }
+//
+//    List<TransferLesson> transferLessonsByDay = transferLessonRepository.findAllByDayAndIsActiveTrue(request.getDay());
+//    List<TransferLesson> transferLessonsWithCurrentTeacherForThisTime = transferLessonsByDay.stream()
+//        .filter(transferLesson -> !isAllowTimeForTransfer(request, transferLesson) && transferLesson.getTeacher().getId() == request.getTeacher().getId())
+//        .collect(Collectors.toList());
+//    List<TransferLesson> transferLessonInThisRoomForThisTime = transferLessonsByDay.stream()
+//        .filter(transferLesson -> !isAllowTimeForTransfer(request, transferLesson) && transferLesson.getRoom().equals(request.getRoom()))
+//        .collect(Collectors.toList());
+//
+//    if (transferLessonsWithCurrentTeacherForThisTime.size() != 0) {
+//      return new ApiResponse(false,
+//          transferLessonsWithCurrentTeacherForThisTime.get(0).getLessonDate()+" заплановано перенесеный урок з " + transferLessonsWithCurrentTeacherForThisTime.get(0).getTeacher().getFirstName()+
+//              " " + transferLessonsWithCurrentTeacherForThisTime.get(0).getTeacher().getLastName() + " о "+transferLessonsWithCurrentTeacherForThisTime.get(0).getTransferTime());
+//    }
+//
+//    if (transferLessonInThisRoomForThisTime.size() != 0) {
+//      return new ApiResponse(false,
+//          transferLessonInThisRoomForThisTime.get(0).getLessonDate()+ " в " + transferLessonInThisRoomForThisTime.get(0).getTransferTime() + " Заплановано перенесеный урок в класі " + transferLessonInThisRoomForThisTime.get(0).getRoom());
+//    }
+//
+//    request.setAbonement(abonement);
+//    TransferLesson savedTransferLesson = transferLessonRepository.save(request);
+//    abonement.getTransferLessons().add(savedTransferLesson);
+//    abonement.setUsedLessons(abonement.getUsedLessons()+1);
+//    if (abonement.getQuantity() == abonement.getUsedLessons()) {
+//      abonement.setIsActive(false);
+//    }
+//    abonementRepository.save(abonement);
 
     return new ApiResponse(true, "Урок перенесено");
   }
@@ -217,27 +217,27 @@ public class TransferLessonServiceImpl implements TransferLessonService{
   @Override
   @Transactional
   public ApiResponse confirmTransferLesson(ConfirmedLesson confirmedLesson, Long trasferLessonId) {
-    TransferLesson transferLesson = transferLessonRepository.findById(trasferLessonId).orElseThrow(() -> new ResourceNotFoundException("TransferLesson", "id", trasferLessonId));
-    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(confirmedLesson.getLessonDate());
-    List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(confirmedLesson.getLessonDate());
-    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(confirmedLesson.getLessonDate());
-    boolean confirmed = confirmedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == confirmedLesson.getLesson().getId() && confirmedLesson.getTime().equals(lesson.getTime()));
-    boolean transfered = transferLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == confirmedLesson.getLesson().getId() && lesson.getTransferTime().equals(confirmedLesson.getTime()));
-    boolean deleted = deletedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == confirmedLesson.getLesson().getId() && lesson.getLesson().getTime().equals(confirmedLesson.getTime()));
-    if (confirmed || transfered  || deleted) {
-      throw new AppException("Lesson status is checked");
-    }
-
-    Abonement abonement = abonementRepository.findFirstByTransferLessonsContains(transferLesson);
-
-    confirmedLesson.setAbonement(abonement);
-    confirmedLesson.setIsPaid(false);
-    ConfirmedLesson savedConfirmedLesson = confirmedLessonRepository.save(confirmedLesson);
-    abonement.getConfirmedLessons().add(savedConfirmedLesson);
-
-    abonementRepository.save(abonement);
-    transferLesson.setStatus(Status.CONFIRMED);
-    transferLessonRepository.save(transferLesson);
+//    TransferLesson transferLesson = transferLessonRepository.findById(trasferLessonId).orElseThrow(() -> new ResourceNotFoundException("TransferLesson", "id", trasferLessonId));
+//    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(confirmedLesson.getLessonDate());
+//    List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(confirmedLesson.getLessonDate());
+//    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(confirmedLesson.getLessonDate());
+//    boolean confirmed = confirmedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == confirmedLesson.getLesson().getId() && confirmedLesson.getTime().equals(lesson.getTime()));
+//    boolean transfered = transferLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == confirmedLesson.getLesson().getId() && lesson.getTransferTime().equals(confirmedLesson.getTime()));
+//    boolean deleted = deletedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == confirmedLesson.getLesson().getId() && lesson.getLesson().getTime().equals(confirmedLesson.getTime()));
+//    if (confirmed || transfered  || deleted) {
+//      throw new AppException("Lesson status is checked");
+//    }
+//
+//    Abonement abonement = abonementRepository.findFirstByTransferLessonsContains(transferLesson);
+//
+//    confirmedLesson.setAbonement(abonement);
+//    confirmedLesson.setIsPaid(false);
+//    ConfirmedLesson savedConfirmedLesson = confirmedLessonRepository.save(confirmedLesson);
+//    abonement.getConfirmedLessons().add(savedConfirmedLesson);
+//
+//    abonementRepository.save(abonement);
+//    transferLesson.setStatus(Status.CONFIRMED);
+//    transferLessonRepository.save(transferLesson);
     return new ApiResponse(true, "Урок підтверджено");
   }
 
@@ -282,8 +282,6 @@ public class TransferLessonServiceImpl implements TransferLessonService{
 
     Set<TransferLesson> transfers = abonement.getTransferLessons().stream().filter(transfer -> transfer.getId() != transferLesson.getId()).collect(Collectors.toSet());
     abonement.setTransferLessons(transfers);
-    abonement.setUsedLessons(abonement.getUsedLessons() - 1);
-    abonement.setIsActive(true);
     abonementRepository.save(abonement);
 
     transferLessonRepository.delete(transferLesson);
