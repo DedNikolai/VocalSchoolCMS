@@ -52,3 +52,14 @@ export const deleteAbonement = (id, page, size) => dispatch => {
         }
     })
 };
+
+export const getAbonementsByStudent = id => dispatch => {
+    dispatch({type: TYPES.ABONEMENTS_BY_STUDENT_LOADING, payload: true});
+    api.get(`/abonements/student/${id}`).then(res => {
+        if (res.status >= 200 && res.status < 300) {
+            dispatch({type: TYPES.SAVE_ABONEMENTS_BY_STUDENT, payload: res.data})
+        }
+    }).finally(() => {
+        dispatch({type: TYPES.ABONEMENTS_BY_STUDENT_LOADING, payload: false});
+    })
+};

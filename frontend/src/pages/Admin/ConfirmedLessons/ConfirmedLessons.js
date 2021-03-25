@@ -84,7 +84,7 @@ function ConfirmedLessons(props) {
     }, []);
 
     if (lessonsLoading) return <Preloader/>
-    console.log(content)
+
     return (
         <div className='lessons-list'>
             <Paper className={classes.root}>

@@ -22,10 +22,8 @@ import {getTransferedLessonsByDate} from "../../../store/actions/transferLessons
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CancelIcon from '@material-ui/icons/Cancel';
 import {createNewConfirmedLesson} from '../../../utils/confirmLesson';
-import TransferedLessonsList from './TransferedLessonsList/TransferedLessonsList';
 import EditIcon from '@material-ui/icons/Edit';
 import {NavLink} from 'react-router-dom';
-import CreditCardIcon from '@material-ui/icons/CreditCard';
 import uaLocale from "date-fns/locale/uk";
 import disciplineValue from '../../../constants/disciplineValue';
 import status from '../../../constants/lessonStatus';
@@ -161,18 +159,18 @@ function MainPage(props) {
                                                         if (column.id === 'actions' && !row.status) {
                                                             return (
                                                                 <TableCell key={column.id} className={classes.cell}>
-                                                                    <IconButton>
-                                                                        <NavLink to={`/admin/lessons/transfer/${row.id}/date/${date}`}>
-                                                                            <EditIcon/>
-                                                                        </NavLink>
-                                                                    </IconButton>
+                                                                    {/*<IconButton>*/}
+                                                                        {/*<NavLink to={`/admin/lessons/transfer/${row.id}/date/${date}`}>*/}
+                                                                            {/*<EditIcon/>*/}
+                                                                        {/*</NavLink>*/}
+                                                                    {/*</IconButton>*/}
                                                                     <IconButton>
                                                                         <NavLink to={`/admin/lessons/confirm/${row.id}/${confirmedDate}`}>
                                                                             <CheckBoxIcon/>
                                                                         </NavLink>
                                                                     </IconButton>
                                                                     <IconButton>
-                                                                        <NavLink to={`/admin/lessons/reject/${row.id}/date/${date}`}>
+                                                                        <NavLink to={`/admin/lessons/reject/${row.id}/date/${confirmedDate}`}>
                                                                             <CancelIcon/>
                                                                         </NavLink>
                                                                     </IconButton>

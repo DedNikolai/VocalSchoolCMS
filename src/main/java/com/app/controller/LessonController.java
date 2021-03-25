@@ -96,4 +96,25 @@ public class LessonController {
     List<LessonResponse> response = lessonFacade.findAllByDates(startDate, finishDate);
     return ResponseEntity.ok(response);
   }
+
+  @GetMapping("teacher/{id}/dates")
+  @JsonView(View.Lesson.class)
+  public ResponseEntity<List<LessonResponse>> getLessonsByStudent(
+      @PathVariable("id") Long id,
+      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date finishDate
+      ) {
+    List<LessonResponse> response = lessonFacade.findAllByDatesAndTeacher(startDate, finishDate, id);
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("teacher/{id}")
+  @JsonView(View.Lesson.class)
+  public ResponseEntity<List<LessonResponse>> getLessonsByStudent(
+      @PathVariable("id") Long id,
+      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date
+  ) {
+    List<LessonResponse> response = lessonFacade.findAllByDatesAndTeacherAndIsNotSingleAndDateNotEpire(date, id);
+    return ResponseEntity.ok(response);
+  }
 }

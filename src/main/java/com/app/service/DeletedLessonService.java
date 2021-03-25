@@ -10,7 +10,7 @@ public interface DeletedLessonService {
 
   ApiResponse createLesson(DeletedLesson deletedLesson);
 
-  DeletedLesson updateLesson(DeletedLesson deletedLesson, Long id);
+  ApiResponse updateLesson(DeletedLesson deletedLesson, Long id);
 
   ApiResponse deleteLesson(Long id);
 

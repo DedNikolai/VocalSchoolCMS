@@ -4,6 +4,7 @@ import com.app.model.Lesson;
 import com.app.model.LessonDay;
 import com.app.model.Room;
 import com.app.model.Student;
+import com.app.model.Teacher;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -33,6 +34,18 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
   List<Lesson> findAllByLessonFinishDateIsNotExpire(
       @Param("startDate") Date startDate, @Param("day") LessonDay day);
 
+  @Query("select l from Lesson l where " +
+      "((l.lessonStartDate <= :startDate and (l.lessonFinishDate >= :finishDate or l.lessonFinishDate is null))" +
+      "or (l.lessonStartDate >= :startDate and l.lessonFinishDate <= :finishDate) " +
+      "or (l.lessonStartDate <= :startDate and l.lessonFinishDate <= :finishDate and l.lessonFinishDate >= :startDate and l.isSingleLesson = false) " +
+      "or (l.lessonStartDate >= :startDate and l.lessonStartDate <= :finishDate and (l.lessonFinishDate >= :finishDate or l.lessonFinishDate is null)))" +
+      "and l.teacher = :teacher")
+  List<Lesson> findAllByDatesAndTeacher(
+      @Param("startDate") Date startDate, @Param("finishDate") Date finishDate, @Param("teacher") Teacher teacher);
 
+  @Query("select l from Lesson l where (l.lessonFinishDate >= :expireDate or l.lessonFinishDate is null) " +
+      "and l.isSingleLesson = false and l.teacher = :teacher")
+  List<Lesson> findAllByTeacherAndLessonIsNotSingleAndDateNotEpire(
+      @Param("expireDate") Date expireDate, @Param("teacher") Teacher teacher);
 
 }

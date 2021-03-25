@@ -2,6 +2,7 @@ package com.app.repository;
 
 import com.app.model.Abonement;
 import com.app.model.ConfirmedLesson;
+import com.app.model.DeletedLesson;
 import com.app.model.Discipline;
 import com.app.model.Student;
 import com.app.model.TransferLesson;
@@ -19,12 +20,18 @@ public interface AbonementRepository extends JpaRepository<Abonement, Long> {
   Page<Abonement> findAllByOrderByCreatedDateDesc(Pageable pageable);
 
   @Query("select a from Abonement a where a.student = :student and a.discipline = :discipline " +
-      "and (size(a.confirmedLessons) + size(a.deletedLessons) < a.quantity) order by a.createdDate")
+      "and a.usedQuantity < a.quantity order by a.createdDate")
   Abonement findFirstByStudentAndDisciplineOrderByCreatedDate(
       @Param("student") Student student, @Param("discipline") Discipline discipline);
 
   Abonement findFirstByConfirmedLessonsContains(ConfirmedLesson confirmedLesson);
 
-  Abonement findFirstByTransferLessonsContains(TransferLesson transferLesson);
+//  Abonement findFirstByTransferLessonsContains(TransferLesson transferLesson);
+
+  Abonement findFirstByDeletedLessonsContains(DeletedLesson deletedLesson);
+
+  @Query("select a from Abonement a where a.student = :student " +
+      "and a.usedQuantity < a.quantity order by a.createdDate")
+  List<Abonement> findAllByStudent(@Param("student") Student student);
 
 }

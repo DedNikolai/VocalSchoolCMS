@@ -41,12 +41,10 @@ public class ConfirmedLessonServiceImp implements ConfirmedLessonService {
   @Transactional
   public ApiResponse createLesson(ConfirmedLesson confirmedLesson) {
     List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDateAndLesson(confirmedLesson.getLessonDate(), confirmedLesson.getLesson());
-    List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDateAndLesson(confirmedLesson.getLessonDate(), confirmedLesson.getLesson());
     List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDateAndLesson(confirmedLesson.getLessonDate(), confirmedLesson.getLesson());
     boolean confirmed = confirmedLessons.size() != 0;
-    boolean transfered = transferLessons.size() != 0;
     boolean deleted = deletedLessons.size() != 0;
-    if (confirmed || transfered  || deleted) {
+    if (confirmed || deleted) {
       return new ApiResponse(false, "Lesson status is checked");
     }
 
@@ -59,7 +57,9 @@ public class ConfirmedLessonServiceImp implements ConfirmedLessonService {
 
     confirmedLesson.setAbonement(abonement);
     confirmedLesson.setIsPaid(false);
+    abonement.setUsedQuantity(abonement.getUsedQuantity() + 1);
     confirmedLessonRepository.save(confirmedLesson);
+    abonementRepository.save(abonement);
     return new ApiResponse(true, "Урок підтверджено");
   }
 
@@ -84,6 +84,7 @@ public class ConfirmedLessonServiceImp implements ConfirmedLessonService {
     Set<ConfirmedLesson> confirmedLessons = abonement.getConfirmedLessons().
         stream().filter(confirmedLesson -> confirmedLesson.getId() != lessonFromDb.getId()).collect(Collectors.toSet());
     abonement.setConfirmedLessons(confirmedLessons);
+    abonement.setUsedQuantity(abonement.getUsedQuantity() - 1);
     abonementRepository.save(abonement);
 
     confirmedLessonRepository.delete(lessonFromDb);

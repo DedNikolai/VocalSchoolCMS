@@ -101,3 +101,14 @@ export const getAllLessonsByDates = (startDate, finishDate) => dispatch => {
         dispatch({type: TYPES.LESSONS_LOADING, payload: false})
     })
 };
+
+export const getAllLessonsByDatesAndTeacher = (startDate, finishDate, teacherId) => dispatch => {
+    dispatch({type: TYPES.LESSONS_BY_DATE_AND_TEACHER_LOADING, payload: true})
+    api.get(`/lessons/teacher/${teacherId}/dates?startDate=${startDate}&finishDate=${finishDate}`).then(res => {
+        if (res.status === 200) {
+            dispatch({type: TYPES.SAVE_LESSONS_BY_DATE_AND_TEACHER, payload: res.data})
+        }
+    }).finally(() => {
+        dispatch({type: TYPES.LESSONS_BY_DATE_AND_TEACHER_LOADING, payload: false})
+    })
+};

@@ -26,18 +26,6 @@ public class DeletedLesson extends BaseEntiy {
   @EqualsAndHashCode.Exclude
   private Lesson lesson;
 
-  @ManyToOne
-  @JoinColumn(name = "student_id")
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  private Student student;
-
-  @ManyToOne
-  @JoinColumn(name = "teacher_id")
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  private Teacher teacher;
-
   @Column(name = "lesson_date")
   @Temporal(TemporalType.DATE)
   private Date lessonDate;

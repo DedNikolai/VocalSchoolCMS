@@ -1,5 +1,7 @@
 package com.app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,12 +49,10 @@ public class Teacher extends BaseEntiy {
   @Column(name = "age")
   private Integer age;
 
-  @ManyToMany(mappedBy = "teachers", fetch = FetchType.EAGER)
-  private Set<Student> students;
-
-  @OneToMany(mappedBy="teacher", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy="teacher")
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
+  @JsonIgnore
   private Set<Lesson> lessons;
 
   @ElementCollection(fetch = FetchType.EAGER)
@@ -63,19 +63,23 @@ public class Teacher extends BaseEntiy {
 
   @OneToMany(mappedBy = "teacher", fetch = FetchType.EAGER)
   @ToString.Exclude
+  @JsonManagedReference
   private Set<Price> prices;
 
   @OneToMany(mappedBy = "teacher")
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
+  @JsonIgnore
   private List<ConfirmedLesson> confirmedLessons = new ArrayList<>();
 
   @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+  @ToString.Exclude
+  @JsonManagedReference
   private Set<TeacherWorkTime> workTimes;
 
-  @OneToMany(mappedBy = "teacher")
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  private List<TransferLesson> transferLessons;
+//  @OneToMany(mappedBy = "teacher")
+//  @ToString.Exclude
+//  @EqualsAndHashCode.Exclude
+//  private List<TransferLesson> transferLessons;
 
 }

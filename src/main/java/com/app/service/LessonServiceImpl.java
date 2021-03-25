@@ -50,6 +50,20 @@ public class LessonServiceImpl implements LessonService {
   }
 
   @Override
+  public List<Lesson> getAllLessonsByDatesAndTeacher(Date startDate, Date finishDate, Long teacherId) {
+    Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() -> new ResourceNotFoundException("Teacher", "id", teacherId));
+    List<Lesson> lessons = lessonRepository.findAllByDatesAndTeacher(startDate, finishDate, teacher);
+    return lessons;
+  }
+
+  @Override
+  public List<Lesson> findAllByTeacherAndLessonIsNotSingleAndDateNotEpire(Date date, Long teacherId) {
+    Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() -> new ResourceNotFoundException("Teacher", "id", teacherId));
+    List<Lesson> lessons = lessonRepository.findAllByTeacherAndLessonIsNotSingleAndDateNotEpire(date, teacher);
+    return lessons;
+  }
+
+  @Override
   @Transactional
   public ApiResponse createLesson(Lesson lesson) {
     List<Lesson> lessonsFromDb = lessonRepository.findAllByLessonFinishDateIsNotExpire(lesson.getLessonStartDate(), lesson.getDay());
@@ -127,6 +141,7 @@ public class LessonServiceImpl implements LessonService {
       return new ApiResponse(false, str);
     }
 
+    lesson.setId(lessonFromDb.getId());
     lessonRepository.save(lesson);
     return new ApiResponse(true, "Урок змінено");
   }

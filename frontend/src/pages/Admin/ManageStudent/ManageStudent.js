@@ -108,7 +108,7 @@ function ManageStudent(props) {
                     <h2>Абонементи</h2>
                     <Paper>
                         <div className='balance-table-container'>
-                            <StudentBalance rows={student.abonements} />
+                            <StudentBalance studentId={student.id} />
                         </div>
                     </Paper>
                     <div className='buttons-container'>

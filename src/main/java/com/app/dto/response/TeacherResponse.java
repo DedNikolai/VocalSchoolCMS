@@ -23,13 +23,19 @@ public class TeacherResponse {
 //  @ToString.Exclude
 //  @EqualsAndHashCode.Exclude
 //  @JsonView(View.Teacher.class)
-  private Set<StudentResponse> students;
+//  private Set<StudentResponse> students;
+//  @ToString.Exclude
+//  @EqualsAndHashCode.Exclude
+//  @JsonView(View.Teacher.class)
+//  private Set<LessonResponse> lessons;
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
   @JsonView(View.Teacher.class)
-  private Set<LessonResponse> lessons;
   private Set<Discipline> disciplines;
   private Set<PriceResponse> prices;
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  @JsonView(View.Teacher.class)
   private Set<TeacherWorkTimeResponse> workTimes;
 //  @ToString.Exclude
 //  @EqualsAndHashCode.Exclude

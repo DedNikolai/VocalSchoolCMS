@@ -3,9 +3,11 @@ package com.app.service;
 import com.app.dto.response.ApiResponse;
 import com.app.exeption.AppException;
 import com.app.exeption.ResourceNotFoundException;
+import com.app.model.Abonement;
 import com.app.model.ConfirmedLesson;
 import com.app.model.DeletedLesson;
 import com.app.model.TransferLesson;
+import com.app.repository.AbonementRepository;
 import com.app.repository.ConfirmedLessonRepository;
 import com.app.repository.DeletedLessonRepository;
 import com.app.repository.TransferLessonRepository;
@@ -16,12 +18,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class DeletedLessonServiceImp implements DeletedLessonService {
   private final ConfirmedLessonRepository confirmedLessonRepository;
-  private final TransferLessonRepository transferLessonRepository;
+  private final AbonementRepository abonementRepository;
   private final DeletedLessonRepository deletedLessonRepository;
 
   @Override
@@ -32,30 +35,65 @@ public class DeletedLessonServiceImp implements DeletedLessonService {
   @Override
   @Transactional
   public ApiResponse createLesson(DeletedLesson deletedLesson) {
-//    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(deletedLesson.getLessonDate());
-//    List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(deletedLesson.getLessonDate());
-//    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(deletedLesson.getLessonDate());
-//    boolean confirmed = confirmedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == deletedLesson.getLesson().getId());
-//    boolean transfered = transferLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == deletedLesson.getLesson().getId());
-//    boolean deleted = deletedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == deletedLesson.getLesson().getId());
-//    if (confirmed || transfered  || deleted) {
-//      throw new AppException("Lesson status is checked");
-//    }
+    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDateAndLesson(deletedLesson.getLessonDate(), deletedLesson.getLesson());
+    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDateAndLesson(deletedLesson.getLessonDate(), deletedLesson.getLesson());
+    boolean confirmed = confirmedLessons.size() != 0;
+    boolean deleted = deletedLessons.size() != 0;
+
+    if (confirmed || deleted) {
+      return new ApiResponse(false, "Lesson status is checked");
+    }
+
+    Abonement abonement = abonementRepository.
+        findFirstByStudentAndDisciplineOrderByCreatedDate(deletedLesson.getLesson().getStudent(), deletedLesson.getLesson().getDiscipline());
+
+    if (!deletedLesson.getIsUsed()) {
+      if (abonement == null) {
+        if (deletedLesson.getLesson().getIsSingleLesson()) {
+          return new ApiResponse(true, "Урок відмінено");
+        }
+        return new ApiResponse(false, "В даного учня немає проплачених занять");
+      }
+
+      List<DeletedLesson> deletedLessonsWithoutIsUsed = abonement.getDeletedLessons().stream()
+          .filter(deletedLessonIsNotUsed -> !deletedLessonIsNotUsed.getIsUsed()).collect(Collectors.toList());
+      if (deletedLessonsWithoutIsUsed.size() == abonement.getTransferedQuantity()) {
+        return new ApiResponse(false, "Закінчився ліміт перенесених занять");
+      }
+      deletedLesson.setAbonement(abonement);
+      deletedLessonRepository.save(deletedLesson);
+      return new ApiResponse(true, "Урок відмінено без списання");
+    }
+
+    if (abonement == null) {
+      return new ApiResponse(false, "В даного учня немає проплачених занять");
+    }
+
+    deletedLesson.setAbonement(abonement);
+    abonement.setUsedQuantity(abonement.getUsedQuantity() + 1);
     deletedLessonRepository.save(deletedLesson);
-    return new ApiResponse(true, "Урок відмінено");
+    abonementRepository.save(abonement);
+    return new ApiResponse(true, "Урок відмінено зі списанням заняття");
   }
 
   @Override
-  public DeletedLesson updateLesson(DeletedLesson deletedLesson, Long id) {
+  public ApiResponse updateLesson(DeletedLesson deletedLesson, Long id) {
     DeletedLesson lessonFromDb = deletedLessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));
     deletedLesson.setId(lessonFromDb.getId());
-    return deletedLessonRepository.save(deletedLesson);
+    deletedLessonRepository.save(deletedLesson);
+    return new ApiResponse(true, "Дані оновлено");
   }
 
   @Override
   public ApiResponse deleteLesson(Long id) {
     DeletedLesson lessonFromDb = deletedLessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));
+    Abonement abonement = abonementRepository.findFirstByDeletedLessonsContains(lessonFromDb);
+    if (lessonFromDb.getIsUsed()) {
+      abonement.setUsedQuantity(abonement.getUsedQuantity() - 1);
+    }
+
     deletedLessonRepository.delete(lessonFromDb);
+    abonementRepository.save(abonement);
     return new ApiResponse(true, "Відміну заняття скасовано");
   }
 

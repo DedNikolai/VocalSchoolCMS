@@ -1,6 +1,7 @@
 package com.app.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -80,19 +81,21 @@ public class Lesson extends BaseEntiy {
   @Temporal(TemporalType.DATE)
   private Date lessonFinishDate;
 
-  @OneToMany(mappedBy = "lesson")
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  private List<TransferLesson> transferLessons;
+//  @OneToMany(mappedBy = "lesson")
+//  @ToString.Exclude
+//  @EqualsAndHashCode.Exclude
+//  private List<TransferLesson> transferLessons;
 
   @OneToMany(mappedBy = "lesson")
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
+  @JsonIgnore
   private List<ConfirmedLesson> confirmedLessons;
 
   @OneToMany(mappedBy = "lesson")
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
+  @JsonIgnore
   private List<DeletedLesson> deletedLessons;
 
   Integer currentStudenBalance;

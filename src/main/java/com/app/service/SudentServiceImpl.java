@@ -48,16 +48,6 @@ public class SudentServiceImpl implements StudentService {
   @Override
   public void deleteStudent(Long id) {
     Student student = studentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Student", "id", id));
-    List<Teacher> teachers = teacherRepository.findAllByStudentsContains(student);
-    List<Lesson> lessons = lessonRepository.findAllByStudentOrderByLessonStartDateDesc(student);
-    lessons.stream().forEach(lesson -> {
-      lesson.setStudent(null);
-    });
-    teachers.stream().forEach(teacher -> {
-      teacher.getStudents().remove(student);
-    });
-    lessonRepository.saveAll(lessons);
-    teacherRepository.saveAll(teachers);
     studentRepository.delete(student);
   }
 

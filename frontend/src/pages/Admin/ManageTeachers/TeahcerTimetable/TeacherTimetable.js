@@ -1,22 +1,22 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import {getAllLessonsByDates} from "../../../store/actions/lesson";
+import {getAllLessonsByDatesAndTeacher} from "../../../../store/actions/lesson";
 import {connect} from 'react-redux';
-import Preloader from '../../../components/Preloader/index';
-import TimeTable from '../../../components/TimeTable/TimeTable';
+import Preloader from '../../../../components/Preloader/index';
+import TimeTable from '../../../../components/TimeTable/TimeTable';
 import moment from 'moment'
-import createWeek from '../../../utils/createWeek'
+import createWeek from '../../../../utils/createWeek'
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
 import {KeyboardDatePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
 import uaLocale from "date-fns/locale/uk";
 
-function Lessons(props) {
-    const {allLessons, allLessonsLoading, getAllByDates} = props;
+function TeacherTimeTable(props) {
+    const {allLessons, allLessonsLoading, getAllByDates, teacherId, teacher} = props;
     const [currentDate, changeCurrentDate] = useState(moment(new Date()).format().slice(0, 10));
     const week = createWeek(currentDate);
 
     useEffect(() => {
-        getAllByDates(week[1], week[week.length-1]);
+        getAllByDates(week[1], week[week.length-1], teacher.id);
     }, []);
 
     if (allLessonsLoading) {
@@ -27,10 +27,11 @@ function Lessons(props) {
         const value = moment(date).format().slice(0, 10);
         changeCurrentDate(value);
         const currentWeek = createWeek(value);
-        getAllByDates(currentWeek[1], currentWeek[currentWeek.length-1]);
+        getAllByDates(currentWeek[1], currentWeek[currentWeek.length-1], teacher.id);
     };
     return (
         <Fragment>
+            <h2>Розклад Школи</h2>
             <MuiPickersUtilsProvider utils={DateFnsUtils} locale={uaLocale}>
                 <Grid container>
                     <KeyboardDatePicker
@@ -48,24 +49,24 @@ function Lessons(props) {
                     />
                 </Grid>
             </MuiPickersUtilsProvider>
-            <TimeTable lessons={allLessons} week={createWeek(currentDate)}/>
+            <TimeTable lessons={allLessons} week={createWeek(currentDate)} freeTime={teacher.workTimes}/>
         </Fragment>
     )
 }
 
-Lessons.defaultProps = {
+TeacherTimeTable.defaultProps = {
     allLessons: [],
 };
 
 const mapStateToProps = ({lesson}) => {
     return {
-        allLessons: lesson.lessons,
-        allLessonsLoading: lesson.lessonsLoading
+        allLessons: lesson.lessonsByDateAndTeacher,
+        allLessonsLoading: lesson.lessonsByDateAndTeacherLoading
     }
 };
 
 const mapDispatchToProps = dispatch => ({
-    getAllByDates: (startDate, finishDate) => dispatch(getAllLessonsByDates(startDate, finishDate))
+    getAllByDates: (startDate, finishDate, id) => dispatch(getAllLessonsByDatesAndTeacher(startDate, finishDate, id))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Lessons);
+export default connect(mapStateToProps, mapDispatchToProps)(TeacherTimeTable);

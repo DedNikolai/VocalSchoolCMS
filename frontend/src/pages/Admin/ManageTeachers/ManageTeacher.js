@@ -11,6 +11,7 @@ import {colors} from '../../../constants/view';
 import TimeTable from '../../../components/TimeTable/TimeTable';
 import TeacherFreeTimes from './TeacherFreeTimes/TeacherFreeTimes';
 import TeacherPrices from './TeacherPrices/TeacherPrices'
+import TeacherTimetable from './TeahcerTimetable/TeacherTimetable'
 import TeachersConfirmedLessons from './TeachersConfirmedLessons/TeachersConfirmedLessons';
 import TeacherData from './TeacherData/TeacherData';
 import AppBar from '@material-ui/core/AppBar';
@@ -74,7 +75,7 @@ function ManageTeacher(props) {
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     <h2>Особистий Розклад</h2>
-                    <TimeTable lessons={teacher.lessons} freeTime={teacher.workTimes}/>
+                    <TeacherTimetable teacher={teacher}/>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     <h2>Робочі години</h2>

@@ -28,13 +28,6 @@ VALUES
   (3, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 'okіш.mal@ukr.com', 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', '063-000-01-90', 'Tetiana', 'Petriv', 26),
   (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 'ivanova@ukr.com', 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500', '093-825-01-90', 'Alina', 'Ivanova', 30);
 
-INSERT INTO students_teachers
-  (student_id, teacher_id)
-VALUES
-  (1, 1),
-  (1, 2),
-  (2, 1);
-
 INSERT INTO teacher_discipline
   (teacher_id, discipline)
 VALUES
@@ -64,17 +57,17 @@ VALUES
 INSERT INTO prices
   (id, date_created, date_modified, teacher_id, discipline, price_value, lesson_type)
 VALUES
-  (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 'VOCAL', 300, 'MAN'),
+  (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 'VOCAL', 150, 'MAN'),
   (3, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 'VOCAL', 250, 'MAN'),
   (5, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 3, 'VOCAL', 150, 'MAN'),
   (4, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 'VOCAL', 150, 'CHILD'),
   (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 'VOCAL', 250, 'CHILD');
 
 INSERT INTO abonements
-  (id, date_created, date_modified, student_id, quantity, price, discipline, transfered_quantity)
+  (id, date_created, date_modified, student_id, quantity, price, discipline, transfered_quantity, used_quantity)
 VALUES
-  (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 1, 4, 1300, 'VOCAL', 1),
-  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, 8, 2000, 'VOCAL', 2);
+  (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 1, 4, 1300, 'VOCAL', 1, 3),
+  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, 8, 2000, 'VOCAL', 2, 2);
 
 INSERT INTO confirmed_lesson
   (id, date_created, date_modified, price, teacher, lesson_id, lesson_date, abonement, paid)
@@ -83,21 +76,21 @@ VALUES
   (3, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 300, 1, 1, '2020-02-24', 1, false),
   (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 500, 2, 1, '2020-08-25', 1, false);
 
-INSERT INTO transfer_lessons
-  (id, date_created, date_modified, teacher, lesson_id, lesson_date, room, transfer_date, transfer_time, abonement, is_active, lesson_day)
-VALUES
-  (1, '2020-09-09 21:30:00', '2020-01-29 21:30:00', 1, 1, '2020-09-07', 'ROOM1', '2021-03-15', '10:30', 1, true, 'THURSDAY'),
-  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, 1, '2020-08-25', 'ROOM3', '2021-03-15', '12:00', 2, true, 'THURSDAY');
+-- INSERT INTO transfer_lessons
+--   (id, date_created, date_modified, teacher, lesson_id, lesson_date, room, transfer_date, transfer_time, abonement, is_active, lesson_day)
+-- VALUES
+--   (1, '2020-09-09 21:30:00', '2020-01-29 21:30:00', 1, 1, '2020-09-07', 'ROOM1', '2021-03-15', '10:30', 1, true, 'THURSDAY'),
+--   (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, 1, '2020-08-25', 'ROOM3', '2021-03-15', '12:00', 2, true, 'THURSDAY');
 
 INSERT INTO deleted_lesson
-  (id, date_created, date_modified, student_id, teacher_id, lesson_id, lesson_date, reason)
+  (id, date_created, date_modified, lesson_id, lesson_date, reason, abonement, is_used)
 VALUES
-  (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 1, 1, 1, '2020-08-24', 'puk-puk'),
-  (3, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 2, 1, 2, '2020-02-24', 'puk-puk'),
-  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 1, 2, 3, '2020-08-25', 'puk-puk');
+  (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 1, '2020-08-24', 'puk-puk', 1, false),
+  (3, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 2, '2020-02-24', 'puk-puk', 2, true ),
+  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 3, '2020-08-25', 'puk-puk', null, false);
 
-INSERT INTO credits
-  (id, date_created, date_modified, student, teacher, lesson_id, lesson_date, lesson_time)
-VALUES
-  (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 1, 1, 1, '2020-08-24', '12:00'),
-  (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 1, 1, 1, '2020-08-25', '11:00');
+-- INSERT INTO credits
+--   (id, date_created, date_modified, student, teacher, lesson_id, lesson_date, lesson_time)
+-- VALUES
+--   (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 1, 1, 1, '2020-08-24', '12:00'),
+--   (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 1, 1, 1, '2020-08-25', '11:00');

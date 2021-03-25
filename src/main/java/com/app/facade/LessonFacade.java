@@ -68,4 +68,14 @@ public class LessonFacade {
     List<Lesson> lessons = lessonService.getAllLessonsByDates(startDate, finishDate);
     return lessons.stream().map(lesson -> modelMapper.map(lesson, LessonResponse.class)).collect(Collectors.toList());
   }
+
+  public List<LessonResponse> findAllByDatesAndTeacher(Date startDate, Date finishDate, Long teacherId) {
+    List<Lesson> lessons = lessonService.getAllLessonsByDatesAndTeacher(startDate, finishDate, teacherId);
+    return lessons.stream().map(lesson -> modelMapper.map(lesson, LessonResponse.class)).collect(Collectors.toList());
+  }
+
+  public List<LessonResponse> findAllByDatesAndTeacherAndIsNotSingleAndDateNotEpire(Date date, Long teacherId) {
+    List<Lesson> lessons = lessonService.findAllByTeacherAndLessonIsNotSingleAndDateNotEpire(date, teacherId);
+    return lessons.stream().map(lesson -> modelMapper.map(lesson, LessonResponse.class)).collect(Collectors.toList());
+  }
 }

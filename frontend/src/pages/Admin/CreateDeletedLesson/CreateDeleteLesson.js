@@ -14,7 +14,20 @@ import {colors} from '../../../constants/view';
 import {getLessonById} from '../../../store/actions/lesson';
 import {rejectLesson} from '../../../store/actions/deletedLesson';
 import disciplineValue from '../../../constants/disciplineValue';
+import {withStyles} from "@material-ui/core/styles/index";
+import {green} from "@material-ui/core/colors/index";
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
+const GreenCheckbox = withStyles({
+    root: {
+        color: green[400],
+        '&$checked': {
+            color: green[600],
+        },
+    },
+    checked: {},
+})((props) => <Checkbox color="default" {...props} />);
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -47,6 +60,16 @@ const useStyles = makeStyles(theme => ({
         marginRight: theme.spacing(1),
         width: 200,
     },
+
+    textInputField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        width: '500px !important',
+    },
+
+    paddingLeft: {
+        paddingLeft: '10px'
+    }
 }));
 
 
@@ -66,19 +89,14 @@ function CreateDeleteLesson(props) {
     const {currentLesson, currentLessonLoading, getLessonById, rejecrLesson} = props;
     const id = props.match.params.id;
     const date = props.match.params.current;
-    const lessonDate = new Date(props.match.params.current).toLocaleDateString().split('.').reverse().join('-');
     const theme = useTheme();
     const [created, setCreated] = useState(false);
-
     const formik = useFormik({
         initialValues: {
             lesson: currentLesson,
-            lessonDate: lessonDate,
-            lessonTime: currentLesson.time,
-            teacher: currentLesson.teacher,
-            student: currentLesson.student,
+            lessonDate: date,
             reason: '',
-            discipline: currentLesson.discipline
+            isUsed: false
         },
 
         onSubmit: value => {
@@ -97,6 +115,11 @@ function CreateDeleteLesson(props) {
         formik.setFieldValue('reason', event.target.value);
     };
 
+    const handleChangeIsUsed = (event) => {
+        formik.setFieldValue('isUsed', event.target.checked);
+    };
+
+
     if (currentLessonLoading) {
         return <Preloader/>
     }
@@ -111,7 +134,7 @@ function CreateDeleteLesson(props) {
                         label="Учень"
                         name='student'
                         id="outlined-size-small"
-                        value={formik.values.student.firstName + ' ' + formik.values.student.lastName}
+                        value={formik.values.lesson.student.firstName + ' ' + formik.values.lesson.student.lastName}
                         variant="outlined"
                         size="small"
                         disabled
@@ -122,7 +145,7 @@ function CreateDeleteLesson(props) {
                         label="Дисципліна"
                         name='discipline'
                         id="outlined-size-small"
-                        value={disciplineValue[formik.values.discipline]}
+                        value={disciplineValue[formik.values.lesson.discipline]}
                         variant="outlined"
                         size="small"
                         disabled
@@ -133,7 +156,7 @@ function CreateDeleteLesson(props) {
                         label="Вчитель"
                         name='teacher'
                         id="outlined-size-small"
-                        value={formik.values.teacher.firstName + ' ' + formik.values.teacher.lastName}
+                        value={formik.values.lesson.teacher.firstName + ' ' + formik.values.lesson.teacher.lastName}
                         variant="outlined"
                         size="small"
                         disabled
@@ -144,7 +167,7 @@ function CreateDeleteLesson(props) {
                         id="date"
                         label="Дата заняття"
                         type="date"
-                        value={formik.values.lessonDate.slice(0, 10)}
+                        value={formik.values.lessonDate}
                         className={classes.textField}
                         InputLabelProps={{
                             shrink: true,
@@ -156,10 +179,11 @@ function CreateDeleteLesson(props) {
                 <div>
                     <TextField
                         id="time"
+                        label="Час"
                         type="time"
                         variant="outlined"
                         className={classes.textField}
-                        value={formik.values.lessonTime}
+                        value={formik.values.lesson.time}
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -171,7 +195,7 @@ function CreateDeleteLesson(props) {
                     <TextField
                         id="reason"
                         variant="outlined"
-                        className={classes.textField}
+                        className={classes.textInputField}
                         value={formik.values.reason}
                         InputLabelProps={{
                             shrink: true,
@@ -179,6 +203,12 @@ function CreateDeleteLesson(props) {
                         onChange={handleChangeReason}
                         variant="outlined"
                         fullWidth
+                    />
+                </div>
+                <div className={classes.paddingLeft}>
+                    <FormControlLabel
+                        control={<GreenCheckbox checked={formik.values.isUsed} onChange={handleChangeIsUsed} name="isTestLesson" />}
+                        label="Списувати з абонементу"
                     />
                 </div>
                 <div className='buttons-container'>

@@ -1,6 +1,7 @@
 package com.app.dto.response;
 
 import com.app.dto.view.View;
+import com.app.model.Abonement;
 import com.app.model.Status;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
@@ -22,6 +23,10 @@ public class ConfirmedLessonResponse {
   @EqualsAndHashCode.Exclude
   @JsonView(View.ConfirmedLesson.class)
   private TeacherResponse teacher;
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  @JsonView(View.ConfirmedLesson.class)
+  private Abonement abonement;
   private Date lessonDate;
   private Boolean isPaid;
 }

@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/api/v1/abonements")
 @PreAuthorize("hasAnyAuthority('SUPER_ADMIN, ADMIN')")
@@ -38,6 +40,13 @@ public class AbonementController {
   @JsonView(View.Abonement.class)
   public ResponseEntity<AbonementResponse> findById(@PathVariable Long id) {
     AbonementResponse response = abonementFacade.getById(id);
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("student/{id}")
+  @JsonView(View.Abonement.class)
+  public ResponseEntity<List<AbonementResponse>> findAllActiveByStudent(@PathVariable Long id) {
+    List<AbonementResponse> response = abonementFacade.getAllActiveAbonementsByStudenr(id);
     return ResponseEntity.ok(response);
   }
 

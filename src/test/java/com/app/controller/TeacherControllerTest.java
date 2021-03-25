@@ -110,8 +110,8 @@ public class TeacherControllerTest {
 
     this.mockMvc.perform(delete("/api/v1/teachers/1")).andExpect(status().is(204));
     assertNull(teacherRepository.findById(id).orElse(null));
-    assertEquals(expectedSize, studentService.getStudntById(id).getTeachers().size());
-    assertEquals(0, studentService.getStudntById(2L).getTeachers().size());
+//    assertEquals(expectedSize, studentService.getStudntById(id).getTeachers().size());
+//    assertEquals(0, studentService.getStudntById(2L).getTeachers().size());
   }
 
   @Test

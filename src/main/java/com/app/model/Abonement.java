@@ -1,5 +1,6 @@
 package com.app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -43,18 +44,23 @@ public class Abonement extends BaseEntiy {
   @OneToMany(mappedBy="abonement", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
+  @JsonIgnore
   private Set<ConfirmedLesson> confirmedLessons = new HashSet<>();
 
-  @OneToMany(mappedBy="abonement", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  private Set<TransferLesson> transferLessons;
+//  @OneToMany(mappedBy="abonement", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//  @ToString.Exclude
+//  @EqualsAndHashCode.Exclude
+//  private Set<TransferLesson> transferLessons;
 
   @OneToMany(mappedBy="abonement", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
+  @JsonIgnore
   private Set<DeletedLesson> deletedLessons;
 
   @Column(name = "transfered_quantity")
   private Integer transferedQuantity;
+
+  @Column(name = "used_quantity")
+  private Integer usedQuantity;
 }

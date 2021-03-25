@@ -154,7 +154,6 @@ function ManageLessons(props) {
 
         formik.setFieldValue('lessonStartDate', event.target.value);
         const day = new Date(event.target.value);
-        console.log(days[day.getDay() - 1])
         formik.setFieldValue('day', days[day.getDay() - 1]);
     };
 
@@ -194,7 +193,7 @@ function ManageLessons(props) {
     if (allTeachersLoading || lessonLoading && id) {
         return <div className="wrapper"><Preloader/></div>
     };
-
+    console.log(lesson)
     const checkedDiscipline = formik.values.discipline;
     const checkedTeacher = formik.values.teacher || {};
     const checkedType = formik.values.type || '';

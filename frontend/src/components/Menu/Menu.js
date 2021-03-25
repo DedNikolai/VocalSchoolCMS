@@ -102,17 +102,17 @@ function Menu(props) {
                     </ListItem>
                 </NavLink>
             }
-            {
-                hasRoles(user, adminPermissions) &&
-                <NavLink to='/admin/transfer-lessons' className='main-menu__item'>
-                    <ListItem button>
-                        <ListItemIcon>
-                            <ArrowForwardIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={ua.menu.transferLessons} />
-                    </ListItem>
-                </NavLink>
-            }
+            {/*{*/}
+                {/*hasRoles(user, adminPermissions) &&*/}
+                {/*<NavLink to='/admin/transfer-lessons' className='main-menu__item'>*/}
+                    {/*<ListItem button>*/}
+                        {/*<ListItemIcon>*/}
+                            {/*<ArrowForwardIcon />*/}
+                        {/*</ListItemIcon>*/}
+                        {/*<ListItemText primary={ua.menu.transferLessons} />*/}
+                    {/*</ListItem>*/}
+                {/*</NavLink>*/}
+            {/*}*/}
             {
                 hasRoles(user, adminPermissions) &&
                 <NavLink to='/admin/deleted-lessons' className='main-menu__item'>

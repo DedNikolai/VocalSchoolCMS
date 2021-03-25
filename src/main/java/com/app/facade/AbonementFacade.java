@@ -10,6 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class AbonementFacade {
@@ -41,4 +44,9 @@ public class AbonementFacade {
     Page<Abonement> abonements = abonementService.findAll(pageable);
     return abonements.map(abonement -> modelMapper.map(abonement, AbonementResponse.class));
   }
-}
+
+  public List<AbonementResponse> getAllActiveAbonementsByStudenr(Long studentId) {
+    List<Abonement> abonements = abonementService.findAllByStudent(studentId);
+    return abonements.stream().map(abonement -> modelMapper.map(abonement, AbonementResponse.class)).collect(Collectors.toList());
+  }
+ }

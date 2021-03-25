@@ -37,8 +37,8 @@ public class DeletedLessonController {
 
   @PutMapping("id")
   @JsonView(View.DeletedLesson.class)
-  public ResponseEntity<DeletedLessonResponse> updateDeletedLesson(@RequestBody DeletedLessonRequest request, @PathVariable Long id) {
-    DeletedLessonResponse response = deletedLessonFacade.updateDeletedLesson(request, id);
+  public ResponseEntity<ApiResponse> updateDeletedLesson(@RequestBody DeletedLessonRequest request, @PathVariable Long id) {
+    ApiResponse response = deletedLessonFacade.updateDeletedLesson(request, id);
     return ResponseEntity.ok(response);
   }
 

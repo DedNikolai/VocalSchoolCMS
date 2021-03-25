@@ -1,8 +1,12 @@
 package com.app.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,5 +34,8 @@ public class TeacherWorkTime extends BaseEntiy {
 
   @ManyToOne
   @JoinColumn(name = "teacher")
+  @JsonBackReference
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private Teacher teacher;
 }

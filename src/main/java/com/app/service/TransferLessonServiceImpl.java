@@ -271,17 +271,15 @@ public class TransferLessonServiceImpl implements TransferLessonService{
       }
     }
 
-    Abonement abonement = abonementRepository.findFirstByTransferLessonsContains(transferLesson);
+    Abonement abonement = abonementRepository.findById(1L).orElse(null);
     Teacher teacher = teacherRepository.findById(transferLesson.getTeacher().getId()).
         orElseThrow(() -> new ResourceNotFoundException("Teacher", "id", transferLesson.getTeacher().getId()));
     Lesson lesson = lessonRepository.findById(transferLesson.getLesson().getId())
         .orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", transferLesson.getLesson().getId()));
 
-    teacher.getTransferLessons().remove(transferLesson);
-    lesson.getTransferLessons().remove(transferLesson);
+//    teacher.getTransferLessons().remove(transferLesson);
+//    lesson.getTransferLessons().remove(transferLesson);
 
-    Set<TransferLesson> transfers = abonement.getTransferLessons().stream().filter(transfer -> transfer.getId() != transferLesson.getId()).collect(Collectors.toSet());
-    abonement.setTransferLessons(transfers);
     abonementRepository.save(abonement);
 
     transferLessonRepository.delete(transferLesson);
