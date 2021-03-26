@@ -21,7 +21,7 @@ const columns = [
     { id: 'lastName', label: 'Прізвище', minWidth: 150, align: 'center' },
     { id: 'email', label: 'Email', minWidth: 150, align: 'center' },
     { id: 'disciplines', label: 'Дисципліни', minWidth: 150, align: 'center' },
-    { id: 'lessons', label: 'Кількість Уроків', minWidth: 50, align: 'center' },
+    // { id: 'lessons', label: 'Кількість Уроків', minWidth: 50, align: 'center' },
     // { id: 'nonPaid', label: 'Не оплачені уроки', minWidth: 50, align: 'center' },
     { id: 'actions', label: 'Редагувати', minWidth: 50, align: 'center' },
 ];
@@ -53,7 +53,6 @@ function Teachers(props) {
     useEffect(() => {
         getAllTeachers();
     }, []);
-
     return (
         <div className='teachers-list'>
             <div className='teachers-list__top-block'>

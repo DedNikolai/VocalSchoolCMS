@@ -1,9 +1,12 @@
 package com.app.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.sql.Time;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -61,25 +65,38 @@ public class Lesson extends BaseEntiy {
   @Enumerated(EnumType.STRING)
   private LessonDay day;
 
-  @Column(columnDefinition = "boolean default false")
-  private Boolean deleted = false;
-
   private Status status;
 
-  @Column(name = "is_test", columnDefinition = "boolean default false")
-  private Boolean isTestLesson = false;
-
-  @Column(name = "lesson_date")
-  @Temporal(TemporalType.DATE)
-  private Date lessonDate;
+  @Column(name = "is_single", columnDefinition = "boolean default false")
+  private Boolean isSingleLesson = false;
 
   @Column(name = "is_active")
   private Boolean isActive = true;
 
+  @Column(name = "lesson_start_date")
+  @Temporal(TemporalType.DATE)
+  private Date lessonStartDate;
+
+  @Column(name = "lesson_finish_date")
+  @Temporal(TemporalType.DATE)
+  private Date lessonFinishDate;
+
+//  @OneToMany(mappedBy = "lesson")
+//  @ToString.Exclude
+//  @EqualsAndHashCode.Exclude
+//  private List<TransferLesson> transferLessons;
+
   @OneToMany(mappedBy = "lesson")
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
-  private List<TransferLesson> transferLessons;
+  @JsonIgnore
+  private List<ConfirmedLesson> confirmedLessons;
+
+  @OneToMany(mappedBy = "lesson")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  @JsonIgnore
+  private List<DeletedLesson> deletedLessons;
 
   Integer currentStudenBalance;
 

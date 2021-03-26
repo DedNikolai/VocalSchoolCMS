@@ -2,6 +2,7 @@ package com.app.controller;
 
 import com.app.dto.request.AbonementRequest;
 import com.app.dto.response.AbonementResponse;
+import com.app.dto.response.ApiResponse;
 import com.app.dto.view.View;
 import com.app.facade.AbonementFacade;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/v1/abonements")
@@ -41,6 +44,13 @@ public class AbonementController {
     return ResponseEntity.ok(response);
   }
 
+  @GetMapping("student/{id}")
+  @JsonView(View.Abonement.class)
+  public ResponseEntity<List<AbonementResponse>> findAllActiveByStudent(@PathVariable Long id) {
+    List<AbonementResponse> response = abonementFacade.getAllActiveAbonementsByStudenr(id);
+    return ResponseEntity.ok(response);
+  }
+
   @PostMapping
   @JsonView(View.Abonement.class)
   public ResponseEntity<AbonementResponse> createAbonement(@RequestBody AbonementRequest request) {
@@ -57,8 +67,8 @@ public class AbonementController {
 
   @DeleteMapping("{id}")
   @JsonView(View.Abonement.class)
-  public ResponseEntity<Void> deleteAbonement(@PathVariable Long id) {
-    abonementFacade.deleteAbonement(id);
-    return ResponseEntity.noContent().build();
+  public ResponseEntity<ApiResponse> deleteAbonement(@PathVariable Long id) {
+    ApiResponse response = abonementFacade.deleteAbonement(id);
+    return ResponseEntity.ok(response);
   }
 }

@@ -1,8 +1,11 @@
 package com.app.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,5 +35,8 @@ public class Price extends BaseEntiy {
 
   @ManyToOne
   @JoinColumn(name="teacher_id", nullable=false)
+  @JsonBackReference
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private Teacher teacher;
 }

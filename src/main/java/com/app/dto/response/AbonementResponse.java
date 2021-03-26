@@ -1,6 +1,7 @@
 package com.app.dto.response;
 
 import com.app.dto.view.View;
+import com.app.model.DeletedLesson;
 import com.app.model.Discipline;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
@@ -19,16 +20,17 @@ public class AbonementResponse {
   @EqualsAndHashCode.Exclude
   @JsonView(View.Abonement.class)
   private StudentResponse student;
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  @JsonView(View.Abonement.class)
-  private TeacherResponse teacher;
   private Integer quantity;
   private Integer price;
   private Discipline discipline;
   private Integer transferedQuantity;
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  @JsonView(View.Abonement.class)
   private Set<ConfirmedLessonResponse> confirmedLessons;
-  private Set<TransferLessonResponse> transferLessons;
-  private Boolean isActive;
-  private Integer usedLessons;
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  @JsonView(View.Abonement.class)
+  private Set<DeletedLesson> deletedLessons;
+  private Integer usedQuantity;
 }

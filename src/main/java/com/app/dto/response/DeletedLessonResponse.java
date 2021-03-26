@@ -4,6 +4,7 @@ import com.app.dto.request.LessonRequest;
 import com.app.dto.request.StudentRequest;
 import com.app.dto.request.TeacherRequest;
 import com.app.dto.view.View;
+import com.app.model.Abonement;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,14 +19,11 @@ public class DeletedLessonResponse {
   @EqualsAndHashCode.Exclude
   @JsonView(View.DeletedLesson.class)
   private LessonResponse lesson;
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  @JsonView(View.DeletedLesson.class)
-  private StudentResponse student;
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  @JsonView(View.DeletedLesson.class)
-  private TeacherResponse teacher;
   private Date lessonDate;
   private String reason;
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  @JsonView(View.DeletedLesson.class)
+  private Abonement abonement;
+  private Boolean isUsed;
 }

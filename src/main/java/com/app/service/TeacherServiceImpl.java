@@ -53,11 +53,6 @@ public class TeacherServiceImpl implements TeacherService{
   @Override
   public void deleteTeacher(Long id) {
     Teacher teacher = getTeacherById(id);
-    List<Student> students = studentRepository.findAllByTeachersContains(teacher);
-    students.stream().forEach(student -> {
-      student.getTeachers().remove(teacher);
-    });
-    studentRepository.saveAll(students);
     teacherRepository.delete(teacher);
   }
 }

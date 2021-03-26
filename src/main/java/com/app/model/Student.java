@@ -1,5 +1,6 @@
 package com.app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -41,22 +42,16 @@ public class Student extends BaseEntiy {
   @Column(name = "age")
   private Integer age;
 
-  @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "students_teachers",
-      joinColumns = {@JoinColumn(name = "student_id")},
-      inverseJoinColumns = {@JoinColumn(name = "teacher_id")})
+  @OneToMany(mappedBy="student", cascade = CascadeType.ALL)
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
-  private Set<Teacher> teachers = new HashSet<>();
-
-  @OneToMany(mappedBy="student", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
+  @JsonIgnore
   private Set<Lesson> lessons = new HashSet<>();
 
   @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
+  @JsonIgnore
   private Set<Abonement> abonements;
 
   @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)

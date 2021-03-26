@@ -1,6 +1,8 @@
 package com.app.repository;
 
+import com.app.model.Abonement;
 import com.app.model.ConfirmedLesson;
+import com.app.model.Lesson;
 import com.app.model.Teacher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +18,13 @@ import java.util.List;
 public interface ConfirmedLessonRepository extends JpaRepository<ConfirmedLesson, Long> {
   Page<ConfirmedLesson> findAllByOrderByCreatedDateDesc(Pageable pageable);
 
-  List<ConfirmedLesson> findAllByLessonDate(@Temporal(TemporalType.DATE)Date date);
+  List<ConfirmedLesson> findAllByLessonDateAndLesson(@Temporal(TemporalType.DATE)Date date, Lesson lesson);
 
   List<ConfirmedLesson> findAllByTeacherAndIsPaidFalse(Teacher teacher);
+
+  List<ConfirmedLesson> findAllByLessonDate(@Temporal(TemporalType.DATE)Date date);
+
+  List<ConfirmedLesson> findAllByLesson(Lesson lesson);
+
+  List<ConfirmedLesson> findAllByAbonement(Abonement abonement);
 }

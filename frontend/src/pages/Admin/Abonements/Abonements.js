@@ -21,9 +21,9 @@ import disciplineValue from '../../../constants/disciplineValue';
 import moment from 'moment';
 
 const columns = [
+    { id: 'id', label: '№', minWidth: 50, align: 'center' },
     { id: 'date', label: 'Дата', minWidth: 150, align: 'center' },
     { id: 'student', label: 'Студент', minWidth: 150, align: 'center' },
-    { id: 'teacher', label: 'Вчитель', minWidth: 150, align: 'center' },
     { id: 'discipline', label: 'Дисципліна', minWidth: 50, align: 'center' },
     { id: 'price', label: 'Ціна', minWidth: 50, align: 'center' },
     { id: 'quantity', label: 'К-ть Занять', minWidth: 50, align: 'center' },
@@ -64,7 +64,6 @@ function Abonements(props) {
     const handleChangePage = (event, page) => {
         getAbonements(page, rowsPerPage, param);
     };
-
     return (
         <div className='students-list'>
             {
@@ -119,13 +118,6 @@ function Abonements(props) {
                                                         return (
                                                             <TableCell className={classes.cell} key={column.id}>
                                                                 {row.student.firstName + ' ' + row.student.lastName}
-                                                            </TableCell>
-                                                        )
-                                                    }
-                                                    if (column.id === 'teacher') {
-                                                        return (
-                                                            <TableCell className={classes.cell} key={column.id}>
-                                                                {row.teacher.firstName + ' ' + row.teacher.lastName}
                                                             </TableCell>
                                                         )
                                                     }

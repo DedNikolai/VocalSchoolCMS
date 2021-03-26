@@ -40,18 +40,16 @@ public class ConfirmedLessonServiceImp implements ConfirmedLessonService {
   @Override
   @Transactional
   public ApiResponse createLesson(ConfirmedLesson confirmedLesson) {
-    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(confirmedLesson.getLessonDate());
-    List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(confirmedLesson.getLessonDate());
-    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(confirmedLesson.getLessonDate());
-    boolean confirmed = confirmedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == confirmedLesson.getLesson().getId() && confirmedLesson.getTime().equals(lesson.getTime()));
-    boolean transfered = transferLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == confirmedLesson.getLesson().getId() && lesson.getTransferTime().equals(confirmedLesson.getTime()));
-    boolean deleted = deletedLessons.stream().anyMatch(lesson -> lesson.getLesson().getId() == confirmedLesson.getLesson().getId() && lesson.getLesson().getTime().equals(confirmedLesson.getTime()));
-    if (confirmed || transfered  || deleted) {
-      throw new AppException("Lesson status is checked");
+    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDateAndLesson(confirmedLesson.getLessonDate(), confirmedLesson.getLesson());
+    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDateAndLesson(confirmedLesson.getLessonDate(), confirmedLesson.getLesson());
+    boolean confirmed = confirmedLessons.size() != 0;
+    boolean deleted = deletedLessons.size() != 0;
+    if (confirmed || deleted) {
+      return new ApiResponse(false, "Lesson status is checked");
     }
 
     Abonement abonement = abonementRepository.
-        findFirstByStudentAndDisciplineAndIsActiveTrueOrderByCreatedDate(confirmedLesson.getStudent(), confirmedLesson.getLesson().getDiscipline());
+        findFirstByStudentAndDisciplineOrderByCreatedDate(confirmedLesson.getLesson().getStudent(), confirmedLesson.getLesson().getDiscipline());
 
     if (abonement == null) {
       return new ApiResponse(false, "В даного учня немає проплачених занять");
@@ -59,12 +57,8 @@ public class ConfirmedLessonServiceImp implements ConfirmedLessonService {
 
     confirmedLesson.setAbonement(abonement);
     confirmedLesson.setIsPaid(false);
-    ConfirmedLesson savedConfirmedLesson = confirmedLessonRepository.save(confirmedLesson);
-    abonement.getConfirmedLessons().add(savedConfirmedLesson);
-    abonement.setUsedLessons(abonement.getUsedLessons()+1);
-    if (abonement.getQuantity() == abonement.getUsedLessons()) {
-      abonement.setIsActive(false);
-    }
+    abonement.setUsedQuantity(abonement.getUsedQuantity() + 1);
+    confirmedLessonRepository.save(confirmedLesson);
     abonementRepository.save(abonement);
     return new ApiResponse(true, "Урок підтверджено");
   }
@@ -90,8 +84,7 @@ public class ConfirmedLessonServiceImp implements ConfirmedLessonService {
     Set<ConfirmedLesson> confirmedLessons = abonement.getConfirmedLessons().
         stream().filter(confirmedLesson -> confirmedLesson.getId() != lessonFromDb.getId()).collect(Collectors.toSet());
     abonement.setConfirmedLessons(confirmedLessons);
-    abonement.setUsedLessons(abonement.getUsedLessons() - 1);
-    abonement.setIsActive(true);
+    abonement.setUsedQuantity(abonement.getUsedQuantity() - 1);
     abonementRepository.save(abonement);
 
     confirmedLessonRepository.delete(lessonFromDb);

@@ -14,7 +14,6 @@ import java.util.List;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
-  List<Student> findAllByTeachersContains(Teacher teacher);
 
   @Query("select s from Student s where "
       + "(:param is null or lower(s.firstName) like lower(CONCAT('%', :param, '%'))) or "

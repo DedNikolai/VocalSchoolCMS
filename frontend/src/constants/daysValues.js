@@ -4,7 +4,7 @@ const daysValues = {
     WEDNESDAY: 'Середа',
     THURSDAY: 'Четвер',
     FRIDAY: 'Пятниця',
-    SUTURDAY: 'Сублта'
+    SUTURDAY: 'Субота'
 };
 
 export default daysValues;

@@ -32,9 +32,8 @@ public class LessonFacade {
     return lessonService.createLesson(lesson);
   }
 
-  public LessonResponse deleteLesson(Long id) {
-    Lesson lesson = lessonService.deleteLesson(id);
-    return modelMapper.map(lesson, LessonResponse.class);
+  public ApiResponse deleteLesson(Long id) {
+    return lessonService.deleteLesson(id);
   }
 
   public LessonResponse getLessonById(Long id) {
@@ -63,5 +62,20 @@ public class LessonFacade {
     List<Lesson> lessons = lessonService.findAllbyLessonDay(day);
     List<LessonResponse> response = lessons.stream().map(lesson -> modelMapper.map(lesson, LessonResponse.class)).collect(Collectors.toList());
     return response;
+  }
+
+  public List<LessonResponse> findAllByDates(Date startDate, Date finishDate) {
+    List<Lesson> lessons = lessonService.getAllLessonsByDates(startDate, finishDate);
+    return lessons.stream().map(lesson -> modelMapper.map(lesson, LessonResponse.class)).collect(Collectors.toList());
+  }
+
+  public List<LessonResponse> findAllByDatesAndTeacher(Date startDate, Date finishDate, Long teacherId) {
+    List<Lesson> lessons = lessonService.getAllLessonsByDatesAndTeacher(startDate, finishDate, teacherId);
+    return lessons.stream().map(lesson -> modelMapper.map(lesson, LessonResponse.class)).collect(Collectors.toList());
+  }
+
+  public List<LessonResponse> findAllByDatesAndTeacherAndIsNotSingleAndDateNotEpire(Date date, Long teacherId) {
+    List<Lesson> lessons = lessonService.findAllByTeacherAndLessonIsNotSingleAndDateNotEpire(date, teacherId);
+    return lessons.stream().map(lesson -> modelMapper.map(lesson, LessonResponse.class)).collect(Collectors.toList());
   }
 }

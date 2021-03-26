@@ -15,8 +15,8 @@ import CreateAbonement from '../CreateAbonement/CreateAbonement';
 import StudentLessons from './StudentLessons/StudentLessons';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import StudentBalance from './StudentBalance/StudentBalance';
-import StudentTransfers from './StudentTransfers/StudentTransfers';
-import StudentCredits from './StudentCredits/StudentCredits';
+// import StudentTransfers from './StudentTransfers/StudentTransfers';
+// import StudentCredits from './StudentCredits/StudentCredits';
 import StudentData from './StudentData/StudentData';
 import {makeStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -78,7 +78,6 @@ function ManageStudent(props) {
     };
 
     const tableLessons = studentLessons.filter(lesson => !lesson.isTestLesson);
-    const testLessons = studentLessons.filter(lesson => lesson.isTestLesson);
 
     return (
         <div className='manage-student'>
@@ -96,8 +95,7 @@ function ManageStudent(props) {
                         <Tab label="Особисті дані" {...a11yProps(0)} />
                         <Tab label="Абонементи" {...a11yProps(1)} />
                         <Tab label="Особистий розклад" {...a11yProps(2)} />
-                        <Tab label="Перенесені уроки" {...a11yProps(3)} />
-                        <Tab label="Борги" {...a11yProps(4)} />
+                        {/*<Tab label="Борги" {...a11yProps(4)} />*/}
                     </Tabs>
                 </AppBar>
                 <TabPanel value={value} index={0}>
@@ -110,7 +108,7 @@ function ManageStudent(props) {
                     <h2>Абонементи</h2>
                     <Paper>
                         <div className='balance-table-container'>
-                            <StudentBalance rows={student.abonements} />
+                            <StudentBalance studentId={student.id} />
                         </div>
                     </Paper>
                     <div className='buttons-container'>
@@ -135,8 +133,6 @@ function ManageStudent(props) {
                 <TabPanel value={value} index={2}>
                     <h2>Планові заняття</h2>
                     <StudentLessons lessons={tableLessons} studentId={student.id}/>
-                    <h2>Тестові заняття</h2>
-                    <StudentLessons lessons={testLessons} studentId={student.id}/>
                     <div className='buttons-container'>
                         <Button
                             variant="contained"
@@ -156,17 +152,10 @@ function ManageStudent(props) {
                         </div>
                     }
                 </TabPanel>
-                <TabPanel value={value} index={3}>
-                    <h2>Перенесені уроки</h2>
-                    {
-                        studentTransfersLoading ? <Preloader/> :
-                            <StudentTransfers tarnsferedLessons={studentTransfers} />
-                    }
-                </TabPanel>
-                <TabPanel value={value} index={4}>
-                    <h2>Заборгованості</h2>
-                    <StudentCredits studentId={student.id}/>
-                </TabPanel>
+                {/*<TabPanel value={value} index={4}>*/}
+                    {/*<h2>Заборгованості</h2>*/}
+                    {/*<StudentCredits studentId={student.id}/>*/}
+                {/*</TabPanel>*/}
             </div>
             <div className='buttons-container'>
                 <NavLink to='/admin/students'>

@@ -32,12 +32,6 @@ public class ConfirmedLesson extends BaseEntiy {
   private Lesson lesson;
 
   @ManyToOne
-  @JoinColumn(name = "student")
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  private Student student;
-
-  @ManyToOne
   @JoinColumn(name = "teacher")
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
@@ -46,9 +40,6 @@ public class ConfirmedLesson extends BaseEntiy {
   @Column(name = "lesson_date")
   @Temporal(TemporalType.DATE)
   private Date lessonDate;
-
-  @Column(name = "lesson_time")
-  private String time;
 
   @ManyToOne
   @JoinColumn(name = "abonement")

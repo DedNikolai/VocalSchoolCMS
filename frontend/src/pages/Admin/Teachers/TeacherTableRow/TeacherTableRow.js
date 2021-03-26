@@ -31,7 +31,6 @@ function TeacherTableRow(props) {
     const {teacher, columns, deleteTeacher} = props;
     const classes = useStyles();
     const disciplines = teacher.disciplines.map(item => disciplineValue[item]).join(', ');
-    const students = teacher.lessons.length;
     return (
         <TableRow hover role="checkbox" tabIndex={-1} >
             {columns.map(column => {
@@ -50,13 +49,13 @@ function TeacherTableRow(props) {
                         </TableCell>
                     )
                 }
-                if (column.id === 'lessons') {
-                    return (
-                        <TableCell key={column.id} align={column.align}>
-                            {students}
-                        </TableCell>
-                    )
-                }
+                // if (column.id === 'lessons') {
+                //     return (
+                //         <TableCell key={column.id} align={column.align}>
+                //             {students}
+                //         </TableCell>
+                //     )
+                // }
                 if (column.id === 'disciplines') {
                     return (
                         <TableCell key={column.id} align={column.align}>

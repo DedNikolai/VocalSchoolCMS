@@ -10,9 +10,7 @@ public class ConfirmedLessonRequest {
   private Date createdDate;
   private Integer price;
   private LessonRequest lesson;
-  private StudentRequest student;
   private TeacherRequest teacher;
   private Date lessonDate;
-  private String time;
   private Boolean isPaid;
 }

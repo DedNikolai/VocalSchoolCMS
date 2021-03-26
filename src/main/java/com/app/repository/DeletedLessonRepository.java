@@ -1,6 +1,8 @@
 package com.app.repository;
 
+import com.app.model.Abonement;
 import com.app.model.DeletedLesson;
+import com.app.model.Lesson;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +17,11 @@ import java.util.List;
 public interface DeletedLessonRepository extends JpaRepository<DeletedLesson, Long> {
   Page<DeletedLesson> findAllByOrderByCreatedDateDesc(Pageable pageable);
 
+  List<DeletedLesson> findAllByLessonDateAndLesson(@Temporal(TemporalType.DATE) Date date, Lesson lesson);
+
   List<DeletedLesson> findAllByLessonDate(@Temporal(TemporalType.DATE) Date date);
+
+  List<DeletedLesson> findAllByLesson(Lesson lesson);
+
+  List<DeletedLesson> findAllByAbonement(Abonement abonement);
 }

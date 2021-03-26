@@ -22,15 +22,14 @@ import {getTransferedLessonsByDate} from "../../../store/actions/transferLessons
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import CancelIcon from '@material-ui/icons/Cancel';
 import {createNewConfirmedLesson} from '../../../utils/confirmLesson';
-import TransferedLessonsList from './TransferedLessonsList/TransferedLessonsList';
 import EditIcon from '@material-ui/icons/Edit';
 import {NavLink} from 'react-router-dom';
-import CreditCardIcon from '@material-ui/icons/CreditCard';
-import uaLocale from "date-fns/locale/ru";
+import uaLocale from "date-fns/locale/uk";
 import disciplineValue from '../../../constants/disciplineValue';
 import status from '../../../constants/lessonStatus';
 import rooms from '../../../constants/rooms';
-import './MainPage.scss'
+import './MainPage.scss';
+import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -76,7 +75,7 @@ const columns = [
     { id: 'room', label: 'Класс', minWidth: 50, align: 'center' },
     { id: 'duration', label: 'Трывалість, хв', minWidth: 50, align: 'center' },
     { id: 'status', label: 'Статус', minWidth: 50, align: 'center' },
-    { id: 'isTest', label: 'Тестове', minWidth: 50, align: 'center' },
+    { id: 'isTest', label: 'Тип', minWidth: 50, align: 'center' },
     { id: 'actions', label: 'Дії', minWidth: 150, align: 'center' },
 ];
 
@@ -108,6 +107,7 @@ function MainPage(props) {
     const statusColor = status => {
       return status === 'DELETED' ? classes.colorRed : status === 'TRANSFERED' ? classes.colorYellow : classes.colorGreen
     };
+    const confirmedDate = moment(date).format().slice(0, 10);
 
     return (
         <Fragment>
@@ -159,22 +159,24 @@ function MainPage(props) {
                                                         if (column.id === 'actions' && !row.status) {
                                                             return (
                                                                 <TableCell key={column.id} className={classes.cell}>
+                                                                    {/*<IconButton>*/}
+                                                                        {/*<NavLink to={`/admin/lessons/transfer/${row.id}/date/${date}`}>*/}
+                                                                            {/*<EditIcon/>*/}
+                                                                        {/*</NavLink>*/}
+                                                                    {/*</IconButton>*/}
                                                                     <IconButton>
-                                                                        <NavLink to={`/admin/lessons/transfer/${row.id}/date/${date}`}>
-                                                                            <EditIcon/>
+                                                                        <NavLink to={`/admin/lessons/confirm/${row.id}/${confirmedDate}`}>
+                                                                            <CheckBoxIcon/>
                                                                         </NavLink>
                                                                     </IconButton>
-                                                                    <IconButton onClick={() => confirmLesson(row)}>
-                                                                        <CheckBoxIcon/>
-                                                                    </IconButton>
                                                                     <IconButton>
-                                                                        <NavLink to={`/admin/lessons/reject/${row.id}/date/${date}`}>
+                                                                        <NavLink to={`/admin/lessons/reject/${row.id}/date/${confirmedDate}`}>
                                                                             <CancelIcon/>
                                                                         </NavLink>
                                                                     </IconButton>
-                                                                    <IconButton onClick={() => createStudentCredit(row)}>
-                                                                        <CreditCardIcon/>
-                                                                    </IconButton>
+                                                                    {/*<IconButton onClick={() => createStudentCredit(row)}>*/}
+                                                                        {/*<CreditCardIcon/>*/}
+                                                                    {/*</IconButton>*/}
                                                                 </TableCell>
                                                             )
                                                         }
@@ -202,7 +204,7 @@ function MainPage(props) {
                                                         if (column.id === 'isTest') {
                                                             return (
                                                                 <TableCell key={column.id} className={classes.cell}>
-                                                                    {row.isTestLesson ? 'Тестове' : ''}
+                                                                    {row.isSingleLesson ? 'Разове' : 'Постійне'}
                                                                 </TableCell>
                                                             )
                                                         }
@@ -243,8 +245,6 @@ function MainPage(props) {
                         </Paper>
                     </div>
             }
-            <h2>Перенесені уроки</h2>
-            <TransferedLessonsList tarnsferedLessons={transferedLessons} date={date}/>
         </Fragment>
     )
 }

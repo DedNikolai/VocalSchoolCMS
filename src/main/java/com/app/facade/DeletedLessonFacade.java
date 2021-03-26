@@ -37,9 +37,8 @@ public class DeletedLessonFacade {
    return deletedLessonService.deleteLesson(id);
   }
 
-  public DeletedLessonResponse updateDeletedLesson(DeletedLessonRequest request, Long id) {
+  public ApiResponse updateDeletedLesson(DeletedLessonRequest request, Long id) {
     DeletedLesson deletedLesson = modelMapper.map(request, DeletedLesson.class);
-    DeletedLesson updatedLesson = deletedLessonService.updateLesson(deletedLesson, id);
-    return modelMapper.map(updatedLesson, DeletedLessonResponse.class);
+    return deletedLessonService.updateLesson(deletedLesson, id);
   }
 }

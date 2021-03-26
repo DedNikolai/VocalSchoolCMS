@@ -38,8 +38,10 @@ export const updateLesson = (id, data) => dispatch => {
 export const deleteLesson = (id, studentId) => dispatch => {
     api.deleteApi(`/lessons/${id}`).then(res => {
         if (res.status >= 200 && res.status < 300) {
-            dispatch(getLessonsByStudent(studentId));
-            toastr.success('Lesson was deleted');
+            if (res.data.success) {
+                dispatch(getLessonsByStudent(studentId));
+                toastr.success(res.data.message);
+            } else toastr.error(res.data.message);
         }
     })
 }
@@ -89,4 +91,26 @@ export const getLessonsByDay = day => dispatch => {
     }).finally(() => {
         dispatch({type: TYPES.LESSONS_BY_DAY_LOADING, payload: false})
     })
-}
+};
+
+export const getAllLessonsByDates = (startDate, finishDate) => dispatch => {
+    dispatch({type: TYPES.LESSONS_LOADING, payload: true})
+    api.get(`/lessons/dates?startDate=${startDate}&finishDate=${finishDate}`).then(res => {
+        if (res.status === 200) {
+            dispatch({type: TYPES.SAVE_LESSONS, payload: res.data})
+        }
+    }).finally(() => {
+        dispatch({type: TYPES.LESSONS_LOADING, payload: false})
+    })
+};
+
+export const getAllLessonsByDatesAndTeacher = (startDate, finishDate, teacherId) => dispatch => {
+    dispatch({type: TYPES.LESSONS_BY_DATE_AND_TEACHER_LOADING, payload: true})
+    api.get(`/lessons/teacher/${teacherId}/dates?startDate=${startDate}&finishDate=${finishDate}`).then(res => {
+        if (res.status === 200) {
+            dispatch({type: TYPES.SAVE_LESSONS_BY_DATE_AND_TEACHER, payload: res.data})
+        }
+    }).finally(() => {
+        dispatch({type: TYPES.LESSONS_BY_DATE_AND_TEACHER_LOADING, payload: false})
+    })
+};

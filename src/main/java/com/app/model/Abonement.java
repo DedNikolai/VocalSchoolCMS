@@ -1,5 +1,6 @@
 package com.app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -33,12 +34,6 @@ public class Abonement extends BaseEntiy {
   @EqualsAndHashCode.Exclude
   private Student student;
 
-  @ManyToOne
-  @JoinColumn(name="teacher_id")
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  private Teacher teacher;
-
   private Integer quantity;
 
   private Integer price;
@@ -46,30 +41,26 @@ public class Abonement extends BaseEntiy {
   @Enumerated(EnumType.STRING)
   private Discipline discipline;
 
-//  @Column(name = "start_date")
-//  @Temporal(TemporalType.DATE)
-//  private Date startedDate;
-//
-//  @Column(name = "end_date")
-//  @Temporal(TemporalType.DATE)
-//  private Date endDate;
-
   @OneToMany(mappedBy="abonement", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
+  @JsonIgnore
   private Set<ConfirmedLesson> confirmedLessons = new HashSet<>();
 
+//  @OneToMany(mappedBy="abonement", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//  @ToString.Exclude
+//  @EqualsAndHashCode.Exclude
+//  private Set<TransferLesson> transferLessons;
+
   @OneToMany(mappedBy="abonement", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
-  private Set<TransferLesson> transferLessons;
+  @JsonIgnore
+  private Set<DeletedLesson> deletedLessons;
 
   @Column(name = "transfered_quantity")
   private Integer transferedQuantity;
 
   @Column(name = "used_quantity")
-  private Integer usedLessons;
-
-  @Column(name = "is_active")
-  private Boolean isActive;
+  private Integer usedQuantity;
 }

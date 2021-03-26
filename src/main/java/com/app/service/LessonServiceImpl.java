@@ -2,7 +2,6 @@ package com.app.service;
 
 import com.app.dto.response.ApiResponse;
 import com.app.exeption.ResourceNotFoundException;
-import com.app.model.Abonement;
 import com.app.model.ConfirmedLesson;
 import com.app.model.DeletedLesson;
 import com.app.model.Lesson;
@@ -10,6 +9,7 @@ import com.app.model.LessonDay;
 import com.app.model.Status;
 import com.app.model.Student;
 import com.app.model.Teacher;
+import com.app.model.TeacherWorkTime;
 import com.app.model.TransferLesson;
 import com.app.repository.ConfirmedLessonRepository;
 import com.app.repository.DeletedLessonRepository;
@@ -35,72 +35,68 @@ public class LessonServiceImpl implements LessonService {
   private final StudentRepository studentRepository;
   private final TeacherRepository teacherRepository;
   private final ConfirmedLessonRepository confirmedLessonRepository;
-  private final TransferLessonRepository transferLessonRepository;
   private final DeletedLessonRepository deletedLessonRepository;
 
   @Override
   public List<Lesson> getLessonsByStudent(Long id) {
     Student student = studentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Student", "id", id));
-    return lessonRepository.findAllByStudentAndDeletedIsFalse(student).stream().filter(lesson -> !lesson.getDeleted()).collect(Collectors.toList());
+    return lessonRepository.findAllByStudentOrderByLessonStartDateDesc(student);
+  }
+
+  @Override
+  public List<Lesson> getAllLessonsByDates(Date startDate, Date finishDate) {
+    return lessonRepository.findAllByDates(startDate, finishDate);
+  }
+
+  @Override
+  public List<Lesson> getAllLessonsByDatesAndTeacher(Date startDate, Date finishDate, Long teacherId) {
+    Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() -> new ResourceNotFoundException("Teacher", "id", teacherId));
+    List<Lesson> lessons = lessonRepository.findAllByDatesAndTeacher(startDate, finishDate, teacher);
+    return lessons;
+  }
+
+  @Override
+  public List<Lesson> findAllByTeacherAndLessonIsNotSingleAndDateNotEpire(Date date, Long teacherId) {
+    Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() -> new ResourceNotFoundException("Teacher", "id", teacherId));
+    List<Lesson> lessons = lessonRepository.findAllByTeacherAndLessonIsNotSingleAndDateNotEpire(date, teacher);
+    return lessons;
   }
 
   @Override
   @Transactional
   public ApiResponse createLesson(Lesson lesson) {
-    List<Lesson> lessonsByDay = lessonRepository.findAllByDayAndDeletedIsFalse(lesson.getDay());
-    boolean isTimetableLessonForThisTime = lessonsByDay.stream().filter(item -> !item.getIsTestLesson() && item.getRoom().equals(lesson.getRoom()))
-        .anyMatch(currentLesson -> !isAllowTime(lesson, currentLesson));
-    List<Lesson> testLessonsForThisTime = lessonsByDay.stream().filter(item -> item.getIsTestLesson() && !isAllowTime(lesson, item))
-        .collect(Collectors.toList());
+    List<Lesson> lessonsFromDb = lessonRepository.findAllByLessonFinishDateIsNotExpire(lesson.getLessonStartDate(), lesson.getDay());
+    List<Lesson> reletiveLessons = lessonsFromDb.stream().filter(item -> isTheSameTime(item, lesson)).collect(Collectors.toList());
+    Teacher teacher = teacherRepository.findById(lesson.getTeacher().getId())
+        .orElseThrow(() -> new ResourceNotFoundException("Teacher", "id", lesson.getTeacher().getId()));
 
-    List<Lesson> testLessonForThisTimeInthisRoom = testLessonsForThisTime.stream().filter(currentLesson -> lesson.getRoom().equals(currentLesson.getRoom())).collect(Collectors.toList());
-    List<Lesson> testLessonForThisTimeWithCurrentTeacher= testLessonsForThisTime.stream().filter(currentLesson -> lesson.getTeacher().getId() == currentLesson.getTeacher().getId()).collect(Collectors.toList());
-
-    if (isTimetableLessonForThisTime) {
-      return new ApiResponse(false, "На цей час в цьому кабінеті вже є урок");
+    if (!isTeacherWorkTime(teacher, lesson)) {
+      return new ApiResponse(false, "Не робочий час для цього вчителя");
     }
 
-    if (testLessonForThisTimeWithCurrentTeacher.size() != 0) {
-      return new ApiResponse(false,
-          testLessonForThisTimeWithCurrentTeacher.get(0).getLessonDate()+" заплановано тестовый урок з " + testLessonForThisTimeWithCurrentTeacher.get(0).getTeacher().getFirstName()+
-      " " + testLessonForThisTimeWithCurrentTeacher.get(0).getTeacher().getLastName() + " о "+testLessonForThisTimeWithCurrentTeacher.get(0).getTime());
-    }
+    for (Lesson key : reletiveLessons) {
+      String str = "";
+      if (key.getRoom().equals(lesson.getRoom())) {
+        if (key.getIsSingleLesson()) {
+          str = key.getLessonStartDate() + " нацей час в цьому класі заплановано разове заняття";
+        } else {
+          str = "Цей клас занятый в даний час";
+        }
 
-    if (testLessonForThisTimeInthisRoom.size() != 0) {
-      return new ApiResponse(false,
-          testLessonForThisTimeInthisRoom.get(0).getLessonDate()+ " в " + testLessonForThisTimeInthisRoom.get(0).getTime() + " Заплановано тестовый урок в класі " + testLessonForThisTimeInthisRoom.get(0).getRoom());
-    }
-    Teacher teacher = teacherRepository.findById(lesson.getTeacher().getId()).orElseThrow(() -> new ResourceNotFoundException("Teacher", "id", lesson.getTeacher().getId()));
+      }
 
-    if (!isTeacherWorkTimes(teacher, lesson)) {
-      return new ApiResponse(false, "Цей час не робочий для цього вяителя");
-    }
+      if (key.getTeacher().getId() == lesson.getTeacher().getId()) {
+        if (key.getIsSingleLesson()) {
+          str = key.getLessonStartDate() + " у вяителя " + key.getTeacher().getFirstName() + " " + key.getTeacher().getLastName()
+              + " заплановано разове заняття";
+        } else {
+          str = "На цей клас" + " у " + key.getTeacher().getFirstName() + " " + key.getTeacher().getLastName()
+              + " вже є заняття";
+        }
 
-    boolean isLessonForTeacherForThisTime = teacher.getLessons().stream().filter(currentLesson -> {
-      return !currentLesson.getIsTestLesson() && currentLesson.getDay().equals(lesson.getDay());
-    }).anyMatch(teacherLesson -> !isAllowTime(lesson, teacherLesson));
+      }
 
-    if (isLessonForTeacherForThisTime) {
-      return new ApiResponse(false, "В данного вчителя вже є урок на цей час");
-    }
-
-    List<TransferLesson> transferLessons = transferLessonRepository.findAllByDayAndIsActiveTrue(lesson.getDay());
-    List<TransferLesson> transferLessonsWithCurrentTeacherForThisTime = transferLessons.stream()
-        .filter(transferLesson -> !isAllowTimeForTransfer(lesson, transferLesson) && transferLesson.getTeacher().getId() == lesson.getTeacher().getId())
-        .collect(Collectors.toList());
-    List<TransferLesson> transferLessonInThisRoomForThisTime = transferLessons.stream()
-        .filter(transferLesson -> !isAllowTimeForTransfer(lesson, transferLesson) && transferLesson.getRoom().equals(lesson.getRoom()))
-        .collect(Collectors.toList());
-
-    if (transferLessonsWithCurrentTeacherForThisTime.size() != 0) {
-      return new ApiResponse(false,
-          transferLessonsWithCurrentTeacherForThisTime.get(0).getLessonDate()+" заплановано перенесеный урок з " + transferLessonsWithCurrentTeacherForThisTime.get(0).getTeacher().getFirstName()+
-              " " + transferLessonsWithCurrentTeacherForThisTime.get(0).getTeacher().getLastName() + " о "+transferLessonsWithCurrentTeacherForThisTime.get(0).getTransferTime());
-    }
-
-    if (transferLessonInThisRoomForThisTime.size() != 0) {
-      return new ApiResponse(false,
-          transferLessonInThisRoomForThisTime.get(0).getLessonDate()+ " в " + transferLessonInThisRoomForThisTime.get(0).getTransferTime() + " Заплановано перенесеный урок в класі " + transferLessonInThisRoomForThisTime.get(0).getRoom());
+      return new ApiResponse(false, str);
     }
 
     lessonRepository.save(lesson);
@@ -108,15 +104,59 @@ public class LessonServiceImpl implements LessonService {
   }
 
   @Override
+  public ApiResponse updateLesson(Lesson lesson, Long id) {
+    Lesson lessonFromDb = lessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));
+    List<Lesson> lessonsFromDb = lessonRepository.findAllByLessonFinishDateIsNotExpire(lesson.getLessonStartDate(), lesson.getDay());
+    List<Lesson> reletiveLessons = lessonsFromDb.stream().filter(item -> isTheSameTime(item, lesson)).collect(Collectors.toList());
+    Teacher teacher = teacherRepository.findById(lesson.getTeacher().getId())
+        .orElseThrow(() -> new ResourceNotFoundException("Teacher", "id", lesson.getTeacher().getId()));
+
+    if (!isTeacherWorkTime(teacher, lesson)) {
+      return new ApiResponse(false, "Не робочий час для цього вчителя");
+    }
+
+    for (Lesson key : reletiveLessons) {
+      String str = "";
+      if (key.getRoom().equals(lesson.getRoom())) {
+        if (key.getIsSingleLesson()) {
+          str = key.getLessonStartDate() + " нацей час в цьому класі заплановано разове заняття";
+        } else {
+          str = "Цей клас занятый в даний час";
+        }
+
+      }
+
+      if (key.getTeacher().getId() == lesson.getTeacher().getId()) {
+        if (key.getIsSingleLesson()) {
+          str = key.getLessonStartDate() + " у вяителя " + key.getTeacher().getFirstName() + " " + key.getTeacher().getLastName()
+              + " заплановано разове заняття";
+        } else {
+          str = "На цей клас" + " у " + key.getTeacher().getFirstName() + " " + key.getTeacher().getLastName()
+              + " вже є заняття";
+        }
+
+      }
+
+      return new ApiResponse(false, str);
+    }
+
+    lesson.setId(lessonFromDb.getId());
+    lessonRepository.save(lesson);
+    return new ApiResponse(true, "Урок змінено");
+  }
+
+  @Override
   @Transactional
-  public Lesson deleteLesson(Long id) {
+  public ApiResponse deleteLesson(Long id) {
     Lesson lesson = lessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));
-    Teacher teacher = teacherRepository.findByLessonsContains(lesson);
-    teacher.getLessons().remove(lesson);
-    teacherRepository.save(teacher);
-    lesson.setTeacher(null);
-    lesson.setDeleted(true);
-    return lessonRepository.save(lesson);
+    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLesson(lesson);
+    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLesson(lesson);
+
+    if (confirmedLessons.size() != 0 || deletedLessons.size() != 0) {
+      return new ApiResponse(false, "Не вдалося відалити, оскільки є залежності з цим уроком");
+    }
+    lessonRepository.delete(lesson);
+    return new ApiResponse(true, "Урок видалено");
   }
 
   @Override
@@ -125,32 +165,11 @@ public class LessonServiceImpl implements LessonService {
     return lesson;
   }
 
-  @Override
-  public ApiResponse updateLesson(Lesson lesson, Long id) {
-    Lesson lessonFromDb = lessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));
-    lesson.setId(lessonFromDb.getId());
-    return createLesson(lesson);
-  }
 
   @Override
   public List<Lesson> getAllLessons() {
-    List<Lesson> lessons = lessonRepository.findAllByDeletedIsFalse().stream().filter(lesson -> !lesson.getDeleted()).collect(Collectors.toList());
-    return lessons.stream().filter(lesson -> !lesson.getIsTestLesson()).collect(Collectors.toList());
-  }
-
-  public Date parseDate(Date date) {
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(date);
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    String dateString = format.format(date);
-    Date parseDate = null;
-    try {
-      parseDate = format.parse(dateString);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-
-    return parseDate;
+    List<Lesson> lessons = lessonRepository.findAll();
+    return lessons.stream().filter(lesson -> !lesson.getIsSingleLesson()).collect(Collectors.toList());
   }
 
   @Override
@@ -166,15 +185,15 @@ public class LessonServiceImpl implements LessonService {
     } catch (ParseException e) {
       e.printStackTrace();
     }
-    List<Lesson> lessons = lessonRepository.findAllByDayAndDeletedIsFalseOrderByTime(LessonDay.values()[cal.get(Calendar.DAY_OF_WEEK)-1]);
+    List<Lesson> lessons = lessonRepository.findAllByDayOrderByTime(LessonDay.values()[cal.get(Calendar.DAY_OF_WEEK)-1]);
     List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(parseDate);
-    List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(parseDate);
     List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(parseDate);
 
-    List<Lesson> lessonList = lessons.stream().map(lesson -> {
-      boolean confirmed = confirmedLessons.stream().anyMatch(confirmedLesson -> confirmedLesson.getLesson().getId() == lesson.getId() && confirmedLesson.getTime().equals(lesson.getTime()));
-      boolean transfered = transferLessons.stream().anyMatch(transferLesson -> transferLesson.getLesson().getId() == lesson.getId() && transferLesson.getTransferTime().equals(lesson.getTime()));
-      boolean deleted = deletedLessons.stream().anyMatch(deletedLesson -> deletedLesson.getLesson().getId() == lesson.getId() && deletedLesson.getLesson().getTime().equals(lesson.getTime()));
+    lessons.stream().map(lesson -> {
+      boolean confirmed = confirmedLessons.stream().anyMatch(confirmedLesson -> confirmedLesson.getLesson().getId() == lesson.getId());
+      boolean transfered = deletedLessons.stream().anyMatch(deletedLesson -> deletedLesson.getLesson().getId() == lesson.getId() && !deletedLesson.getIsUsed() && !lesson.getIsSingleLesson());
+      boolean deleted = deletedLessons.stream().anyMatch(deletedLesson -> deletedLesson.getLesson().getId() == lesson.getId() &&
+          ((deletedLesson.getIsUsed() && !lesson.getIsSingleLesson()) || (lesson.getIsSingleLesson() && !deletedLesson.getIsUsed())));
       if (confirmed) {
         lesson.setStatus(Status.CONFIRMED);
       }
@@ -192,66 +211,56 @@ public class LessonServiceImpl implements LessonService {
       }
 
       return lesson;
-    }).filter(lesson -> !lesson.getDeleted()).filter(lesson -> {
-      if (!lesson.getIsTestLesson() || lesson.getIsTestLesson() && lesson.getLessonDate().equals(parseDate(date))) {
-        return true;
-      } else {
-        return false;
-      }
     }).map(lesson -> {
           Student student = lesson.getStudent();
           Integer balance = student.getAbonements()
-              .stream().filter(abonement -> abonement.getIsActive() && abonement.getDiscipline().equals(lesson.getDiscipline()))
-              .reduce(0, (partialAgeResult, abonement) -> partialAgeResult + abonement.getQuantity() - abonement.getUsedLessons(), Integer::sum);
+              .stream().filter(abonement -> abonement.getQuantity() > abonement.getUsedQuantity() && abonement.getDiscipline().equals(lesson.getDiscipline()))
+              .reduce(0, (partialAgeResult, abonement) -> partialAgeResult + abonement.getQuantity() - abonement.getUsedQuantity(), Integer::sum);
           lesson.setCurrentStudenBalance(balance);
           return lesson;
         })
         .collect(Collectors.toList());
-    return lessonList;
+    return lessons;
   }
 
   @Override
   public List<Lesson> findAllbyLessonDay(String day) {
-    return lessonRepository.findAllByDayAndDeletedIsFalse(LessonDay.valueOf(day)).stream().filter(lesson -> !lesson.getDeleted() && !lesson.getIsTestLesson()).collect(Collectors.toList());
+    return lessonRepository.findAllByDay(LessonDay.valueOf(day)).stream().filter(lesson -> !lesson.getIsSingleLesson()).collect(Collectors.toList());
   }
 
-  public boolean isAllowTime(Lesson createdLesson, Lesson currentLesson) {
-    int createdStart = Integer.parseInt(createdLesson.getTime().substring(0, 2))*60 + Integer.parseInt(createdLesson.getTime().substring(3));
-    int createdEnd = createdStart + createdLesson.getDuration();
-    int currentStart = Integer.parseInt(currentLesson.getTime().substring(0, 2))*60 + Integer.parseInt(currentLesson.getTime().substring(3));
-    int currentEnd = currentStart + currentLesson.getDuration();
 
-    if (createdEnd <= currentStart || createdStart >= currentEnd) {
+  public boolean isTheSameTime(Lesson lessonFromDb, Lesson lesson) {
+    int lessonFromDbStartTime = Integer.parseInt(lessonFromDb.getTime().substring(0, 2))*60 + Integer.parseInt(lessonFromDb.getTime().substring(3));
+    int lessonFromDbFinishTime = Integer.parseInt(lessonFromDb.getTime().substring(0, 2))*60 + Integer.parseInt(lessonFromDb.getTime().substring(3)) + lessonFromDb.getDuration();
+    int lessonStartTime = Integer.parseInt(lesson.getTime().substring(0, 2))*60 + Integer.parseInt(lesson.getTime().substring(3));
+    int lessonFinishTime = Integer.parseInt(lesson.getTime().substring(0, 2))*60 + Integer.parseInt(lesson.getTime().substring(3)) + lesson.getDuration();
+
+    if (lessonStartTime >= lessonFromDbStartTime && lessonStartTime < lessonFromDbFinishTime) {
+      return true;
+    }
+
+    if (lessonFinishTime > lessonFromDbStartTime && lessonFinishTime <= lessonFromDbFinishTime) {
       return true;
     }
 
     return false;
   }
 
-  public boolean isAllowTimeForTransfer(Lesson createdLesson, TransferLesson currentLesson) {
-    int createdStart = Integer.parseInt(createdLesson.getTime().substring(0, 2))*60 + Integer.parseInt(createdLesson.getTime().substring(3));
-    int createdEnd = createdStart + createdLesson.getDuration();
-    int currentStart = Integer.parseInt(currentLesson.getTransferTime().substring(0, 2))*60 + Integer.parseInt(currentLesson.getTransferTime().substring(3));
-    int currentEnd = currentStart + currentLesson.getLesson().getDuration();
+  public boolean isTeacherWorkTime(Teacher teacher, Lesson lesson) {
+    List<TeacherWorkTime> workTimes = teacher.getWorkTimes().stream()
+        .filter(teacherWorkTime -> teacherWorkTime.getDay().equals(lesson.getDay()))
+        .collect(Collectors.toList());
+    for (TeacherWorkTime time : workTimes) {
+      int startWorkTime = Integer.parseInt(time.getStartTime().substring(0, 2))*60 + Integer.parseInt(time.getStartTime().substring(3));
+      int endWorkTime = Integer.parseInt(time.getEndTime().substring(0, 2))*60 + Integer.parseInt(time.getEndTime().substring(3));
+      int lessonStartTime = Integer.parseInt(lesson.getTime().substring(0, 2))*60 + Integer.parseInt(lesson.getTime().substring(3));
+      int lessonFinishTime = Integer.parseInt(lesson.getTime().substring(0, 2))*60 + Integer.parseInt(lesson.getTime().substring(3)) + lesson.getDuration();
 
-    if (createdEnd <= currentStart || createdStart >= currentEnd) {
-      return true;
-    }
-
-    return false;
-  }
-
-  public boolean isTeacherWorkTimes(Teacher teacher, Lesson lesson) {
-    int lessonStart = Integer.parseInt(lesson.getTime().substring(0, 2))*60 + Integer.parseInt(lesson.getTime().substring(3));
-    int lessonEnd = lessonStart + lesson.getDuration();
-    return teacher.getWorkTimes().stream().filter(workTime -> workTime.getDay().equals(lesson.getDay())).anyMatch(worktime -> {
-      int teacherStartTime = Integer.parseInt(worktime.getStartTime().substring(0, 2))*60 + Integer.parseInt(worktime.getStartTime().substring(3));
-      int teacherEndTime = Integer.parseInt(worktime.getEndTime().substring(0, 2))*60 + Integer.parseInt(worktime.getEndTime().substring(3));
-      if (lessonStart >= teacherStartTime && lessonEnd <= teacherEndTime) {
+      if (lessonStartTime >= startWorkTime && lessonFinishTime <= endWorkTime) {
         return true;
-      } else {
-        return false;
       }
-    });
+    }
+
+    return false;
   }
 }

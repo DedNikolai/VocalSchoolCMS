@@ -5,6 +5,8 @@ const initialState = {
     abonementsLoading: true,
     abonementById: {},
     abonementByIdLoading: true,
+    abonementsByStudent: [],
+    abonementsByStudentLoading: true,
 };
 
 const abonement = (state = initialState, action) => {
@@ -17,6 +19,10 @@ const abonement = (state = initialState, action) => {
             return {...state, abonementById: action.payload}
         case TYPES.ABONEMENT_LOADING:
             return {...state, abonementByIdLoading: action.payload}
+        case TYPES.SAVE_ABONEMENTS_BY_STUDENT:
+            return {...state, abonementsByStudent: action.payload}
+        case TYPES.ABONEMENTS_BY_STUDENT_LOADING:
+            return {...state, abonementsByStudentLoading: action.payload}
         default:
             return {...state}
     }

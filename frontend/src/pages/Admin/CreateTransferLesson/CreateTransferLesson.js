@@ -28,14 +28,7 @@ import {NavLink} from 'react-router-dom';
 import disciplineValue from '../../../constants/disciplineValue';
 import rooms from '../../../constants/rooms';
 import daysValues from '../../../constants/daysValues';
-
-const days = [
-    'MONDAY',
-    'TUESDAY',
-    'WEDNESDAY',
-    'THURSDAY',
-    'FRIDAY',
-    'SUTURDAY'];
+import days from '../../../constants/days'
 
 const useStyles = makeStyles(theme => ({
     root: {

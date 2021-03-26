@@ -42,17 +42,17 @@ public class CreditServiceImpl implements CreditService{
 
   @Override
   public ApiResponse createCredit(ConfirmedLesson confirmedLesson) {
-    ConfirmedLesson savedLesson = confirmedLessonRepository.save(confirmedLesson);
-    Credit credit = new Credit();
-    credit.setLesson(savedLesson.getLesson());
-    credit.setStudent(savedLesson.getStudent());
-    credit.setTeacher(savedLesson.getTeacher());
-    credit.setLessonDate(savedLesson.getLessonDate());
-    credit.setTime(savedLesson.getTime());
-    Credit savedCredit = creditRepository.save(credit);
-    if (savedCredit.getId() != null) {
-      return new  ApiResponse(true, "Записано в кредит");
-    }
+//    ConfirmedLesson savedLesson = confirmedLessonRepository.save(confirmedLesson);
+//    Credit credit = new Credit();
+//    credit.setLesson(savedLesson.getLesson());
+//    credit.setStudent(savedLesson.getStudent());
+//    credit.setTeacher(savedLesson.getTeacher());
+//    credit.setLessonDate(savedLesson.getLessonDate());
+//    credit.setTime(savedLesson.getTime());
+//    Credit savedCredit = creditRepository.save(credit);
+//    if (savedCredit.getId() != null) {
+//      return new  ApiResponse(true, "Записано в кредит");
+//    }
     return new  ApiResponse(false, "Не вдалося записати на кредит");
   }
 }

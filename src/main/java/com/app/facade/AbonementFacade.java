@@ -2,6 +2,7 @@ package com.app.facade;
 
 import com.app.dto.request.AbonementRequest;
 import com.app.dto.response.AbonementResponse;
+import com.app.dto.response.ApiResponse;
 import com.app.model.Abonement;
 import com.app.service.AbonementService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -33,12 +37,17 @@ public class AbonementFacade {
     return modelMapper.map(updatedAbonement, AbonementResponse.class);
   }
 
-  public void deleteAbonement(Long id) {
-    abonementService.deleteAbonement(id);
+  public ApiResponse deleteAbonement(Long id) {
+     return abonementService.deleteAbonement(id);
   }
 
   public Page<AbonementResponse> findAll(Pageable pageable) {
     Page<Abonement> abonements = abonementService.findAll(pageable);
     return abonements.map(abonement -> modelMapper.map(abonement, AbonementResponse.class));
   }
-}
+
+  public List<AbonementResponse> getAllActiveAbonementsByStudenr(Long studentId) {
+    List<Abonement> abonements = abonementService.findAllByStudent(studentId);
+    return abonements.stream().map(abonement -> modelMapper.map(abonement, AbonementResponse.class)).collect(Collectors.toList());
+  }
+ }

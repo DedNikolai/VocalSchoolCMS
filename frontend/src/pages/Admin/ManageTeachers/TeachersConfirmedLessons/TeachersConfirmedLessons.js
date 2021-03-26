@@ -81,7 +81,6 @@ function TeachersConfirmedLessons(props) {
     const payNonPaidLessons = () => {
         payAllTeachersLessons(teacherId);
     };
-
     return (
         <div className='lessons-list'>
             {
@@ -123,14 +122,14 @@ function TeachersConfirmedLessons(props) {
                                                     if (column.id === 'teacher') {
                                                         return (
                                                             <TableCell className={classes.cell} key={column.id}>
-                                                                {row.teacher.firstName + ' ' + row.teacher.lastName}
+                                                                {row.lesson.teacher.firstName + ' ' + row.lesson.teacher.lastName}
                                                             </TableCell>
                                                         )
                                                     }
                                                     if (column.id === 'student') {
                                                         return (
                                                             <TableCell className={classes.cell} key={column.id}>
-                                                                {row.student.firstName + ' ' + row.student.lastName}
+                                                                {row.lesson.student.firstName + ' ' + row.lesson.student.lastName}
                                                             </TableCell>
                                                         )
                                                     }

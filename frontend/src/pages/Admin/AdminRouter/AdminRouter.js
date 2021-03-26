@@ -26,6 +26,7 @@ import ManageAbonement from '../ManageAbonement/ManageAbonement';
 import ManageConfirmedLesson from '../ManageConfirmedLesson/ManageConfirmedLesson';
 import DeletedLessons from '../DeletedLessons/DeletedLessons';
 import ConfirmedLessons from '../ConfirmedLessons/ConfirmedLessons';
+import CreateConfirmedLesson from '../CreateConfirmedLesson/CreateConfirmedLesson';
 import TransferLessons from '../TransferLessons/TransferLessons';
 import Credit from '../Credit/Credits';
 
@@ -48,18 +49,19 @@ function AdminRouter (props) {
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/teachers/add-new' component={CreateTeacher} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/teachers' component={Teachers} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/add-new' component={ManageLessons} />
+            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/confirm/:lessonId/:date' component={CreateConfirmedLesson} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/edit/:id' component={ManageLessons} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/transfer/:id/date/:current' component={CreateTransferLesson} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/lessons/reject/:id/date/:current' component={CreateDeleteLesson} />
-            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/transfer-lessons/edit/:id' component={ManageTrasferLesson} />
-            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/transfer-lessons' component={TransferLessons} />
+            {/*<AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/transfer-lessons/edit/:id' component={ManageTrasferLesson} />*/}
+            {/*<AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/transfer-lessons' component={TransferLessons} />*/}
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/timetable' component={Lessons} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/deleted-lessons/:id' component={DeletedLesson} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/deleted-lessons' component={DeletedLessons} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/abonements/edit/:id' component={ManageAbonement} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/abonements/create' component={CreateAbonement} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/abonements' component={Abonements} />
-            <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/credits' component={Credit} />
+            {/*<AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/credits' component={Credit} />*/}
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/confirmed-lessons/edit/:id' component={ManageConfirmedLesson} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/confirmed-lessons' component={ConfirmedLessons} />
             <AuthorizedRoute authorized={hasRoles(user, teacherPermissions)} path='/admin' component={MainPage} />
