@@ -2,6 +2,7 @@ package com.app.controller;
 
 import com.app.dto.request.AbonementRequest;
 import com.app.dto.response.AbonementResponse;
+import com.app.dto.response.ApiResponse;
 import com.app.dto.view.View;
 import com.app.facade.AbonementFacade;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -66,8 +67,8 @@ public class AbonementController {
 
   @DeleteMapping("{id}")
   @JsonView(View.Abonement.class)
-  public ResponseEntity<Void> deleteAbonement(@PathVariable Long id) {
-    abonementFacade.deleteAbonement(id);
-    return ResponseEntity.noContent().build();
+  public ResponseEntity<ApiResponse> deleteAbonement(@PathVariable Long id) {
+    ApiResponse response = abonementFacade.deleteAbonement(id);
+    return ResponseEntity.ok(response);
   }
 }

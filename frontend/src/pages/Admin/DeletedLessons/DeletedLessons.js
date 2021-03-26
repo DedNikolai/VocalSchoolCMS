@@ -26,6 +26,7 @@ const columns = [
     { id: 'time', label: 'Час', minWidth: 150, align: 'center' },
     { id: 'student', label: 'Учень', minWidth: 150, align: 'center' },
     { id: 'teacher', label: 'Вчитель', minWidth: 150, align: 'center' },
+    { id: 'abonement', label: 'Абонемент №/дата', minWidth: 150, align: 'center' },
     { id: 'actions', label: 'Дії', minWidth: 50, align: 'center' },
 ];
 
@@ -57,7 +58,6 @@ function DeletedLessons(props) {
     const handleChangePage = (event, page) => {
         getLessons(page, rowsPerPage);
     };
-    console.log(content)
     useEffect(() => {
         getLessons(0, rowsPerPage);
     }, []);
@@ -108,6 +108,15 @@ function DeletedLessons(props) {
                                                         return (
                                                             <TableCell className={classes.cell} key={column.id}>
                                                                 {row.lesson.teacher.firstName + ' ' + row.lesson.teacher.lastName}
+                                                            </TableCell>
+                                                        )
+                                                    }
+                                                    if (column.id === 'abonement') {
+                                                        return (
+                                                            <TableCell className={classes.cell} key={column.id}>
+                                                                {row.abonement ? row.abonement.id + ' / ' + row.abonement.createdDate.split('-').reverse().join('-')
+                                                                : ''
+                                                                }
                                                             </TableCell>
                                                         )
                                                     }

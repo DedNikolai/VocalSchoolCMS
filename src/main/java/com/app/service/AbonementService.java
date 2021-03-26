@@ -1,5 +1,6 @@
 package com.app.service;
 
+import com.app.dto.response.ApiResponse;
 import com.app.model.Abonement;
 import com.app.model.Student;
 import org.springframework.data.domain.Page;
@@ -14,7 +15,7 @@ public interface AbonementService {
 
   Abonement updateAbonement(Abonement abonement, Long id);
 
-  void deleteAbonement(Long id);
+  ApiResponse deleteAbonement(Long id);
 
   Page<Abonement> findAll(Pageable pageable);
 

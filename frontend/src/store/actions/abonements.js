@@ -47,8 +47,11 @@ export const getAbonementById = id => dispatch => {
 export const deleteAbonement = (id, page, size) => dispatch => {
     api.deleteApi(`/abonements/${id}`).then(res => {
         if (res.status >= 200 && res.status < 300) {
-            dispatch(getAllAbonements(page, size));
-            toastr.success('Abonement was deleted');
+            console.log(res)
+            if (res.data.success) {
+                dispatch(getAllAbonements(page, size));
+                toastr.success(res.data.message);
+            } else toastr.error(res.data.message)
         }
     })
 };

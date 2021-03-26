@@ -50,6 +50,7 @@ public class DeletedLessonServiceImp implements DeletedLessonService {
     if (!deletedLesson.getIsUsed()) {
       if (abonement == null) {
         if (deletedLesson.getLesson().getIsSingleLesson()) {
+          deletedLessonRepository.save(deletedLesson);
           return new ApiResponse(true, "Урок відмінено");
         }
         return new ApiResponse(false, "В даного учня немає проплачених занять");

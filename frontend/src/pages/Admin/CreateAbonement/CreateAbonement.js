@@ -1,10 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import {Redirect} from 'react-router-dom';
+import React from 'react';
 import {createAbonement} from "../../../store/actions/abonements";
-import {getAllTeachers} from "../../../store/actions/teacher";
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
-import Preloader from '../../../components/Preloader/index';
 import Paper from '@material-ui/core/Paper';
 import {makeStyles, ThemeProvider, useTheme} from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
@@ -22,7 +19,6 @@ import {useFormik} from 'formik';
 import {colors} from '../../../constants/view';
 import Disciplines from '../../../constants/disciplines';
 import ua from "../../../languages/ua";
-import {rowsPerPage} from '../../../constants/view';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -65,16 +61,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const validate = values => {
-    const {noDisciplines, noQuantity, noTeacher, noPrice} = ua.pages.manageUsers.errors;
+    const {noDisciplines, noQuantity, noPrice} = ua.pages.manageUsers.errors;
     const errors = {};
 
     if (!values.discipline) {
         errors.discipline = noDisciplines;
-    }
-
-
-    if (!values.teacher) {
-        errors.teacher = noTeacher;
     }
 
     if (!values.quantity) {
@@ -101,7 +92,7 @@ const MenuProps = {
 
 function CreateAbonement(props) {
     const classes = useStyles();
-    const {createAbonement, student, allTeachersLoading, getTeachers, allTeachers, closeForm} = props;
+    const {createAbonement, student, closeForm} = props;
     const theme = useTheme();
 
     const formik = useFormik({
@@ -115,22 +106,9 @@ function CreateAbonement(props) {
         },
     });
 
-    useEffect(() => {
-        getTeachers();
-    }, []);
-
     const handleChangeDiscipline = event => {
         formik.setFieldValue('discipline', event.target.value);
-        formik.setFieldValue('teacher', {});
     };
-
-    const handleChangeTeacher = event => {
-        formik.setFieldValue('teacher', event.target.value);
-    };
-
-    if (allTeachersLoading) {
-        return <div className="wrapper"><Preloader/></div>
-    }
 
     const checkedTeacher = formik.values.teacher || {};
     const checkedDiscipline = formik.values.discipline || '';
@@ -168,30 +146,6 @@ function CreateAbonement(props) {
                                 <MenuItem key={item} value={item}>
                                     <Checkbox checked={formik.values.discipline === item}/>
                                     <ListItemText primary={item} />
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </div>
-                <div>
-                    <FormControl className={classes.formControl}>
-                        <InputLabel id="demo-mutiple-checkbox-label">{formik.touched.teacher && formik.errors.teacher || 'Вчитель'}</InputLabel>
-                        <Select
-                            labelId="demo-mutiple-checkbox-label"
-                            id="demo-mutiple-checkbox"
-                            name='teacher'
-                            onChange={handleChangeTeacher}
-                            input={<Input />}
-                            renderValue={() => checkedTeacher.id ? checkedTeacher.firstName + ' ' + checkedTeacher.lastName : ''}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.teacher && formik.errors.teacher}
-                            MenuProps={MenuProps}
-                            disabled={!checkedDiscipline}
-                        >
-                            {allTeachers.filter(teacher => teacher.disciplines.indexOf(checkedDiscipline) !== -1).map(teacher => (
-                                <MenuItem key={teacher.id} value={teacher}>
-                                    <Checkbox checked={checkedTeacher.id === teacher.id}/>
-                                    <ListItemText primary={teacher.firstName + ' ' + teacher.lastName} />
                                 </MenuItem>
                             ))}
                         </Select>
@@ -266,14 +220,11 @@ CreateAbonement.defaultProps = {
 
 const mapStateToProps = ({teacher}) => {
     return {
-        allTeachers: teacher.teachers,
-        allTeachersLoading: teacher.teachersLoading,
     }
 };
 
 const mapDispatchToProps = dispatch => ({
     createAbonement: data => dispatch(createAbonement(data)),
-    getTeachers: () => dispatch(getAllTeachers()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateAbonement);

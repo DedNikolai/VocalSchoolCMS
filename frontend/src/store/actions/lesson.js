@@ -38,8 +38,10 @@ export const updateLesson = (id, data) => dispatch => {
 export const deleteLesson = (id, studentId) => dispatch => {
     api.deleteApi(`/lessons/${id}`).then(res => {
         if (res.status >= 200 && res.status < 300) {
-            dispatch(getLessonsByStudent(studentId));
-            toastr.success('Lesson was deleted');
+            if (res.data.success) {
+                dispatch(getLessonsByStudent(studentId));
+                toastr.success(res.data.message);
+            } else toastr.error(res.data.message);
         }
     })
 }

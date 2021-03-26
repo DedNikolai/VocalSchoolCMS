@@ -1,5 +1,6 @@
 package com.app.repository;
 
+import com.app.model.Abonement;
 import com.app.model.ConfirmedLesson;
 import com.app.model.Lesson;
 import com.app.model.Teacher;
@@ -20,4 +21,10 @@ public interface ConfirmedLessonRepository extends JpaRepository<ConfirmedLesson
   List<ConfirmedLesson> findAllByLessonDateAndLesson(@Temporal(TemporalType.DATE)Date date, Lesson lesson);
 
   List<ConfirmedLesson> findAllByTeacherAndIsPaidFalse(Teacher teacher);
+
+  List<ConfirmedLesson> findAllByLessonDate(@Temporal(TemporalType.DATE)Date date);
+
+  List<ConfirmedLesson> findAllByLesson(Lesson lesson);
+
+  List<ConfirmedLesson> findAllByAbonement(Abonement abonement);
 }

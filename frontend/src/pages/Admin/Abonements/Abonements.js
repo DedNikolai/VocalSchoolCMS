@@ -21,6 +21,7 @@ import disciplineValue from '../../../constants/disciplineValue';
 import moment from 'moment';
 
 const columns = [
+    { id: 'id', label: '№', minWidth: 50, align: 'center' },
     { id: 'date', label: 'Дата', minWidth: 150, align: 'center' },
     { id: 'student', label: 'Студент', minWidth: 150, align: 'center' },
     { id: 'discipline', label: 'Дисципліна', minWidth: 50, align: 'center' },

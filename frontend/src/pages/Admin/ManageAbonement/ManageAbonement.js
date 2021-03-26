@@ -1,9 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Redirect} from 'react-router-dom';
 import {getAbonementById, updateAbonement} from "../../../store/actions/abonements";
-import {getAllTeachers} from "../../../store/actions/teacher";
 import {connect} from "react-redux";
-import PropTypes from 'prop-types';
 import Preloader from '../../../components/Preloader/index';
 import Paper from '@material-ui/core/Paper';
 import {makeStyles, ThemeProvider, useTheme} from '@material-ui/core/styles';
@@ -71,11 +69,6 @@ const validate = values => {
         errors.discipline = noDisciplines;
     }
 
-
-    if (!values.teacher) {
-        errors.teacher = noTeacher;
-    }
-
     if (!values.quantity) {
         errors.quantity = noQuantity;
     }
@@ -100,8 +93,7 @@ const MenuProps = {
 
 function ManageAbonement(props) {
     const classes = useStyles();
-    const {updateAbonement, allTeachersLoading, getTeachers, allTeachers, abonementById,
-        getAbonement, abonementByIdLoading} = props;
+    const {updateAbonement, abonementById, getAbonement, abonementByIdLoading} = props;
     const theme = useTheme();
     const [close, setClose] = useState(false);
     const id = props.match.params.id;
@@ -117,27 +109,20 @@ function ManageAbonement(props) {
 
     useEffect(() => {
         getAbonement(id);
-        getTeachers();
     }, []);
 
     const handleChangeDiscipline = event => {
         formik.setFieldValue('discipline', event.target.value);
-        formik.setFieldValue('teacher', {});
-    };
-
-    const handleChangeTeacher = event => {
-        formik.setFieldValue('teacher', event.target.value);
     };
 
     if (close) {
         return <Redirect to='/admin/abonements' />
     }
 
-    if (allTeachersLoading || abonementByIdLoading) {
+    if (abonementByIdLoading) {
         return <div className="wrapper"><Preloader/></div>
     }
 
-    const checkedTeacher = formik.values.teacher || {};
     const checkedDiscipline = formik.values.discipline || '';
     const isValid = !Object.keys(formik.errors).length && Object.keys(formik.touched).length !== 0;
 
@@ -182,31 +167,6 @@ function ManageAbonement(props) {
                                 <MenuItem key={item} value={item}>
                                     <Checkbox checked={formik.values.discipline === item}/>
                                     <ListItemText primary={item} />
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </div>
-                <div>
-                    <FormControl className={classes.formControl}>
-                        <InputLabel id="demo-mutiple-checkbox-label">{formik.touched.teacher && formik.errors.teacher || 'Вчитель'}</InputLabel>
-                        <Select
-                            labelId="demo-mutiple-checkbox-label"
-                            id="demo-mutiple-checkbox"
-                            name='teacher'
-                            onChange={handleChangeTeacher}
-                            input={<Input />}
-                            renderValue={() => checkedTeacher.id ? checkedTeacher.firstName + ' ' + checkedTeacher.lastName : ''}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.teacher && formik.errors.teacher}
-                            value={checkedTeacher}
-                            MenuProps={MenuProps}
-                            disabled={!checkedDiscipline}
-                        >
-                            {allTeachers.filter(teacher => teacher.disciplines.indexOf(checkedDiscipline) !== -1).map(teacher => (
-                                <MenuItem key={teacher.id} value={teacher}>
-                                    <Checkbox checked={checkedTeacher.id === teacher.id}/>
-                                    <ListItemText primary={teacher.firstName + ' ' + teacher.lastName} />
                                 </MenuItem>
                             ))}
                         </Select>
@@ -268,32 +228,18 @@ function ManageAbonement(props) {
     )
 }
 
-ManageAbonement.propTypes = {
-    updateAbonement: PropTypes.func.isRequired,
-    getAbonement: PropTypes.func.isRequired,
-    getTeachers: PropTypes.func.isRequired,
-    allTeachersLoading: PropTypes.bool.isRequired,
-    abonementByIdLoading: PropTypes.bool.isRequired,
-    allTeachers: PropTypes.array,
-    abonementById: PropTypes.object,
-
-};
-
 ManageAbonement.defaultProps = {
     allTeachers: [],
 }
 
-const mapStateToProps = ({teacher, abonement}) => {
+const mapStateToProps = ({abonement}) => {
     return {
-        allTeachers: teacher.teachers,
-        allTeachersLoading: teacher.teachersLoading,
         abonementById: abonement.abonementById,
         abonementByIdLoading: abonement.abonementByIdLoading,
     }
 };
 
 const mapDispatchToProps = dispatch => ({
-    getTeachers: () => dispatch(getAllTeachers()),
     getAbonement: (id) => dispatch(getAbonementById(id)),
     updateAbonement: (data, id) => dispatch(updateAbonement(data, id))
 });

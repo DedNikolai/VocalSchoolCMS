@@ -2,6 +2,7 @@ package com.app.facade;
 
 import com.app.dto.request.AbonementRequest;
 import com.app.dto.response.AbonementResponse;
+import com.app.dto.response.ApiResponse;
 import com.app.model.Abonement;
 import com.app.service.AbonementService;
 import lombok.RequiredArgsConstructor;
@@ -36,8 +37,8 @@ public class AbonementFacade {
     return modelMapper.map(updatedAbonement, AbonementResponse.class);
   }
 
-  public void deleteAbonement(Long id) {
-    abonementService.deleteAbonement(id);
+  public ApiResponse deleteAbonement(Long id) {
+     return abonementService.deleteAbonement(id);
   }
 
   public Page<AbonementResponse> findAll(Pageable pageable) {

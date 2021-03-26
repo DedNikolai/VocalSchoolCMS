@@ -75,7 +75,7 @@ const columns = [
     { id: 'room', label: 'Класс', minWidth: 50, align: 'center' },
     { id: 'duration', label: 'Трывалість, хв', minWidth: 50, align: 'center' },
     { id: 'status', label: 'Статус', minWidth: 50, align: 'center' },
-    { id: 'isTest', label: 'Разове', minWidth: 50, align: 'center' },
+    { id: 'isTest', label: 'Тип', minWidth: 50, align: 'center' },
     { id: 'actions', label: 'Дії', minWidth: 150, align: 'center' },
 ];
 
@@ -204,7 +204,7 @@ function MainPage(props) {
                                                         if (column.id === 'isTest') {
                                                             return (
                                                                 <TableCell key={column.id} className={classes.cell}>
-                                                                    {row.isTestLesson ? 'Тестове' : ''}
+                                                                    {row.isSingleLesson ? 'Разове' : 'Постійне'}
                                                                 </TableCell>
                                                             )
                                                         }

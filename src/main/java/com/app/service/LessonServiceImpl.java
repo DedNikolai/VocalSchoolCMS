@@ -35,7 +35,6 @@ public class LessonServiceImpl implements LessonService {
   private final StudentRepository studentRepository;
   private final TeacherRepository teacherRepository;
   private final ConfirmedLessonRepository confirmedLessonRepository;
-  private final TransferLessonRepository transferLessonRepository;
   private final DeletedLessonRepository deletedLessonRepository;
 
   @Override
@@ -149,7 +148,15 @@ public class LessonServiceImpl implements LessonService {
   @Override
   @Transactional
   public ApiResponse deleteLesson(Long id) {
-    return new ApiResponse(false, "не реализовано");
+    Lesson lesson = lessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));
+    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLesson(lesson);
+    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLesson(lesson);
+
+    if (confirmedLessons.size() != 0 || deletedLessons.size() != 0) {
+      return new ApiResponse(false, "Не вдалося відалити, оскільки є залежності з цим уроком");
+    }
+    lessonRepository.delete(lesson);
+    return new ApiResponse(true, "Урок видалено");
   }
 
   @Override
@@ -179,40 +186,40 @@ public class LessonServiceImpl implements LessonService {
       e.printStackTrace();
     }
     List<Lesson> lessons = lessonRepository.findAllByDayOrderByTime(LessonDay.values()[cal.get(Calendar.DAY_OF_WEEK)-1]);
-//    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(parseDate);
-//    List<TransferLesson> transferLessons = transferLessonRepository.findAllByLessonDate(parseDate);
-//    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(parseDate);
-//
-//    List<Lesson> lessonList = lessons.stream().map(lesson -> {
-//      boolean confirmed = confirmedLessons.stream().anyMatch(confirmedLesson -> confirmedLesson.getLesson().getId() == lesson.getId() && confirmedLesson.getTime().equals(lesson.getTime()));
-//      boolean transfered = transferLessons.stream().anyMatch(transferLesson -> transferLesson.getLesson().getId() == lesson.getId() && transferLesson.getTransferTime().equals(lesson.getTime()));
-//      boolean deleted = deletedLessons.stream().anyMatch(deletedLesson -> deletedLesson.getLesson().getId() == lesson.getId() && deletedLesson.getLesson().getTime().equals(lesson.getTime()));
-//      if (confirmed) {
-//        lesson.setStatus(Status.CONFIRMED);
-//      }
-//
-//      if (transfered) {
-//        lesson.setStatus(Status.TRANSFERED);
-//      }
-//
-//      if (deleted) {
-//        lesson.setStatus(Status.DELETED);
-//      }
-//
-//      if (!transfered && !confirmed && !deleted) {
-//        lesson.setStatus(null);
-//      }
-//
-//      return lesson;
-//    }).map(lesson -> {
-//          Student student = lesson.getStudent();
-//          Integer balance = student.getAbonements()
-//              .stream().filter(abonement -> abonement.getIsActive() && abonement.getDiscipline().equals(lesson.getDiscipline()))
-//              .reduce(0, (partialAgeResult, abonement) -> partialAgeResult + abonement.getQuantity() - abonement.getConfirmedLessons().size(), Integer::sum);
-//          lesson.setCurrentStudenBalance(balance);
-//          return lesson;
-//        })
-//        .collect(Collectors.toList());
+    List<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByLessonDate(parseDate);
+    List<DeletedLesson> deletedLessons = deletedLessonRepository.findAllByLessonDate(parseDate);
+
+    lessons.stream().map(lesson -> {
+      boolean confirmed = confirmedLessons.stream().anyMatch(confirmedLesson -> confirmedLesson.getLesson().getId() == lesson.getId());
+      boolean transfered = deletedLessons.stream().anyMatch(deletedLesson -> deletedLesson.getLesson().getId() == lesson.getId() && !deletedLesson.getIsUsed() && !lesson.getIsSingleLesson());
+      boolean deleted = deletedLessons.stream().anyMatch(deletedLesson -> deletedLesson.getLesson().getId() == lesson.getId() &&
+          ((deletedLesson.getIsUsed() && !lesson.getIsSingleLesson()) || (lesson.getIsSingleLesson() && !deletedLesson.getIsUsed())));
+      if (confirmed) {
+        lesson.setStatus(Status.CONFIRMED);
+      }
+
+      if (transfered) {
+        lesson.setStatus(Status.TRANSFERED);
+      }
+
+      if (deleted) {
+        lesson.setStatus(Status.DELETED);
+      }
+
+      if (!transfered && !confirmed && !deleted) {
+        lesson.setStatus(null);
+      }
+
+      return lesson;
+    }).map(lesson -> {
+          Student student = lesson.getStudent();
+          Integer balance = student.getAbonements()
+              .stream().filter(abonement -> abonement.getQuantity() > abonement.getUsedQuantity() && abonement.getDiscipline().equals(lesson.getDiscipline()))
+              .reduce(0, (partialAgeResult, abonement) -> partialAgeResult + abonement.getQuantity() - abonement.getUsedQuantity(), Integer::sum);
+          lesson.setCurrentStudenBalance(balance);
+          return lesson;
+        })
+        .collect(Collectors.toList());
     return lessons;
   }
 
