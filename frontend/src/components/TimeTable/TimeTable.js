@@ -9,7 +9,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {findLessonId, isFreeTime, isFullLesson, isLesson, isTimeClosed} from "../../utils/timetable";
+import {findLessonId, isFreeTime, isFullLesson, isLesson, isTimeClosed, findLesson} from "../../utils/timetable";
+import lessonColors from "../../constants/lessonColors";
 import {NavLink} from 'react-router-dom';
 import './TimeTable.scss';
 
@@ -45,9 +46,9 @@ const useStyles = makeStyles({
         top: '57px'
     },
 
-    lesson: {
-        backgroundColor: '#4caf50'
-    }
+    // lesson: {
+    //     backgroundColor: '#4caf50'
+    // }
 });
 
 const days = ['Понеділок', 'Вівторок', 'Середа', 'Четвер', 'П\'ятниця', 'Субота'];
@@ -69,17 +70,26 @@ function TimeTable(props) {
             <TableRow key={time}>
                 <TableCell className='lessons-timetable__cell lessons-timetable__cell--padding'><span className='lessons-timetable__cell-time'>{time}</span></TableCell>
                 {Array.apply(null, {length: 24}).map((item, index) => {
+                    const lesson = findLesson(lessons, time, index);
+                    const color = lesson ? lessonColors[lesson.discipline] : 'inherit';
                     return (
                         isLesson(lessons, time, index) ?
                             <TableCell key={index}
-                                className={`lessons-timetable__cell ${classes.lesson} ${isFullLesson(lessons, time, index) && 'lessons-timetable__cell--border-none'}`}
-                                // rowspan={isFullLesson(lessons, time, index) && 2}
+                                       className={`lessons-timetable__cell
+                                       ${classes.lesson}
+                                       ${isFullLesson(lessons, time, index) && 'lessons-timetable__cell--border-none'}
+                                    `   }
+                                        style={{backgroundColor: color}}
+
+                                // rowSpan={isFullLesson(lessons, time, index) && 2}
                             >
                                 <NavLink
                                     to={`/admin/lessons/edit/${findLessonId(lessons, time, index)}`}
-                                    className={`lessons-timetable__lesson-link`}
+                                    className={`lessons-timetable__lesson-link
+                                                ${isFullLesson(lessons, time, index) && 'lessons-timetable__lesson-link--color-transparent'}
+                                    `           }
                                 >
-                                    1
+                                    <span className={`lessons-type-symbol`}>{lesson.isSingleLesson ? '?' : ''}</span>
                                 </NavLink>
                             </TableCell>
                                 :

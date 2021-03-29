@@ -30,6 +30,7 @@ import status from '../../../constants/lessonStatus';
 import rooms from '../../../constants/rooms';
 import './MainPage.scss';
 import moment from 'moment';
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
     paper: {
