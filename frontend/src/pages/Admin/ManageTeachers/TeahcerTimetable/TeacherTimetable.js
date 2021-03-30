@@ -31,7 +31,6 @@ function TeacherTimeTable(props) {
     };
     return (
         <Fragment>
-            <h2>Розклад Школи</h2>
             <MuiPickersUtilsProvider utils={DateFnsUtils} locale={uaLocale}>
                 <Grid container>
                     <KeyboardDatePicker

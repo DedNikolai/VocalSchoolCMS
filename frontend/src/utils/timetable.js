@@ -21,6 +21,17 @@ export const isLesson = (lessons, time, index) => {
   })
 };
 
+export const findLesson = (lessons, time, index) => {
+    return lessons.filter(lesson => {
+        const lessonStart = convertTimeToMinutes(lesson.time);
+        const lessonEnd = convertTimeToMinutes(lesson.time) + lesson.duration;
+        const lessonTime = convertTimeToMinutes(time);
+        if (lessonTime === lessonStart && indexCheck(lesson, index)) return true
+        if (lessonStart < lessonTime && lessonTime < lessonEnd && indexCheck(lesson, index)) return true
+        return false;
+    })[0]
+};
+
 export const isFullLesson = (lessons, time, index) => {
     return lessons.some(lesson => {
         const lessonStart = convertTimeToMinutes(lesson.time);

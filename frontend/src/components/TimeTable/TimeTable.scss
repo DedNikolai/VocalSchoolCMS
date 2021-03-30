@@ -14,10 +14,14 @@
 
     &--border-none {
       border-bottom: none !important;
+      background: #000;
+      color: #FFF;
+      mix-blend-mode: multiply;
     }
 
     &--grey {
-      background-color: #BDBDBD;
+      //background-color: #BDBDBD;
+      background-color: #E5F0FF;
     }
 
     &--padding {
@@ -34,8 +38,15 @@
   &__lesson-link {
     display: block;
     height: 40px;
+    font-size: 24px;
+    font-weight: bold;
     line-height: 40px;
-    color: #4caf50;
+    //color: #4caf50;
+    &--color-transparent {
+      color: rgba(0,0,0,0);
+      line-height: unset;
+      position: relative;
+    }
 
     &--double-lesson {
       height: 80px;

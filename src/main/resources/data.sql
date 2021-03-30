@@ -41,9 +41,9 @@ INSERT INTO lessons
 VALUES
   (1, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 1, 'ROOM1', 'VOCAL', 'MAN', 'MONDAY', '12:00', 60, false, true, '2021-02-15', null),
   (4, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 1, 2, 'ROOM1', 'VOCAL', 'MAN', 'MONDAY', '13:00', 60, false, true, '2021-02-15', null),
-  (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 2, 'ROOM2', 'SOLFEGGIO', 'MAN', 'MONDAY', '14:00', 60, false, true, '2021-02-15', '2021-03-17'),
+  (2, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 2, 'ROOM2', 'SOLFEGGIO', 'MAN', 'MONDAY', '14:00', 60, false, true, '2021-02-15', '2021-03-29'),
   (3, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 1, 'ROOM3', 'VOCAL', 'CHILD', 'FRIDAY', '10:30', 30, false, true, '2021-03-22', null),
-  (5, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 3, 'ROOM4', 'VOCAL', 'MAN', 'MONDAY', '16:00', 60, true, true, '2021-03-15', '2021-03-15');
+  (5, '2020-01-29 21:30:00', '2020-01-29 21:30:00', 2, 3, 'ROOM4', 'VOCAL', 'MAN', 'MONDAY', '16:00', 60, true, true, '2021-03-29', '2021-03-29');
 
 INSERT INTO teacher_worktime
   (id, date_created, date_modified, lesson_day, start_time, end_time, teacher)

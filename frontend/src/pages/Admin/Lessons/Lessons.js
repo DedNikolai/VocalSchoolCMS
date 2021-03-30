@@ -9,6 +9,8 @@ import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
 import {KeyboardDatePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
 import uaLocale from "date-fns/locale/uk";
+import lessonColors from '../../../constants/lessonColors';
+import './Lessons.scss';
 
 function Lessons(props) {
     const {allLessons, allLessonsLoading, getAllByDates} = props;
@@ -31,23 +33,35 @@ function Lessons(props) {
     };
     return (
         <Fragment>
-            <MuiPickersUtilsProvider utils={DateFnsUtils} locale={uaLocale}>
-                <Grid container>
-                    <KeyboardDatePicker
-                        disableToolbar
-                        variant="inline"
-                        format="dd-MM-yyyy"
-                        margin="normal"
-                        id="date-picker-inline"
-                        label="Дата"
-                        value={currentDate}
-                        onChange={changeDate}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
-                    />
-                </Grid>
-            </MuiPickersUtilsProvider>
+            <div className='timetable-head'>
+                <MuiPickersUtilsProvider utils={DateFnsUtils} locale={uaLocale}>
+                    <Grid container>
+                        <KeyboardDatePicker
+                            disableToolbar
+                            variant="inline"
+                            format="dd-MM-yyyy"
+                            margin="normal"
+                            id="date-picker-inline"
+                            label="Дата"
+                            value={currentDate}
+                            onChange={changeDate}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                        />
+                    </Grid>
+                </MuiPickersUtilsProvider>
+                <div className='colors-container'>
+                    <div className="colors-container__item" style={{backgroundColor: lessonColors.VOCAL}}>Вокал</div>
+                    <div className="colors-container__item" style={{backgroundColor: lessonColors.DRUM}}>Ударні</div>
+                    <div className="colors-container__item" style={{backgroundColor: lessonColors.GUITAR}}>Гітара</div>
+                    <div className="colors-container__item" style={{backgroundColor: lessonColors.PIANO}}>Фортепіано</div>
+                    <div className="colors-container__item" style={{backgroundColor: lessonColors.PSYCHOLOGIST}}>Логопед</div>
+                    <div className="colors-container__item" style={{backgroundColor: lessonColors.THERAPY}}>Арт-Терапія</div>
+                    <div className="colors-container__item" style={{backgroundColor: lessonColors.ACCOMPANIST}}>Концертмейстер</div>
+                    <div className="colors-container__item" style={{backgroundColor: lessonColors.SOLFEGGIO}}>Сальфеджіо</div>
+                </div>
+            </div>
             <TimeTable lessons={allLessons} week={createWeek(currentDate)}/>
         </Fragment>
     )
