@@ -116,7 +116,7 @@ public class TeacherControllerTest {
 
   @Test
   public void getAllTeachers() throws Exception {
-    int expectedSize = 2;
+    int expectedSize = 3;
 
     MvcResult result = mockMvc.perform(get("/api/v1/teachers"))
         .andReturn();
