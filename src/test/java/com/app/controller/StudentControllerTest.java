@@ -110,7 +110,7 @@ public class StudentControllerTest {
 
   @Test
   public void getAllStudents() throws Exception {
-    int expectedSize = 2;
+    int expectedSize = 3;
 
     MvcResult result = mockMvc.perform(get("/api/v1/students?page=0&limit=20"))
         .andReturn();
