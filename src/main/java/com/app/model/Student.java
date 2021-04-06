@@ -39,6 +39,9 @@ public class Student extends BaseEntiy {
   @Column(name = "last_name")
   private String lastName;
 
+  @Column(name = "parent")
+  private String parent;
+
   @Column(name = "age")
   private Integer age;
 
