@@ -76,21 +76,9 @@ VALUES
   (3, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 300, 1, 1, '2020-02-24', 1, false),
   (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 500, 2, 1, '2020-08-25', 1, false);
 
--- INSERT INTO transfer_lessons
---   (id, date_created, date_modified, teacher, lesson_id, lesson_date, room, transfer_date, transfer_time, abonement, is_active, lesson_day)
--- VALUES
---   (1, '2020-09-09 21:30:00', '2020-01-29 21:30:00', 1, 1, '2020-09-07', 'ROOM1', '2021-03-15', '10:30', 1, true, 'THURSDAY'),
---   (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 2, 1, '2020-08-25', 'ROOM3', '2021-03-15', '12:00', 2, true, 'THURSDAY');
-
 INSERT INTO deleted_lesson
   (id, date_created, date_modified, lesson_id, lesson_date, reason, abonement, is_used)
 VALUES
   (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 1, '2020-08-24', 'puk-puk', 1, false),
   (3, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 2, '2020-02-24', 'puk-puk', 2, true ),
   (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 3, '2020-08-25', 'puk-puk', null, false);
-
--- INSERT INTO credits
---   (id, date_created, date_modified, student, teacher, lesson_id, lesson_date, lesson_time)
--- VALUES
---   (1, '2020-08-24 21:30:00', '2020-01-29 21:30:00', 1, 1, 1, '2020-08-24', '12:00'),
---   (2, '2020-01-29 21:30:00', '2020-02-29 21:30:00', 1, 1, 1, '2020-08-25', '11:00');
