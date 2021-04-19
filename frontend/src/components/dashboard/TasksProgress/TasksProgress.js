@@ -16,7 +16,7 @@ const TasksProgress = (props) => {
     const {abonements = []} = props;
     const test = abonements.filter(abonement => abonement.quantity == 1).length;
     const abonement = abonements.filter(abonement => abonement.quantity != 1).length;
-    const effect = test != 0 ? abonement*100%test : 100;
+    const effect = test != 0 ? Math.round(abonement*100 / test) : 100;
 
     return (
         <Card
