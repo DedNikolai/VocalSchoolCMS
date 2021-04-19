@@ -66,3 +66,14 @@ export const getStudentTransfers = id => dispatch => {
         dispatch({type: TYPES.STUDENT_TRANSFERS_LOADING, payload: false})
     })
 };
+
+export const getStudentsByDates = (startDate, finishDate) => dispatch => {
+    dispatch({type: TYPES.STUDENT_BY_DATES_LOADING, payload: true})
+    api.get(`/students/dates?startDate=${startDate}&finishDate=${finishDate}`).then(res => {
+        if (res.status === 200) {
+            dispatch({type: TYPES.SAVE_STUDENT_BY_DATES, payload: res.data})
+        }
+    }).finally(() => {
+        dispatch({type: TYPES.STUDENT_BY_DATES_LOADING, payload: false})
+    })
+};

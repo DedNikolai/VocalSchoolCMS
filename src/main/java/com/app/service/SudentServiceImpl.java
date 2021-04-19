@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -57,6 +58,12 @@ public class SudentServiceImpl implements StudentService {
       return studentRepository.findAll(pageable);
     }
     Page<Student> students = studentRepository.findAllByParams(params, pageable);
+    return students;
+  }
+
+  @Override
+  public Set<Student> findAllByDates(Date startDate, Date endDate) {
+    Set<Student> students = studentRepository.findAllByDates(startDate, endDate);
     return students;
   }
 }

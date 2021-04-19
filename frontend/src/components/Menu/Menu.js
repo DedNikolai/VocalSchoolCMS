@@ -18,6 +18,7 @@ import ua from '../../languages/ua';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
 import CancelIcon from '@material-ui/icons/Cancel';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
 import './Menu.scss';
 
 const teacherPermissions = [Roles.TEACHER, Roles.ADMIN, Roles.SUPER_ADMIN];
@@ -135,6 +136,17 @@ function Menu(props) {
                     {/*</ListItem>*/}
                 {/*</NavLink>*/}
             {/*}*/}
+            {
+                hasRoles(user, superAdmin) &&
+                <NavLink to='/admin/statistics' className='main-menu__item'>
+                    <ListItem button>
+                        <ListItemIcon>
+                            <EqualizerIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={ua.menu.statistics} />
+                    </ListItem>
+                </NavLink>
+            }
         </div>
     )
 };

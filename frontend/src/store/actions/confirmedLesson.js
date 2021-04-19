@@ -56,3 +56,14 @@ export const updateConfirmedLesson = (lesson, id) => dispatch => {
         }
     })
 };
+
+export const getLessonsByDates = (startDate, finishDate) => dispatch => {
+    dispatch({type: TYPES.CONFIRMED_LESSON_BY_DATES_LOADING, payload: true})
+    api.get(`/confirmed-lessons/dates?startDate=${startDate}&finishDate=${finishDate}`).then(res => {
+        if (res.status === 200) {
+            dispatch({type: TYPES.SAVE_CONFIRMED_LESSON_BY_DATES, payload: res.data})
+        }
+    }).finally(() => {
+        dispatch({type: TYPES.CONFIRMED_LESSON_BY_DATES_LOADING, payload: false})
+    })
+};

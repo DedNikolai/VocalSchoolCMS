@@ -66,3 +66,14 @@ export const getAbonementsByStudent = id => dispatch => {
         dispatch({type: TYPES.ABONEMENTS_BY_STUDENT_LOADING, payload: false});
     })
 };
+
+export const getAbonementsByDates = (startDate, finishDate) => dispatch => {
+    dispatch({type: TYPES.ABONEMENTS_BY_DATES_LOADING, payload: true});
+    api.get(`/abonements/dates?startDate=${startDate}&finishDate=${finishDate}`).then(res => {
+        if (res.status === 200) {
+            dispatch({type: TYPES.SAVE_ABONEMENTS_BY_DATES, payload: res.data})
+        }
+    }).finally(() => {
+        dispatch({type: TYPES.ABONEMENTS_BY_DATES_LOADING, payload: false})
+    })
+};

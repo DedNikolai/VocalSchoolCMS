@@ -11,7 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -55,5 +57,10 @@ public class ConfirmedLessonFacade {
   public ApiResponse updateLesson(ConfirmedLessonRequest request, Long id) {
     ConfirmedLesson confirmedLesson = modelMapper.map(request, ConfirmedLesson.class);
     return confirmedLessonService.updateLesson(confirmedLesson, id);
+  }
+
+  public Set<ConfirmedLessonResponse> findAllByDates(Date startDate, Date endDate) {
+    Set<ConfirmedLesson> confirmedLessons = confirmedLessonService.findAllByDate(startDate, endDate);
+    return confirmedLessons.stream().map(confirmedLesson -> modelMapper.map(confirmedLesson, ConfirmedLessonResponse.class)).collect(Collectors.toSet());
   }
 }

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,8 +21,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/api/v1/abonements")
@@ -69,6 +73,15 @@ public class AbonementController {
   @JsonView(View.Abonement.class)
   public ResponseEntity<ApiResponse> deleteAbonement(@PathVariable Long id) {
     ApiResponse response = abonementFacade.deleteAbonement(id);
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("dates")
+  @JsonView(View.Abonement.class)
+  public ResponseEntity<Set<AbonementResponse>> findAllByDates(
+      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date finishDate) {
+    Set<AbonementResponse> response = abonementFacade.findAllByDates(startDate, finishDate);
     return ResponseEntity.ok(response);
   }
 }

@@ -29,6 +29,7 @@ import ConfirmedLessons from '../ConfirmedLessons/ConfirmedLessons';
 import CreateConfirmedLesson from '../CreateConfirmedLesson/CreateConfirmedLesson';
 import TransferLessons from '../TransferLessons/TransferLessons';
 import Credit from '../Credit/Credits';
+import Stats from '../Stats/Stats';
 
 const teacherPermissions = [Roles.TEACHER, Roles.ADMIN, Roles.SUPER_ADMIN];
 const adminPermissions = [Roles.ADMIN, Roles.SUPER_ADMIN];
@@ -42,6 +43,7 @@ function AdminRouter (props) {
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/users/edit/:id' component={ManageUser} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/users/add-new' component={CreateUser} />
             <AuthorizedRoute authorized={hasRoles(user, superAdmin)} path='/admin/users' component={Users} />
+            <AuthorizedRoute authorized={hasRoles(user, superAdmin)} path='/admin/statistics' component={Stats} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/students/edit/:id' component={ManageStudent} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/students/add-new' component={CreateStudnet} />
             <AuthorizedRoute authorized={hasRoles(user, adminPermissions)} path='/admin/students' component={Students} />

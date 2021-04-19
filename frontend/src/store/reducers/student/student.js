@@ -7,6 +7,8 @@ const initialState = {
     studentByIdLoading: true,
     studentTransferLessons: [],
     studentTransferLessonsLoading: false,
+    studentByDates: [],
+    studentByDatesLoading: true
 }
 
 const student = (state = initialState, action) => {
@@ -23,6 +25,10 @@ const student = (state = initialState, action) => {
             return {...state, studentTransferLessons: action.payload}
         case TYPES.STUDENT_TRANSFERS_LOADING:
             return {...state, studentTransferLessonsLoading: action.payload}
+        case TYPES.SAVE_STUDENT_BY_DATES:
+            return {...state, studentByDates: action.payload}
+        case TYPES.STUDENT_BY_DATES_LOADING:
+            return {...state, studentByDatesLoading: action.payload}
         default:
             return {...state}
     }
