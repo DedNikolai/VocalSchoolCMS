@@ -16,11 +16,15 @@ import ua from "../../../languages/ua";
 
 const useStyles = makeStyles(theme => ({
     root: {
-        '& .MuiTextField-root': {
-            margin: theme.spacing(1),
-            width: 200,
-        },
+        margin: 10,
+        width: 300,
     },
+
+    rootFullWidth: {
+        width: '90%',
+        margin: 10,
+    },
+
     formControl: {
         margin: theme.spacing(1),
         width: 500
@@ -100,7 +104,7 @@ function CreateStudent(props) {
         <div className='manage-student'>
             <h2>Особисті дані</h2>
             <Paper>
-                <form className={classes.root} autoComplete="off" onSubmit={formik.handleSubmit}>
+                <form autoComplete="off" onSubmit={formik.handleSubmit}>
                     <div>
                         <TextField
                             label={formik.touched.firstName && formik.errors.firstName || "Ім'я"}
@@ -112,6 +116,7 @@ function CreateStudent(props) {
                             onChange={formik.handleChange}
                             error={formik.touched.firstName && formik.errors.firstName}
                             onBlur={formik.handleBlur}
+                            className={classes.root}
                         />
                         <TextField
                             label={formik.touched.lastName && formik.errors.lastName || "Прізвище"}
@@ -123,6 +128,7 @@ function CreateStudent(props) {
                             onChange={formik.handleChange}
                             error={formik.touched.lastName && formik.errors.lastName}
                             onBlur={formik.handleBlur}
+                            className={classes.root}
                         />
                         <TextField
                             label={formik.touched.age && formik.errors.age || "Вік"}
@@ -134,6 +140,20 @@ function CreateStudent(props) {
                             onChange={formik.handleChange}
                             error={formik.touched.age && formik.errors.age}
                             onBlur={formik.handleBlur}
+                            className={classes.root}
+                        />
+                    </div>
+                    <div>
+                        <TextField
+                            label={"Батьки"}
+                            name='parent'
+                            id="outlined-size-small"
+                            defaultValue={''}
+                            variant="outlined"
+                            size="small"
+                            onChange={formik.handleChange}
+                            fullWidth
+                            className={classes.rootFullWidth}
                         />
                     </div>
                     <div>
@@ -147,6 +167,7 @@ function CreateStudent(props) {
                             onChange={formik.handleChange}
                             error={formik.touched.email && formik.errors.email}
                             onBlur={formik.handleBlur}
+                            className={classes.root}
                         />
                         <TextField
                             label={formik.touched.phone && formik.errors.phone || "Телефон"}
@@ -158,6 +179,7 @@ function CreateStudent(props) {
                             onChange={formik.handleChange}
                             error={formik.touched.phone && formik.errors.phone}
                             onBlur={formik.handleBlur}
+                            className={classes.root}
                         />
                     </div>
                     <div className='buttons-container'>
