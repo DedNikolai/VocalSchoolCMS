@@ -1,0 +1,28 @@
+.dates-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+
+  &__item {
+    margin: 0 30px;
+  }
+}
+
+.box-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+
+  &__item {
+    text-align: center;
+  }
+}
+
+.box-taffic-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}

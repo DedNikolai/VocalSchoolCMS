@@ -17,4 +17,5 @@ public class StudentRequest {
   private Set<TeacherRequest> teachers;
   private Set<LessonRequest> lessons;
   private Set<ConfirmedLessonRequest> confirmedLessons;
+  private String parent;
 }

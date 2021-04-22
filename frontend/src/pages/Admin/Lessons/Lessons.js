@@ -7,7 +7,7 @@ import moment from 'moment'
 import createWeek from '../../../utils/createWeek'
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
-import {KeyboardDatePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
+import {KeyboardDatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
 import uaLocale from "date-fns/locale/uk";
 import lessonColors from '../../../constants/lessonColors';
 import './Lessons.scss';

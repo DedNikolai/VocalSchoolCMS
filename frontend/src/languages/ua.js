@@ -10,6 +10,7 @@ const ua = {
         deleted: 'Скасовані Уроки',
         abonements: 'Абонементи',
         credits: 'Заборгованості',
+        statistics: 'Статистика'
     },
 
     dashboard: 'Панель Управління',

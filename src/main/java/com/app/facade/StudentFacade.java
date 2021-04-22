@@ -10,6 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class StudentFacade {
@@ -42,5 +46,10 @@ public class StudentFacade {
     Page<Student> students = studentService.getAllStudents(params, pageable);
     Page<StudentResponse> studentsList = students.map(student -> modelMapper.map(student, StudentResponse.class));
     return studentsList;
+  }
+
+  public Set<StudentResponse> findAllByDates(Date startDate, Date endDate) {
+    Set<Student> students = studentService.findAllByDates(startDate, endDate);
+    return students.stream().map(student -> modelMapper.map(student, StudentResponse.class)).collect(Collectors.toSet());
   }
 }

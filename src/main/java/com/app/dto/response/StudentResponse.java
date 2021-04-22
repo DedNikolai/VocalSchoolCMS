@@ -22,6 +22,7 @@ public class StudentResponse {
   @EqualsAndHashCode.Exclude
   @JsonView(View.Student.class)
   private Set<AbonementResponse> abonements;
+  private String parent;
 //  @ToString.ExcludeRes
 //  @EqualsAndHashCode.Exclude
 //  @JsonView(View.Student.class)

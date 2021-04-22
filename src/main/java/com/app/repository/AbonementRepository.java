@@ -13,7 +13,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface AbonementRepository extends JpaRepository<Abonement, Long> {
@@ -34,4 +36,7 @@ public interface AbonementRepository extends JpaRepository<Abonement, Long> {
       "and a.usedQuantity < a.quantity order by a.createdDate")
   List<Abonement> findAllByStudent(@Param("student") Student student);
 
+  @Query("select  a from Abonement a where (coalesce(:startDate, null) is null or :startDate <= a.createdDate) and " +
+      "(coalesce(:endDate, null) is null or :endDate >= a.createdDate)")
+  Set<Abonement> findAllByDates(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

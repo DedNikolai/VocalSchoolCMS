@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -122,5 +123,11 @@ public class ConfirmedLessonServiceImp implements ConfirmedLessonService {
     }).collect(Collectors.toList());
     confirmedLessonRepository.saveAll(paidLessons);
     return new ApiResponse(true, "Усі Уроки проплачено вчытелю");
+  }
+
+  @Override
+  public Set<ConfirmedLesson> findAllByDate(Date startDate, Date endDate) {
+    Set<ConfirmedLesson> confirmedLessons = confirmedLessonRepository.findAllByDates(startDate, endDate);
+    return confirmedLessons;
   }
 }

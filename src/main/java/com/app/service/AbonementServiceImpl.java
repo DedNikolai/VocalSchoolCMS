@@ -15,7 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -68,6 +70,12 @@ public class AbonementServiceImpl implements AbonementService{
   public List<Abonement> findAllByStudent(Long studentId) {
     Student student = studentRepository.findById(studentId).orElseThrow(() -> new ResourceNotFoundException("Student", "id", studentId));
     List<Abonement> abonements = abonementRepository.findAllByStudent(student);
+    return abonements;
+  }
+
+  @Override
+  public Set<Abonement> findAllByDates(Date startDate, Date endDate) {
+    Set<Abonement> abonements = abonementRepository.findAllByDates(startDate, endDate);
     return abonements;
   }
 

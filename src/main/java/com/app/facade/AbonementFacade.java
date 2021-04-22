@@ -11,7 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -49,5 +51,10 @@ public class AbonementFacade {
   public List<AbonementResponse> getAllActiveAbonementsByStudenr(Long studentId) {
     List<Abonement> abonements = abonementService.findAllByStudent(studentId);
     return abonements.stream().map(abonement -> modelMapper.map(abonement, AbonementResponse.class)).collect(Collectors.toList());
+  }
+
+  public Set<AbonementResponse> findAllByDates(Date startDate, Date endDate) {
+    Set<Abonement> abonements = abonementService.findAllByDates(startDate, endDate);
+    return abonements.stream().map(abonement -> modelMapper.map(abonement, AbonementResponse.class)).collect(Collectors.toSet());
   }
  }
