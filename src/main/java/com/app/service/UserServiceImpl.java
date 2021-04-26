@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
 
     mailSender.send(constructResetTokenEmail(getAppUrl(request), passwordResetToken.getToken(), passwordResetToken.getUser()));
 
-    return new ApiResponse(true, "We send the reset password instruction to your email");
+    return new ApiResponse(true, "На ваш email відправлено листа для зміни пароля");
   }
 
   public PasswordResetToken createPasswordResetTokenForUser(User user, String token) {
@@ -141,10 +141,10 @@ public class UserServiceImpl implements UserService {
 
   private SimpleMailMessage constructResetTokenEmail(
     String contextPath, String token, User user) {
-    String url = contextPath + "/user/changePassword?token=" + token;
+    String url = contextPath + "/admin/reset-password?token=" + token;
 //    String message = "To complete the password reset process, please click here: ";
     String message = "To complete the password reset process, copy this code: ";
-    return constructEmail("Reset Password", message + " \r\n" + token, user);
+    return constructEmail("Reset Password", message + " \r\n" + url, user);
   }
 
   private SimpleMailMessage constructEmail(String subject, String body,
@@ -158,8 +158,8 @@ public class UserServiceImpl implements UserService {
   }
 
   private String getAppUrl(HttpServletRequest request) {
-    return "http://localhost:3000/admin/reset-password";
-//    return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+//    return "http://localhost:3000";
+    return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
   }
 
   private String isValidPasswordResetToken(String token) {

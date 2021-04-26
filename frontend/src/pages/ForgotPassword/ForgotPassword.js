@@ -30,18 +30,6 @@ const CssTextField = withStyles({
     },
 })(TextField);
 
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -70,16 +58,23 @@ function ForgotPassword(props) {
     const [resetPass, setResetPass] = useState(false);
 
     const formik = useFormik({
-        initialValues: {},
+        initialValues: {
+            email: ''
+        },
         onSubmit: value => {
             setResetPass(true);
             resetPasswordByEmail(value.email);
+            resetForm();
         },
     });
 
-    if (resetPass) {
-        return <Redirect to={'/admin/reset-password'}/>
+    const resetForm = () => {
+        formik.setFieldValue('email', '')
     }
+
+    // if (resetPass) {
+    //     return <Redirect to={'/admin/reset-password'}/>
+    // }
 
     return (
         <Container component="main" maxWidth="xs">
@@ -92,7 +87,7 @@ function ForgotPassword(props) {
                     Forgot Password
                 </Typography>
                 <form className={classes.form} noValidate onSubmit={formik.handleSubmit}>
-                    <CssTextField
+                    <TextField
                         variant="outlined"
                         margin="normal"
                         required
@@ -102,8 +97,8 @@ function ForgotPassword(props) {
                         name="email"
                         autoComplete="email"
                         autoFocus
+                        value={formik.values.email}
                         onChange={formik.handleChange}
-                        color={colors.primeryColor}
                     />
                     <Button
                         type="submit"

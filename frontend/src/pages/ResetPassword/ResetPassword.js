@@ -77,9 +77,11 @@ function ResetPassword(props) {
     const classes = useStyles();
     const {updatePassword} = props;
     const [passChanged, setPassChanged] = useState(false);
+    const url = new URL(window.location.href);
+    const token = url.searchParams.get("token");
 
     const formik = useFormik({
-        initialValues: {},
+        initialValues: {token: token},
         validate,
         onSubmit: value => {
             setPassChanged(true);
@@ -124,16 +126,6 @@ function ResetPassword(props) {
                         type="password"
                         id="confirm_password"
                         autoComplete="current-password"
-                        onChange={formik.handleChange}
-                    />
-                    <CssTextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="token"
-                        label="Inser code from your email"
-                        type="password"
                         onChange={formik.handleChange}
                     />
                     <Button
