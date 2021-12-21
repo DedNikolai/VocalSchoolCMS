@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import PropTypes from 'prop-types';
 import Preloader from '../../../components/Preloader/index';
 import Paper from '@material-ui/core/Paper';
-import {makeStyles, useTheme} from '@material-ui/core/styles';
+import {makeStyles, useTheme, withStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -12,7 +12,19 @@ import './DeletedLesson.scss';
 import {colors} from '../../../constants/view';
 import {getDeletedLessonById} from '../../../store/actions/deletedLesson';
 import {NavLink} from 'react-router-dom';
+import Checkbox from '@material-ui/core/Checkbox';
+import {green} from "@material-ui/core/colors";
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
+const GreenCheckbox = withStyles({
+    root: {
+        color: green[400],
+        '&$checked': {
+            color: green[600],
+        },
+    },
+    checked: {},
+})((props) => <Checkbox color="default" {...props} />);
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -45,6 +57,9 @@ const useStyles = makeStyles(theme => ({
         marginRight: theme.spacing(1),
         width: 200,
     },
+    paddingLeft: {
+        paddingLeft: '10px'
+    }
 }));
 
 const ITEM_HEIGHT = 48;
@@ -71,7 +86,7 @@ function DeletedLesson(props) {
     if (deletedLessonByIdLoading) {
         return <Preloader/>
     }
-
+    console.log(deletedLesson)
     return (
         <Paper>
             <form className={classes.root} noValidate autoComplete="off">
@@ -80,7 +95,7 @@ function DeletedLesson(props) {
                         label="Учень"
                         name='student'
                         id="outlined-size-small"
-                        value={deletedLesson.student.firstName + ' ' + deletedLesson.student.lastName}
+                        value={deletedLesson.lesson.student.firstName + ' ' + deletedLesson.lesson.student.lastName}
                         variant="outlined"
                         size="small"
                         disabled
@@ -91,7 +106,7 @@ function DeletedLesson(props) {
                         label="Учень"
                         name='teacher'
                         id="outlined-size-small"
-                        value={deletedLesson.teacher.firstName + ' ' + deletedLesson.teacher.lastName}
+                        value={deletedLesson.lesson.teacher.firstName + ' ' + deletedLesson.lesson.teacher.lastName}
                         variant="outlined"
                         size="small"
                         disabled
@@ -137,6 +152,12 @@ function DeletedLesson(props) {
                         disabled
                         variant="outlined"
                         fullWidth
+                    />
+                </div>
+                <div className={classes.paddingLeft}>
+                    <FormControlLabel
+                        control={<GreenCheckbox checked={deletedLesson.isUsed} />}
+                        label="Списано з абонементу"
                     />
                 </div>
                 <div className='buttons-container'>

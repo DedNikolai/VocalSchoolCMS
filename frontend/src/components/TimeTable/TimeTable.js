@@ -30,7 +30,7 @@ const useStyles = makeStyles({
         borderBottom: 'none',
         borderRight: 'none',
         boxSizing: 'border-box',
-        height: '20px',
+        height: '25px',
     },
 
     headCell: {
@@ -39,7 +39,8 @@ const useStyles = makeStyles({
         borderRight: 'none',
         textAlign: 'center',
         boxSizing: 'border-box',
-        padding: '7px'
+        padding: '7px',
+        height: '10px'
     },
 
     tableHead: {

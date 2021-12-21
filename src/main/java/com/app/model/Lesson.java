@@ -92,7 +92,7 @@ public class Lesson extends BaseEntiy {
   @JsonIgnore
   private List<ConfirmedLesson> confirmedLessons;
 
-  @OneToMany(mappedBy = "lesson")
+  @OneToMany(mappedBy = "lesson", fetch = FetchType.EAGER)
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
   @JsonIgnore

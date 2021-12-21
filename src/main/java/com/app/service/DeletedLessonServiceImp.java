@@ -3,14 +3,8 @@ package com.app.service;
 import com.app.dto.response.ApiResponse;
 import com.app.exeption.AppException;
 import com.app.exeption.ResourceNotFoundException;
-import com.app.model.Abonement;
-import com.app.model.ConfirmedLesson;
-import com.app.model.DeletedLesson;
-import com.app.model.TransferLesson;
-import com.app.repository.AbonementRepository;
-import com.app.repository.ConfirmedLessonRepository;
-import com.app.repository.DeletedLessonRepository;
-import com.app.repository.TransferLessonRepository;
+import com.app.model.*;
+import com.app.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +21,7 @@ public class DeletedLessonServiceImp implements DeletedLessonService {
   private final ConfirmedLessonRepository confirmedLessonRepository;
   private final AbonementRepository abonementRepository;
   private final DeletedLessonRepository deletedLessonRepository;
+  private final LessonRepository lessonRepository;
 
   @Override
   public DeletedLesson getLessonById(Long id) {
@@ -86,15 +82,23 @@ public class DeletedLessonServiceImp implements DeletedLessonService {
   }
 
   @Override
+  @Transactional
   public ApiResponse deleteLesson(Long id) {
     DeletedLesson lessonFromDb = deletedLessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));
     Abonement abonement = abonementRepository.findFirstByDeletedLessonsContains(lessonFromDb);
+    Set<DeletedLesson> deletedLessons = abonement.getDeletedLessons().stream().filter(lesson -> lesson.getId() != id).collect(Collectors.toSet());
+    abonement.setDeletedLessons(deletedLessons);
+    Lesson lesson = lessonRepository.findFirstByDeletedLessonsContains(lessonFromDb);
+    List<DeletedLesson> lessons = lesson.getDeletedLessons().stream().filter(lesson1 -> lesson.getId() == id).collect(Collectors.toList());
+    lesson.setDeletedLessons(lessons);
+
     if (lessonFromDb.getIsUsed()) {
       abonement.setUsedQuantity(abonement.getUsedQuantity() - 1);
     }
 
-    deletedLessonRepository.delete(lessonFromDb);
     abonementRepository.save(abonement);
+    lessonRepository.save(lesson);
+    deletedLessonRepository.delete(lessonFromDb);
     return new ApiResponse(true, "Відміну заняття скасовано");
   }
 

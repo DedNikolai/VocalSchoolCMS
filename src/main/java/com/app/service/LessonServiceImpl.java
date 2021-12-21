@@ -106,38 +106,40 @@ public class LessonServiceImpl implements LessonService {
   @Override
   public ApiResponse updateLesson(Lesson lesson, Long id) {
     Lesson lessonFromDb = lessonRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));
-    List<Lesson> lessonsFromDb = lessonRepository.findAllByLessonFinishDateIsNotExpire(lesson.getLessonStartDate(), lesson.getDay());
-    List<Lesson> reletiveLessons = lessonsFromDb.stream().filter(item -> isTheSameTime(item, lesson)).collect(Collectors.toList());
-    Teacher teacher = teacherRepository.findById(lesson.getTeacher().getId())
-        .orElseThrow(() -> new ResourceNotFoundException("Teacher", "id", lesson.getTeacher().getId()));
+    if (!lessonFromDb.getIsSingleLesson() && lesson.getLessonFinishDate() == null) {
+      List<Lesson> lessonsFromDb = lessonRepository.findAllByLessonFinishDateIsNotExpire(lesson.getLessonStartDate(), lesson.getDay());
+      List<Lesson> reletiveLessons = lessonsFromDb.stream().filter(item -> isTheSameTime(item, lesson)).collect(Collectors.toList());
+      Teacher teacher = teacherRepository.findById(lesson.getTeacher().getId())
+              .orElseThrow(() -> new ResourceNotFoundException("Teacher", "id", lesson.getTeacher().getId()));
 
-    if (!isTeacherWorkTime(teacher, lesson)) {
-      return new ApiResponse(false, "Не робочий час для цього вчителя");
-    }
-
-    for (Lesson key : reletiveLessons) {
-      String str = "";
-      if (key.getRoom().equals(lesson.getRoom())) {
-        if (key.getIsSingleLesson()) {
-          str = key.getLessonStartDate() + " нацей час в цьому класі заплановано разове заняття";
-        } else {
-          str = "Цей клас занятый в даний час";
-        }
-
+      if (!isTeacherWorkTime(teacher, lesson)) {
+        return new ApiResponse(false, "Не робочий час для цього вчителя");
       }
 
-      if (key.getTeacher().getId() == lesson.getTeacher().getId()) {
-        if (key.getIsSingleLesson()) {
-          str = key.getLessonStartDate() + " у вяителя " + key.getTeacher().getFirstName() + " " + key.getTeacher().getLastName()
-              + " заплановано разове заняття";
-        } else {
-          str = "На цей клас" + " у " + key.getTeacher().getFirstName() + " " + key.getTeacher().getLastName()
-              + " вже є заняття";
+      for (Lesson key : reletiveLessons) {
+        String str = "";
+        if (key.getRoom().equals(lesson.getRoom())) {
+          if (key.getIsSingleLesson()) {
+            str = key.getLessonStartDate() + " нацей час в цьому класі заплановано разове заняття";
+          } else {
+            str = "Цей клас занятый в даний час";
+          }
+
         }
 
-      }
+        if (key.getTeacher().getId() == lesson.getTeacher().getId()) {
+          if (key.getIsSingleLesson()) {
+            str = key.getLessonStartDate() + " у вяителя " + key.getTeacher().getFirstName() + " " + key.getTeacher().getLastName()
+                    + " заплановано разове заняття";
+          } else {
+            str = "На цей клас" + " у " + key.getTeacher().getFirstName() + " " + key.getTeacher().getLastName()
+                    + " вже є заняття";
+          }
 
-      return new ApiResponse(false, str);
+        }
+
+        return new ApiResponse(false, str);
+      }
     }
 
     lesson.setId(lessonFromDb.getId());
