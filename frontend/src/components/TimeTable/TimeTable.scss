@@ -1,3 +1,7 @@
+.MuiTableCell-root {
+  border-bottom: 1px solid #333 !important;
+}
+
 .lessons-timetable {
 
   &__cell {
@@ -5,18 +9,35 @@
     min-width: 40px !important;
     padding: 0 !important;
     text-align: center !important;
-    border: 1px solid rgba(224, 224, 224, 1);
+    border: 1px solid #333;
     border-top: none !important;
     border-right: none;
     box-sizing: border-box;
     height: 25px;
     line-height: 40px;
 
+    &-modal {
+      position: absolute;
+      width: 150px;
+      top: 25%;
+      left: 50%;
+      z-index: 100;
+
+      &--hidden {
+        display: none;
+      }
+    }
+
     &--border-none {
       border-bottom: none !important;
       background: #000;
       color: #FFF;
-      mix-blend-mode: multiply;
+      mix-blend-mode: unset;
+
+      & > .lessons-timetable__cell-modal {
+        top: 125%;
+        z-index: 1000;
+      }
     }
 
     &--grey {

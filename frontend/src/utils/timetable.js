@@ -21,6 +21,15 @@ export const isLesson = (lessons, time, index) => {
   })
 };
 
+export const isLessonStartTime = (lesson, time) => {
+    const lessonStart = convertTimeToMinutes(lesson.time);
+    const lessonTime = convertTimeToMinutes(time);
+    if (lessonTime === lessonStart) return true
+    return false
+};
+
+
+
 export const findLesson = (lessons, time, index) => {
     return lessons.filter(lesson => {
         const lessonStart = convertTimeToMinutes(lesson.time);
